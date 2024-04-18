@@ -11,12 +11,12 @@ from rye_tui.components.config_tab import ConfigTab
 
 class MainFrame(Horizontal):
     def compose(self) -> Iterable[Widget]:
-        with TabbedContent():
-            with TabPane("Projects"):
+        with TabbedContent(initial="Config"):
+            with TabPane("Projects", id="Projects"):
                 yield ProjectTab()
-            with TabPane("General"):
+            with TabPane("General", id="General"):
                 yield GeneralTab()
-            with TabPane("Config"):
+            with TabPane("Config", id="Config"):
                 yield ConfigTab()
 
         return super().compose()
