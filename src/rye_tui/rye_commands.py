@@ -31,7 +31,7 @@ def rye_tools_list(cwd: Path = Path.cwd()) -> str:
 
 
 def rye_command_str_output(command: str, cwd: Path = Path.cwd()) -> str:
-    result = subprocess.run(command.split(" "), capture_output=True, text=True, cwd=cwd)
+    result = subprocess.run(command.split(), capture_output=True, text=True, cwd=cwd)
     if result.returncode == 0:
         packages = result.stdout.strip()
         return packages

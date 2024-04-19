@@ -6,7 +6,7 @@ from textual.widget import Widget
 from textual.containers import Container, Vertical, Horizontal
 
 from rye_tui.rye_commands import get_rye_config_values, rye_config_set_command
-from rye_tui.constants import RYE_CONFIG_OPTION_DICT
+from rye_tui.constants import CONF_OPT_DICT
 
 
 class ConfigTab(Container):
@@ -46,9 +46,10 @@ class ConfigBehavior(Container):
         self.LOAD = True
         self.styles.border = ("heavy", "lightblue")
         self.border_title = self.category
-        for opt, opt_default in RYE_CONFIG_OPTION_DICT[self.category].items():
+        for opt, opt_dict in CONF_OPT_DICT[self.category].items():
             opt_name = Static(opt)
-            opt_switch = Switch(value=opt_default, id=f"{self.category}_{opt}")
+            opt_name.tooltip = opt_dict["tooltip"]
+            opt_switch = Switch(value=opt_dict["default"], id=f"{self.category}_{opt}")
             opt_switch.loading = True
             with Horizontal(classes=f"config-{self.category}-container"):
                 yield opt_name
@@ -57,9 +58,9 @@ class ConfigBehavior(Container):
         return super().compose()
 
     def load_current(self, conf_dict):
-        for opt, opt_value in conf_dict.items():
+        for opt, opt_dict in CONF_OPT_DICT[self.category].items():
             opt_switch = self.query_one(f"#{self.category}_{opt}")
-            opt_switch.value = opt_value
+            opt_switch.value = conf_dict.get(opt, opt_dict["default"])
             opt_switch.loading = False
 
     @work(thread=True, exclusive=True)
