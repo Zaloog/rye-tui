@@ -1,11 +1,12 @@
 from typing import Iterable
 
-from textual import work
-from textual.widgets import Input, Static
+from textual import work, on
+from textual.widgets import Input, Static, Switch
 from textual.widget import Widget
 from textual.containers import Container, Vertical, Horizontal
 
-from rye_tui.rye_commands import RyeConfig
+from rye_tui.rye_commands import get_rye_config_values, rye_config_set_command
+from rye_tui.constants import RYE_CONFIG_OPTION_DICT
 
 
 class ConfigTab(Container):
@@ -15,28 +16,21 @@ class ConfigTab(Container):
                 yield ConfigDefault()
                 yield ConfigSources()
             with Vertical():
-                self.conf_behavior = ConfigBehaviour()
+                self.conf_behavior = ConfigBehavior()
                 yield self.conf_behavior
                 yield ConfigProxy()
         return super().compose()
 
     @work(thread=True)
     def on_mount(self):
-        rye_conf = RyeConfig()
-        self.conf_dict = rye_conf.config_dict
-        self.conf_behavior.query_one(Static).update(
-            "\n".join(
-                [
-                    f"{opt}:{opt_val}"
-                    for opt, opt_val in self.conf_dict["behavior"].items()
-                ]
-            )
-        )
-        print(self.conf_dict)
+        self.rye_config = get_rye_config_values()
+        # prevent Messages on initial load
+        with self.prevent(Switch.Changed):
+            self.conf_behavior.load_current(conf_dict=self.rye_config["behavior"])
 
 
 class ConfigDefault(Container):
-    category: str = "Default"
+    category: str = "default"
 
     def compose(self) -> Iterable[Widget]:
         self.styles.border = ("heavy", "lightblue")
@@ -45,18 +39,41 @@ class ConfigDefault(Container):
         return super().compose()
 
 
-class ConfigBehaviour(Container):
-    category: str = "Behavior"
+class ConfigBehavior(Container):
+    category: str = "behavior"
 
     def compose(self) -> Iterable[Widget]:
+        self.LOAD = True
         self.styles.border = ("heavy", "lightblue")
         self.border_title = self.category
-        yield Static(self.category)
+        for opt, opt_default in RYE_CONFIG_OPTION_DICT[self.category].items():
+            opt_name = Static(opt)
+            opt_switch = Switch(value=opt_default, id=f"{self.category}_{opt}")
+            opt_switch.loading = True
+            with Horizontal(classes=f"config-{self.category}-container"):
+                yield opt_name
+                yield opt_switch
+
         return super().compose()
+
+    def load_current(self, conf_dict):
+        for opt, opt_value in conf_dict.items():
+            opt_switch = self.query_one(f"#{self.category}_{opt}")
+            opt_switch.value = opt_value
+            opt_switch.loading = False
+
+    @work(thread=True, exclusive=True)
+    @on(Switch.Changed)
+    def update_value(event, message):
+        message.switch.loading = True
+        new_value = str(message.value).lower()
+        category, option = message.switch.id.split("_")
+        rye_config_set_command(category=category, option=option, value=new_value)
+        message.switch.loading = False
 
 
 class ConfigSources(Container):
-    category: str = "Source"
+    category: str = "source"
 
     def compose(self) -> Iterable[Widget]:
         self.styles.border = ("heavy", "lightblue")
@@ -66,7 +83,7 @@ class ConfigSources(Container):
 
 
 class ConfigProxy(Container):
-    category: str = "Proxy"
+    category: str = "proxy"
 
     def compose(self) -> Iterable[Widget]:
         self.styles.border = ("heavy", "lightblue")

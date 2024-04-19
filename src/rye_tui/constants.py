@@ -12,12 +12,12 @@ RYE_CONFIG_OPTION_DICT = {
         "https": str,
     },
     "behavior": {
-        "force-rye-managed": bool,
-        "global-python": bool,
-        "use-uv": bool,
-        "autosync": bool,
-        "venv-mark-sync-ignore": bool,
-        "fetch-with-build-info": bool,
+        "force-rye-managed": False,
+        "global-python": True,
+        "use-uv": True,
+        "autosync": False,
+        "venv-mark-sync-ignore": True,
+        "fetch-with-build-info": False,
     },
     "sources": {
         "default": str,

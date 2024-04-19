@@ -48,6 +48,8 @@ multidict==6.0.5
     # via yarl
 nodeenv==1.8.0
     # via pre-commit
+pillow==10.3.0
+    # via rich-pixels
 platformdirs==4.2.0
     # via virtualenv
 pre-commit==3.7.0
@@ -56,7 +58,10 @@ pygments==2.17.2
 pyyaml==6.0.1
     # via pre-commit
 rich==13.7.1
+    # via rich-pixels
     # via textual
+rich-pixels==3.0.1
+    # via rye-tui
 setuptools==69.5.1
     # via nodeenv
 textual==0.56.4

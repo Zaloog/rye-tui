@@ -1,10 +1,7 @@
-from dataclasses import dataclass, field
+import tomllib
 
-from collections import defaultdict
 import subprocess
 from pathlib import Path
-
-from rye_tui.constants import RYE_CONFIG_OPTION_DICT
 
 
 def rye_version() -> str:
@@ -41,20 +38,13 @@ def rye_command_str_output(command: str, cwd: Path = Path.cwd()) -> str:
     return result.stderr
 
 
-def rye_config_get_command(category: str, option: str) -> str:
-    return f"rye config --get {category}.{option}"
+def rye_config_set_command(category: str, option: str, value=str) -> str:
+    if category == "behavior":
+        command = f"rye config --set-bool {category}.{option}={value}"
+        return rye_command_str_output(command=command)
 
 
-@dataclass
-class RyeConfig:
-    config_dict: defaultdict[dict] = field(default_factory=lambda: defaultdict(dict))
-
-    def __post_init__(self):
-        self.get_config_values()
-
-    def get_config_values(self):
-        # Behaviour
-        for category, category_options in RYE_CONFIG_OPTION_DICT.items():
-            for option in category_options.keys():
-                command = rye_config_get_command(category=category, option=option)
-                self.config_dict[category][option] = rye_command_str_output(command)
+def get_rye_config_values():
+    config_file_path = rye_command_str_output(command="rye config --show-path")
+    with open(config_file_path, "rb") as config_file:
+        return tomllib.load(config_file)

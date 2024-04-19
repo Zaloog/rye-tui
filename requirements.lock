@@ -38,10 +38,15 @@ msgpack==1.0.8
 multidict==6.0.5
     # via aiohttp
     # via yarl
+pillow==10.3.0
+    # via rich-pixels
 pygments==2.17.2
     # via rich
 rich==13.7.1
+    # via rich-pixels
     # via textual
+rich-pixels==3.0.1
+    # via rye-tui
 textual==0.56.4
     # via rye-tui
     # via textual-dev

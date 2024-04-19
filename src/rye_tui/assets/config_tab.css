@@ -1,0 +1,30 @@
+Container {
+    color: red;
+    height: auto;
+}
+
+.config-behavior-container {
+    layout: grid;
+    grid-size:2;
+    height: auto;
+}
+.config-behavior-container > Static {
+    
+    color: white;
+    height: auto;
+    width: 3fr;
+    content-align: left middle;
+    margin: 1 0 0 0;
+}
+
+.config-behavior-container > Switch {
+    
+    height: auto;
+    width: 1fr;
+    margin: 0 0 0 0;
+}
+
+/* .config-option-container  > Switch > .switch--slider  { */
+    /* color: green; */
+    /* background: darkslateblue; */
+/* } */

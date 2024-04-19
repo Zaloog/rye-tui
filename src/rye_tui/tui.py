@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from textual import work
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal
@@ -8,7 +10,11 @@ from rye_tui.rye_commands import rye_version
 
 
 class RyeTui(App):
+    CSS_PATH = Path("assets/config_tab.css")
+
     def compose(self) -> ComposeResult:
+        self.conf_dict = {}
+
         yield Header()
         yield Footer()
         with Horizontal():
