@@ -3,6 +3,10 @@ Container {
     height: auto;
 }
 
+Tab {
+    width: 1fr;
+}
+
 .config-behavior-container {
     layout: grid;
     grid-size:2;
@@ -23,8 +27,3 @@ Container {
     width: 1fr;
     margin: 0 0 0 0;
 }
-
-/* .config-option-container  > Switch > .switch--slider  { */
-    /* color: green; */
-    /* background: darkslateblue; */
-/* } */

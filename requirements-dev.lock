@@ -8,7 +8,7 @@
 #   with-sources: false
 
 -e file:.
-aiohttp==3.9.4
+aiohttp==3.9.5
     # via textual-dev
 aiosignal==1.3.1
     # via aiohttp
@@ -64,7 +64,7 @@ rich-pixels==3.0.1
     # via rye-tui
 setuptools==69.5.1
     # via nodeenv
-textual==0.56.4
+textual==0.57.0
     # via rye-tui
     # via textual-dev
 textual-dev==1.5.1
@@ -74,7 +74,7 @@ typing-extensions==4.11.0
     # via textual-dev
 uc-micro-py==1.0.3
     # via linkify-it-py
-virtualenv==20.25.1
+virtualenv==20.25.3
     # via pre-commit
 yarl==1.9.4
     # via aiohttp

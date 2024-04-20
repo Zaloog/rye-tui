@@ -13,12 +13,15 @@ class ConfigTab(Container):
     def compose(self) -> Iterable[Widget]:
         with Horizontal():
             with Vertical():
-                yield ConfigDefault()
-                yield ConfigSources()
+                self.conf_default = ConfigDefault()
+                yield self.conf_default
+                self.conf_sources = ConfigSources()
+                yield self.conf_sources
             with Vertical():
                 self.conf_behavior = ConfigBehavior()
                 yield self.conf_behavior
-                yield ConfigProxy()
+                self.conf_proxy = ConfigProxy()
+                yield self.conf_proxy
         return super().compose()
 
     @work(thread=True)
@@ -43,7 +46,6 @@ class ConfigBehavior(Container):
     category: str = "behavior"
 
     def compose(self) -> Iterable[Widget]:
-        self.LOAD = True
         self.styles.border = ("heavy", "lightblue")
         self.border_title = self.category
         for opt, opt_dict in CONF_OPT_DICT[self.category].items():
@@ -71,6 +73,11 @@ class ConfigBehavior(Container):
         category, option = message.switch.id.split("_")
         rye_config_set_command(category=category, option=option, value=new_value)
         message.switch.loading = False
+        msg_color = "green" if new_value == "true" else "red"
+        event.notify(
+            message=f"{category}.{option} set to [{msg_color}]{new_value}[/]",
+            title="Config Updated",
+        )
 
 
 class ConfigSources(Container):
