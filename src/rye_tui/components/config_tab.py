@@ -1,9 +1,9 @@
 from typing import Iterable
 
 from textual import work, on
-from textual.widgets import Input, Static, Switch
+from textual.widgets import Input, Static, Switch, Collapsible
 from textual.widget import Widget
-from textual.containers import Container, Vertical, Horizontal
+from textual.containers import Container, Vertical, Horizontal, VerticalScroll
 
 from rye_tui.rye_commands import get_rye_config_values, rye_config_set_command
 from rye_tui.constants import CONF_OPT_DICT
@@ -29,19 +29,42 @@ class ConfigTab(Container):
         self.rye_config = get_rye_config_values()
         # prevent Messages on initial load
         with self.prevent(Switch.Changed):
+            self.conf_default.load_current(conf_dict=self.rye_config["default"])
             self.conf_behavior.load_current(conf_dict=self.rye_config["behavior"])
+            self.conf_proxy.load_current(conf_dict=self.rye_config["proxy"])
 
 
+########################################################################################
+# Default
 class ConfigDefault(Container):
     category: str = "default"
 
     def compose(self) -> Iterable[Widget]:
         self.styles.border = ("heavy", "lightblue")
         self.border_title = self.category
-        yield Input(self.category)
+        for opt, opt_dict in CONF_OPT_DICT[self.category].items():
+            opt_name = Static(opt)
+            opt_name.tooltip = opt_dict["tooltip"]
+            opt_value = Input(
+                value=opt_dict["default"],
+                placeholder="enter proxy to use",
+                id=f"{self.category}_{opt}",
+            )
+            opt_value.loading = True
+            with Horizontal(classes=f"config-{self.category}-container"):
+                yield opt_name
+                yield opt_value
         return super().compose()
 
+    def load_current(self, conf_dict):
+        for opt, opt_dict in CONF_OPT_DICT[self.category].items():
+            opt_switch = self.query_one(f"#{self.category}_{opt}")
+            opt_switch.value = conf_dict.get(opt, opt_dict["default"])
+            opt_switch.loading = False
 
+
+########################################################################################
+# Behavior
 class ConfigBehavior(Container):
     category: str = "behavior"
 
@@ -80,21 +103,61 @@ class ConfigBehavior(Container):
         )
 
 
-class ConfigSources(Container):
+########################################################################################
+# Sources
+class ConfigSources(VerticalScroll):
     category: str = "source"
 
     def compose(self) -> Iterable[Widget]:
         self.styles.border = ("heavy", "lightblue")
         self.border_title = self.category
-        yield Input(self.category)
+        with Collapsible(title="default"):
+            yield Input(self.category)
+            yield Input(self.category)
+        with Collapsible(title="private"):
+            yield Input(self.category)
+            yield Input(self.category)
         return super().compose()
 
 
+########################################################################################
+# Proxy
 class ConfigProxy(Container):
     category: str = "proxy"
 
     def compose(self) -> Iterable[Widget]:
         self.styles.border = ("heavy", "lightblue")
         self.border_title = self.category
-        yield Input(self.category)
+        for opt, opt_dict in CONF_OPT_DICT[self.category].items():
+            opt_name = Static(opt)
+            opt_name.tooltip = opt_dict["tooltip"]
+            opt_value = Input(
+                value=opt_dict["default"],
+                placeholder="enter proxy and press enter",
+                id=f"{self.category}_{opt}",
+            )
+            opt_value.loading = True
+            with Horizontal(classes=f"config-{self.category}-container"):
+                yield opt_name
+                yield opt_value
         return super().compose()
+
+    def load_current(self, conf_dict):
+        for opt, opt_dict in CONF_OPT_DICT[self.category].items():
+            opt_switch = self.query_one(f"#{self.category}_{opt}")
+            opt_switch.value = conf_dict.get(opt, opt_dict["default"])
+            opt_switch.loading = False
+
+    @work(thread=True, exclusive=True)
+    @on(Input.Submitted)
+    def update_value(event, message):
+        message.input.loading = True
+        new_value = str(message.value).lower()
+        category, option = message.input.id.split("_")
+        rye_config_set_command(category=category, option=option, value=new_value)
+        message.input.loading = False
+        msg_show = f"set to [green]{new_value}[/]" if new_value else "[red]removed[/]"
+        event.notify(
+            message=f"{category}.{option} {msg_show}",
+            title="Config Updated",
+        )

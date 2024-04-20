@@ -51,3 +51,9 @@ TT_DEFAULT_BUILD_SYSTEM = """"""
 TT_DEFAULT_LICENCE = """"""
 TT_DEFAULT_AUTHOR = """"""
 TT_DEFAULT_DEPENDENCY_OPERATOR = """"""
+
+TT_PROXY_HTTP = """the proxy to use for HTTP
+(overridden by the http_proxy environment variable)"""
+
+TT_PROXY_HTTPS = """the proxy to use for HTTPS
+(overridden by the https_proxy environment variable)"""

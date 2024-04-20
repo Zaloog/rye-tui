@@ -30,8 +30,16 @@ CONF_OPT_DICT = {
         },
     },
     "proxy": {
-        "http": str,
-        "https": str,
+        "http": {
+            "default": "",
+            "type": bool,
+            "tooltip": tt.TT_PROXY_HTTP,
+        },
+        "https": {
+            "default": "",
+            "type": bool,
+            "tooltip": tt.TT_PROXY_HTTPS,
+        },
     },
     "behavior": {
         "force-rye-managed": {

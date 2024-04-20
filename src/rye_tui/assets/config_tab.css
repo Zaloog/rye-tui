@@ -1,5 +1,4 @@
 Container {
-    color: red;
     height: auto;
 }
 
@@ -7,6 +6,29 @@ Tab {
     width: 1fr;
 }
 
+/* Default */
+.config-default-container {
+    layout: grid;
+    grid-size:2;
+    height: auto;
+}
+.config-default-container > Static {
+    
+    color: white;
+    height: auto;
+    width: 3fr;
+    content-align: left middle;
+    margin: 1 0 0 0;
+}
+
+.config-default-container > Input {
+    
+    height: auto;
+    width: 1fr;
+    margin: 0 0 0 0;
+}
+
+/* Behavior */
 .config-behavior-container {
     layout: grid;
     grid-size:2;
@@ -22,6 +44,28 @@ Tab {
 }
 
 .config-behavior-container > Switch {
+    
+    height: auto;
+    width: 1fr;
+    margin: 0 0 0 0;
+}
+
+/* Proxy */
+.config-proxy-container {
+    layout: grid;
+    grid-size:2;
+    height: auto;
+}
+.config-proxy-container > Static {
+    
+    color: white;
+    height: auto;
+    width: 3fr;
+    content-align: left middle;
+    margin: 1 0 0 0;
+}
+
+.config-proxy-container > Input {
     
     height: auto;
     width: 1fr;
