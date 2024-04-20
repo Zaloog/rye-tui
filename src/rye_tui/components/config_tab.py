@@ -1,12 +1,12 @@
 from typing import Iterable
 
 from textual import work, on
-from textual.widgets import Input, Static, Switch, Collapsible
+from textual.widgets import Input, Static, Switch, Collapsible, Button, Select
 from textual.widget import Widget
 from textual.containers import Container, Vertical, Horizontal, VerticalScroll
 
 from rye_tui.rye_commands import get_rye_config_values, rye_config_set_command
-from rye_tui.constants import CONF_OPT_DICT
+from rye_tui.constants import CONF_OPT_DICT, OPT_DROPDOWN_DICT
 
 
 class ConfigTab(Container):
@@ -45,11 +45,18 @@ class ConfigDefault(Container):
         for opt, opt_dict in CONF_OPT_DICT[self.category].items():
             opt_name = Static(opt)
             opt_name.tooltip = opt_dict["tooltip"]
-            opt_value = Input(
-                value=opt_dict["default"],
-                placeholder="enter proxy to use",
-                id=f"{self.category}_{opt}",
-            )
+            if opt in OPT_DROPDOWN_DICT.keys():
+                opt_value = Select(
+                    options=[(val, val) for val in OPT_DROPDOWN_DICT[opt]],
+                    id=f"{self.category}_{opt}",
+                    value=opt_dict["default"],
+                    allow_blank=False,
+                )
+            else:
+                opt_value = Input(
+                    value=opt_dict["default"],
+                    id=f"{self.category}_{opt}",
+                )
             opt_value.loading = True
             with Horizontal(classes=f"config-{self.category}-container"):
                 yield opt_name
@@ -117,6 +124,7 @@ class ConfigSources(VerticalScroll):
         with Collapsible(title="private"):
             yield Input(self.category)
             yield Input(self.category)
+        yield Button("Add new Source")
         return super().compose()
 
 

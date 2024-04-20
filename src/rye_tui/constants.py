@@ -80,3 +80,5 @@ CONF_OPT_DICT = {
         }
     ],
 }
+
+OPT_DROPDOWN_DICT = {"license": ["MIT", "TEST"], "dependency-operator": [">=", "=="]}
