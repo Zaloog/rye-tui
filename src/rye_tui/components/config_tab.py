@@ -55,6 +55,7 @@ class ConfigDefault(Container):
             else:
                 opt_value = Input(
                     value=opt_dict["default"],
+                    placeholder=opt_dict.get("placeholder"),
                     id=f"{self.category}_{opt}",
                 )
             opt_value.loading = True

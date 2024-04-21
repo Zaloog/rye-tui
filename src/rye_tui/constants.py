@@ -6,22 +6,26 @@ CONF_OPT_DICT = {
             "default": ">= 3.8",
             "type": str,
             "tooltip": tt.TT_DEFAULT_REQUIRES_PYTHON,
+            "placeholder": "enter python version",
         },
         "toolchain": {
             "default": "cpython@3.11.1",
             "type": str,
             "tooltip": tt.TT_DEFAULT_TOOLCHAIN,
+            "placeholder": "enter toolchain",
         },
         "build-system": {
             "default": "hatchling",
             "type": str,
             "tooltip": tt.TT_DEFAULT_BUILD_SYSTEM,
+            "placeholder": "enter build-system",
         },
         "license": {"default": "MIT", "type": str, "tooltip": tt.TT_DEFAULT_LICENCE},
         "author": {
-            "default": "Full Name <email>",
+            "default": "",
             "type": str,
             "tooltip": tt.TT_DEFAULT_AUTHOR,
+            "placeholder": "enter mail to override git",
         },
         "dependency-operator": {
             "default": ">=",
@@ -81,4 +85,7 @@ CONF_OPT_DICT = {
     ],
 }
 
-OPT_DROPDOWN_DICT = {"license": ["MIT", "TEST"], "dependency-operator": [">=", "=="]}
+OPT_DROPDOWN_DICT = {
+    "license": ["MIT", "TEST"],
+    "dependency-operator": [">=", "~=", "=="],
+}
