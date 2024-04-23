@@ -79,9 +79,19 @@ CONF_OPT_DICT = {
     },
     "sources": [
         {
-            "name": str,
-            "url": str,
-        }
+            "name": "default",
+            "url": "https://pypi.org/simple/",
+            "username": "",
+            "password": "",
+            "verify-ssl": True,
+        },
+        {
+            "name": "test",
+            "url": "https://test.pypi.org/simple/",
+            "username": "bla",
+            "password": "blopb",
+            "verify-ssl": True,
+        },
     ],
 }
 
@@ -89,3 +99,5 @@ OPT_DROPDOWN_DICT = {
     "license": ["MIT", "TEST"],
     "dependency-operator": [">=", "~=", "=="],
 }
+
+SOURCES_VALUES = ["url", "username", "password", "verify-ssl"]
