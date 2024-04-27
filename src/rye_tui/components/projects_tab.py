@@ -3,18 +3,21 @@ from pathlib import Path
 import subprocess
 
 from textual import work, on
-from textual.containers import VerticalScroll
+from textual.containers import VerticalScroll, Container, Horizontal, Vertical
 from textual.widget import Widget
-from textual.widgets import Input, Button, Static
+from textual.widgets import Label, Button, Static, ListView, ListItem
 
 
 class ProjectTab(VerticalScroll):
     info = Static("TestStatic")
 
     def compose(self) -> Iterable[Widget]:
-        yield Input("Projects")
-        yield Button("press")
-        yield self.info
+        with Horizontal():
+            with Vertical():
+                yield ProjectList()
+                yield ProjectInteraction()
+            with Vertical():
+                yield ProjectPreview()
 
         return super().compose()
 
@@ -36,4 +39,29 @@ class ProjectTab(VerticalScroll):
             self.info.update(f"""{result.stderr}""")
 
 
-class ProjectView(VerticalScroll): ...
+class ProjectList(VerticalScroll):
+    def compose(self) -> Iterable[Widget]:
+        yield ListView(
+            ListItem(Horizontal(Label("Test"), Button("Edit"))),
+            ListItem(Label("Test1")),
+        )
+
+        return super().compose()
+
+
+class ProjectInteraction(Container):
+    def compose(self) -> Iterable[Widget]:
+        yield Button("New Project")
+        yield Button("Interaction2")
+
+        return super().compose()
+
+
+class ProjectPreview(VerticalScroll):
+    def compose(self) -> Iterable[Widget]:
+        content = open(r"C:\Users\grams\scoop\persist\rye\config.toml").read()
+        project_infos = Static("[green]Hello[/]\n" + content, expand=True)
+
+        yield project_infos
+
+        return super().compose()
