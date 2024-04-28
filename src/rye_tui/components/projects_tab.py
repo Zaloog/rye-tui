@@ -70,6 +70,8 @@ class ProjectInteraction(Container):
         return super().compose()
 
 
+# TODO
+# Collapsibles Infos/Packages
 class ProjectPreview(VerticalScroll):
     def compose(self) -> Iterable[Widget]:
         self.styles.border = ("heavy", "lightblue")

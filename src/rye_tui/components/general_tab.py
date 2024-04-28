@@ -9,6 +9,9 @@ from textual.containers import Container
 from rye_tui.rye_commands import rye_tools_list
 
 
+# installed tools/packages
+# installed python toolchains
+# add new toolchain?
 class GeneralTab(Container):
     tools = Static("Test")
 
