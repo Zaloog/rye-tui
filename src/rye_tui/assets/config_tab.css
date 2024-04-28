@@ -7,9 +7,10 @@ Tab {
 ConfigTab Container {
     height: auto;
 }
-.config-category {
+.section {
     border: rgb(132,164,50) heavy;
 }
+
 /* Default */
 .config-default-container {
     layout: grid;
@@ -117,18 +118,23 @@ ProjectTab Vertical{
     height: auto;
 }
 /* ProjectList */
-ProjectList VerticalScroll {
+ProjectList ListItem{
+    layout:grid;
+    grid-size: 4;
+}
+ProjectList ListItem Label {
+    height:auto;
+    width: auto;
+    column-span: 2;
+    margin: 1 0 0 0;
+}
+ProjectList ListItem Button {
     height:auto;
     width: 1fr;
 }
 /* ProjectInteraction */
 ProjectInteraction {
     border: rgb(132,164,50) heavy;
-}
-ProjectInteraction Container {
-    border: black round;
-    height: auto;
-    width: auto;
 }
 ProjectInteraction Horizontal {
     height: 1fr;
@@ -141,5 +147,5 @@ ProjectInteraction Button {
     height: 1fr;
     width: 1fr;
     background: rgb(44,55,58);
-    margin: 1 1 1 1;
+    margin: 0 1 0 1;
 }

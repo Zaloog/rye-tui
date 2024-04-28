@@ -41,12 +41,11 @@ class ProjectTab(Container):
 
 class ProjectList(VerticalScroll):
     def compose(self) -> Iterable[Widget]:
-        self.styles.border = ("heavy", "lightblue")
+        self.classes = "section"
         self.border_title = "Project List"
         yield ListView(
-            ListItem(Horizontal(Label("Test"), Button("Edit"))),
-            ListItem(Label("Test1")),
-            ListItem(Label("Test2")),
+            ListItem(Label("Test"), Button("Edit"), Button("Delete")),
+            ListItem(Label("Test1"), Button("Edit1"), Button("Delete")),
         )
 
         return super().compose()
@@ -54,7 +53,7 @@ class ProjectList(VerticalScroll):
 
 class ProjectInteraction(Container):
     def compose(self) -> Iterable[Widget]:
-        # self.styles.border = ("heavy", "lightblue")
+        self.classes = "section"
         self.border_title = "Interaction"
 
         with Vertical():
@@ -72,9 +71,11 @@ class ProjectInteraction(Container):
 
 # TODO
 # Collapsibles Infos/Packages
+## Rye show
+## Rye list
 class ProjectPreview(VerticalScroll):
     def compose(self) -> Iterable[Widget]:
-        self.styles.border = ("heavy", "lightblue")
+        self.classes = "section"
         self.border_title = "Preview"
 
         content = open(r"pyproject.toml").read()
