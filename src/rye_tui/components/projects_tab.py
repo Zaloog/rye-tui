@@ -8,7 +8,7 @@ from textual.widget import Widget
 from textual.widgets import Label, Button, Static, ListView, ListItem
 
 
-class ProjectTab(VerticalScroll):
+class ProjectTab(Container):
     info = Static("TestStatic")
 
     def compose(self) -> Iterable[Widget]:
@@ -41,9 +41,12 @@ class ProjectTab(VerticalScroll):
 
 class ProjectList(VerticalScroll):
     def compose(self) -> Iterable[Widget]:
+        self.styles.border = ("heavy", "lightblue")
+        self.border_title = "Project List"
         yield ListView(
             ListItem(Horizontal(Label("Test"), Button("Edit"))),
             ListItem(Label("Test1")),
+            ListItem(Label("Test2")),
         )
 
         return super().compose()
@@ -51,15 +54,28 @@ class ProjectList(VerticalScroll):
 
 class ProjectInteraction(Container):
     def compose(self) -> Iterable[Widget]:
-        yield Button("New Project")
-        yield Button("Interaction2")
+        self.styles.border = ("heavy", "lightblue")
+        self.border_title = "Interaction"
+
+        with Vertical():
+            with Horizontal():
+                yield Button("New Project")
+                yield Button("Add/Remove Packages")
+                yield Button("Rye Synch + Update")
+            with Horizontal():
+                yield Button("Pin Python Version")
+                yield Button("Build")
+                yield Button("Publish")
 
         return super().compose()
 
 
 class ProjectPreview(VerticalScroll):
     def compose(self) -> Iterable[Widget]:
-        content = open(r"C:\Users\grams\scoop\persist\rye\config.toml").read()
+        self.styles.border = ("heavy", "lightblue")
+        self.border_title = "Preview"
+
+        content = open(r"pyproject.toml").read()
         project_infos = Static("[green]Hello[/]\n" + content, expand=True)
 
         yield project_infos

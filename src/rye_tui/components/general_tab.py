@@ -2,7 +2,7 @@ from typing import Iterable
 
 from textual import work
 from textual.events import Mount
-from textual.widgets import Static
+from textual.widgets import Static, Button
 from textual.widget import Widget
 from textual.containers import Container
 
@@ -14,6 +14,8 @@ class GeneralTab(Container):
 
     def compose(self) -> Iterable[Widget]:
         yield self.tools
+        yield Button("Test1")
+        yield Button("Test2")
         return super().compose()
 
     @work(thread=True)

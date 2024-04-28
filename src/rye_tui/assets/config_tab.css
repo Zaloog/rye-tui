@@ -1,11 +1,12 @@
-Container {
-    height: auto;
-}
 
 Tab {
     width: 1fr;
 }
 
+/* ConfigTab */
+ConfigTab Container {
+    height: auto;
+}
 /* Default */
 .config-default-container {
     layout: grid;
@@ -16,12 +17,19 @@ Tab {
     
     color: white;
     height: auto;
-    width: 3fr;
+    width: 1fr;
     content-align: left middle;
     margin: 1 0 0 0;
 }
+.config-default-container Select{
+    
+    color: white;
+    height: auto;
+    content-align: left middle;
+    width: 1fr;
+}
 
-.config-default-container > Input {
+.config-default-container Input {
     
     height: auto;
     width: 1fr;
@@ -34,7 +42,7 @@ Tab {
     grid-size:2;
     height: auto;
 }
-.config-behavior-container > Static {
+.config-behavior-container Static {
     
     color: white;
     height: auto;
@@ -43,7 +51,7 @@ Tab {
     margin: 1 0 0 0;
 }
 
-.config-behavior-container > Switch {
+.config-behavior-container Switch {
     
     height: auto;
     width: 1fr;
@@ -78,7 +86,7 @@ Tab {
     grid-size:2;
     height: auto;
 }
-.config-sources-container > Static {
+.config-sources-container Static {
     
     color: white;
     height: auto;
@@ -87,16 +95,36 @@ Tab {
     margin: 1 0 0 0;
 }
 
-.config-sources-container > Input {
+.config-sources-container Input {
     
     height: auto;
     width: 1fr;
     margin: 0 0 0 0;
 }
 
-.config-sources-container > Switch {
+.config-sources-container Switch {
     
     height: auto;
     width: 1fr;
     margin: 0 0 0 0;
+}
+
+/* Projects */
+ProjectTab Vertical{
+    height: auto;
+}
+/* ProjectList */
+ProjectList VerticalScroll {
+    height:auto;
+    width: 1fr;
+}
+/* ProjectInteraction */
+ProjectInteraction Horizontal {
+    height: 2fr;
+    margin: 1 1 0 1;
+}
+ProjectInteraction Button {
+    height: 1fr;
+    width: 1fr;
+    margin: 0 1 0 0;
 }
