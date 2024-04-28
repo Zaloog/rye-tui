@@ -1,11 +1,11 @@
 from typing import Iterable
-from pathlib import Path
-import subprocess
 
-from textual import work, on
+from textual import on
 from textual.containers import VerticalScroll, Container, Horizontal, Vertical
 from textual.widget import Widget
 from textual.widgets import Label, Button, Static, ListView, ListItem
+
+from rye_tui.config import cfg
 
 
 class ProjectTab(Container):
@@ -21,22 +21,22 @@ class ProjectTab(Container):
 
         return super().compose()
 
-    @on(Button.Pressed)
-    def rye_load_package_list(self) -> None:
-        self.info.update("Loading...")
-        self.refresh_info()
+    # @on(Button.Pressed)
+    # def rye_load_package_list(self) -> None:
+    #     self.info.update("Loading...")
+    #     self.refresh_info()
 
-    @work(thread=True)
-    def refresh_info(self):
-        result = subprocess.run(
-            ["rye", "list"], capture_output=True, text=True, cwd=Path(".")
-        )
-        if result.returncode == 0:
-            msg = result.stdout
-            print(msg)
-            self.info.update(f"""{msg}""")
-        else:
-            self.info.update(f"""{result.stderr}""")
+    # @work(thread=True)
+    # def refresh_info(self):
+    #     result = subprocess.run(
+    #         ["rye", "list"], capture_output=True, text=True, cwd=Path(".")
+    #     )
+    #     if result.returncode == 0:
+    #         msg = result.stdout
+    #         print(msg)
+    #         self.info.update(f"""{msg}""")
+    #     else:
+    #         self.info.update(f"""{result.stderr}""")
 
 
 class ProjectList(VerticalScroll):
@@ -67,6 +67,10 @@ class ProjectInteraction(Container):
                 yield Button("Publish")
 
         return super().compose()
+
+    @on(Button.Pressed)
+    def rye_load_package_list(self) -> None:
+        self.app.log.debug([(p, j) for p, j in cfg.config["projects"].items()])
 
 
 # TODO

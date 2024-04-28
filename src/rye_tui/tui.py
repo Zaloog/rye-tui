@@ -10,7 +10,7 @@ from rye_tui.rye_commands import rye_version
 
 
 class RyeTui(App):
-    CSS_PATH = Path("assets/config_tab.css")
+    CSS_PATH = Path("assets/tui.css")
 
     def compose(self) -> ComposeResult:
         self.conf_dict = {}
