@@ -40,7 +40,7 @@ class ConfigDefault(Container):
     category: str = "default"
 
     def compose(self) -> Iterable[Widget]:
-        self.styles.border = ("heavy", "lightblue")
+        self.classes = "config-category"
         self.border_title = self.category
         for opt, opt_dict in CONF_OPT_DICT[self.category].items():
             opt_name = Static(opt)
@@ -77,7 +77,7 @@ class ConfigBehavior(Container):
     category: str = "behavior"
 
     def compose(self) -> Iterable[Widget]:
-        self.styles.border = ("heavy", "lightblue")
+        self.classes = "config-category"
         self.border_title = self.category
         for opt, opt_dict in CONF_OPT_DICT[self.category].items():
             opt_name = Static(opt)
@@ -117,7 +117,7 @@ class ConfigSources(VerticalScroll):
     category: str = "sources"
 
     def compose(self) -> Iterable[Widget]:
-        self.styles.border = ("heavy", "lightblue")
+        self.classes = "config-category"
         self.border_title = self.category
         for source in CONF_OPT_DICT[self.category]:
             with Collapsible(title=source["name"]):
@@ -151,7 +151,7 @@ class ConfigProxy(Container):
     category: str = "proxy"
 
     def compose(self) -> Iterable[Widget]:
-        self.styles.border = ("heavy", "lightblue")
+        self.classes = "config-category"
         self.border_title = self.category
         for opt, opt_dict in CONF_OPT_DICT[self.category].items():
             opt_name = Static(opt)

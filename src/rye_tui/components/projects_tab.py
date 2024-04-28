@@ -54,7 +54,7 @@ class ProjectList(VerticalScroll):
 
 class ProjectInteraction(Container):
     def compose(self) -> Iterable[Widget]:
-        self.styles.border = ("heavy", "lightblue")
+        # self.styles.border = ("heavy", "lightblue")
         self.border_title = "Interaction"
 
         with Vertical():
