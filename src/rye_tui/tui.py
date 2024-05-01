@@ -47,6 +47,9 @@ class RyeTui(App):
                 self.cfg.add_project(
                     new_project_name=project_name, new_project_path=project_path
                 )
-                self.notify(f"[blue]{project_name}[/] added to rye-tui config")
+                self.notify(
+                    f"[blue]{project_name}[/] was added to [b]rye-tui[/b] config",
+                    title="Project List Updated",
+                )
             else:
                 self.notify("[red]NO[/] pyproject.toml found in [blue]CWD[/]")

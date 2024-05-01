@@ -2,7 +2,7 @@ from typing import Iterable
 
 from textual import on
 from textual.widget import Widget
-from textual.widgets import Button, Label, ListItem, Header
+from textual.widgets import Button, Label, ListItem, Header, DataTable
 
 
 class RyeHeader(Header):
@@ -35,7 +35,9 @@ class DeleteButton(Widget):
         self.app.query_one("#project_list").update()
         self.app.query_one("#project_preview").update_content()
 
-        self.notify(f"Project [red]{project_name}[/] deleted")
+        self.notify(
+            f"project [blue]{project_name}[/] was deleted", title="Project List Updated"
+        )
 
 
 class ProjectListItem(ListItem):
@@ -49,3 +51,10 @@ class ProjectListItem(ListItem):
         yield DeleteButton()
 
         return super().compose()
+
+
+# Config Widget Line
+class ProjectPreviewPackageTable(DataTable):
+    def __init__(self, reihe) -> None:
+        self.add_rows(reihe)
+        super().__init__()

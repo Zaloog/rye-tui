@@ -4,7 +4,7 @@ from pathlib import Path
 from textual import on, work
 from textual.containers import VerticalScroll, Container, Horizontal, Vertical
 from textual.widget import Widget
-from textual.widgets import Button, Static, ListView
+from textual.widgets import Button, Static, ListView, DataTable
 from rich_pixels import Pixels
 
 from rye_tui.components.helper_widgets import ProjectListItem
@@ -64,7 +64,7 @@ class ProjectInteraction(Container):
             with Horizontal():
                 yield Button("New Project", id="btn_new")
                 yield Button("Add/Remove Packages", id="btn_pkg")
-                yield Button("Rye Synch + Update")
+                yield Button("Rye Sync + Update")
             with Horizontal():
                 yield Button("Pin Python Version")
                 yield Button("Build")
@@ -98,10 +98,13 @@ class ProjectPreview(VerticalScroll):
         self.id = "project_preview"
         # with Image.open('images/rye_image.jpg') as image:
         pixels = Pixels.from_image_path("images/rye_image.jpg", resize=(80, 55))
-        self.content = Static(pixels, shrink=True, expand=True)
+        self.content_info = Static(pixels, shrink=True, expand=True)
+        self.content_table = DataTable(show_cursor=False, show_header=False)
+        self.content_table.add_columns("package", "version")
         # self.content = Static("please select a project", expand=True)
 
-        yield self.content
+        yield self.content_info
+        yield self.content_table
 
         return super().compose()
 
@@ -109,12 +112,27 @@ class ProjectPreview(VerticalScroll):
     def update_content(self):
         try:
             if self.app.active_project_path:
-                content = rye_command_str_output(
+                project_infos = rye_command_str_output(
                     "rye show", cwd=self.app.active_project_path
+                )
+                project_packages = rye_command_str_output(
+                    "rye list", cwd=self.app.active_project_path
+                )
+                content = project_infos
+                self.content_info.update(content)
+
+                self.content_table.show_header = True
+                if not self.content_table.columns:
+                    self.content_table.add_columns("package", "version")
+                self.content_table.clear()
+                self.content_table.add_rows(
+                    [i.split("==") for i in project_packages.split("\n") if "==" in i]
                 )
             else:
                 content = "please select a project"
-            self.content.update(content)
+                self.content_info.update(content)
+                self.content_table.clear(columns=True)
+            # self.content = content
         except Exception as e:
             self.app.log.error(e)
-            self.content.update("error: project path name is not valid")
+            self.content_info.update("error: project path name is not valid")

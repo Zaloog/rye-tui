@@ -156,11 +156,23 @@ ProjectInteraction Button {
     background: rgb(44,55,58);
     margin: 0 1 0 1;
 }
+/* ProjectPreview */
+DataTable {
+    height: 1fr;
+}
 
 Header {
     background: rgb(132,164,50);
 }
-
 Footer {
+    background: rgb(132,164,50);
+}
+Footer .footer--key {
+    background: rgb(132,164,50);
+}
+Footer .footer--highlight {
+    background: rgb(132,164,50);
+}
+Footer .footer--highlight-key {
     background: rgb(132,164,50);
 }
