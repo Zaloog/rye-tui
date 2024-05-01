@@ -125,17 +125,17 @@ ProjectTab Vertical{
     height: auto;
 }
 /* ProjectList */
-ProjectList ListItem{
+ProjectListItem{
     layout:grid;
     grid-size: 4;
 }
-ProjectList ListItem Label {
+ProjectListItem Label {
     height:auto;
     width: auto;
     column-span: 2;
     margin: 1 0 0 0;
 }
-ProjectList ListItem Button {
+ProjectListItem Button {
     height:auto;
     width: 1fr;
 }

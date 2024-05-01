@@ -13,10 +13,10 @@ class ProjectTab(Container):
     def compose(self) -> Iterable[Widget]:
         with Horizontal():
             with Vertical():
-                yield ProjectList(id="project_list")
-                yield ProjectInteraction(id="project_interaction")
+                yield ProjectList()
+                yield ProjectInteraction()
             with Vertical():
-                yield ProjectPreview(id="project_preview")
+                yield ProjectPreview()
 
         return super().compose()
 
@@ -25,12 +25,12 @@ class ProjectList(VerticalScroll):
     def compose(self) -> Iterable[Widget]:
         self.classes = "section"
         self.border_title = "Project List"
+        self.id = "project_list"
         yield ListView(
             *[
-                ProjectListItem(project_title=f"{proj}\n{proj_path}")
-                for proj, proj_path in self.app.cfg.projects.items()
-            ],
-            ProjectListItem(project_title="Test"),
+                ProjectListItem(project_title=proj)
+                for proj, _proj_path in self.app.cfg.projects.items()
+            ]
         )
 
         return super().compose()
@@ -44,6 +44,7 @@ class ProjectInteraction(Container):
     def compose(self) -> Iterable[Widget]:
         self.classes = "section"
         self.border_title = "Interaction"
+        self.id = "project_interaction"
 
         with Vertical():
             with Horizontal():
@@ -80,6 +81,7 @@ class ProjectPreview(VerticalScroll):
     def compose(self) -> Iterable[Widget]:
         self.classes = "section"
         self.border_title = "Preview"
+        self.id = "project_preview"
 
         content = open(r"pyproject.toml").read()
         project_infos = Static("[green]Hello[/]\n" + content, expand=True)

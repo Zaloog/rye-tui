@@ -14,7 +14,7 @@ class RyeTui(App):
     CSS_PATH = Path("assets/tui.css")
 
     def compose(self) -> ComposeResult:
-        self.cfg = RyeTuiConfig()
+        self.cfg: RyeTuiConfig = RyeTuiConfig()
 
         yield Header()
         yield Footer()

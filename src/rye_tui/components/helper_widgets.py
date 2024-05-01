@@ -18,7 +18,10 @@ class DeleteButton(Widget):
 
     @on(Button.Pressed)
     def delete_project(self):
-        self.app.log.error(self.parent.project_title)
+        project_name = self.parent.project_title
+        self.app.cfg.remove_project(project_name=project_name)
+        self.app.query_one("#project_list").update()
+        self.notify(f"Project [red]{project_name}[/] deleted")
 
 
 class ProjectListItem(ListItem):
