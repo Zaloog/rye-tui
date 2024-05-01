@@ -27,6 +27,7 @@ class ProjectList(VerticalScroll):
         self.classes = "section"
         self.border_title = "Project List"
         self.id = "project_list"
+
         yield ListView(
             *[
                 ProjectListItem(project_title=proj)
@@ -110,5 +111,6 @@ class ProjectPreview(VerticalScroll):
             else:
                 content = "please select a project"
             self.content.update(content)
-        except FileNotFoundError:
-            self.content.update('it seems like theres no "pyproject.toml" here')
+        except Exception as e:
+            self.app.log.error(e)
+            self.content.update("error: project path name is not valid")

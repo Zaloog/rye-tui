@@ -1,3 +1,4 @@
+import tomllib
 from pathlib import Path
 
 from textual import work
@@ -15,9 +16,12 @@ class RyeTui(App):
     CSS_PATH = Path("assets/tui.css")
 
     cfg: RyeTuiConfig = RyeTuiConfig()
+    active_project = reactive("")
     active_project_path = reactive("")
 
     def compose(self) -> ComposeResult:
+        self.add_cwd_to_config()
+
         yield Header()
         yield Footer()
         with Horizontal():
@@ -27,3 +31,20 @@ class RyeTui(App):
     @work(thread=True)
     def on_mount(self) -> None:
         self.sub_title = rye_version()
+
+    @work(thread=True)
+    def add_cwd_to_config(self):
+        project_path = Path().cwd().as_posix()
+        if project_path not in self.cfg.project_paths:
+            toml_path = Path().cwd() / "pyproject.toml"
+            if toml_path.exists():
+                with open(toml_path, "rb") as tomlfile:
+                    project_infos = tomllib.load(tomlfile)
+
+                project_name = project_infos["project"]["name"]
+                self.cfg.add_project(
+                    new_project_name=project_name, new_project_path=project_path
+                )
+                self.notify(f"[blue]{project_name}[/] added to rye-tui config")
+            else:
+                self.notify("[red]NO[/] pyproject.toml found in [blue]CWD[/]")

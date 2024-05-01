@@ -1,14 +1,15 @@
 from pathlib import Path
+from platformdirs import user_config_dir
 
 from rye_tui import tooltips as tt
 
 CONFIG_FILE_NAME = "rye-tui.ini"
 
-# CONFIG_PATH = Path(
-#     user_config_dir(appname="rye-tui", appauthor=False, ensure_exists=True)
-# )
+CONFIG_PATH = Path(
+    user_config_dir(appname="rye-tui", appauthor=False, ensure_exists=True)
+)
 
-CONFIG_PATH = Path().cwd()
+# CONFIG_PATH = Path().cwd()
 CONFIG_FILE_PATH = CONFIG_PATH / CONFIG_FILE_NAME
 
 CONF_OPT_DICT = {
