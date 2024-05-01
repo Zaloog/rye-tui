@@ -51,7 +51,6 @@ class ProjectList(VerticalScroll):
         )
 
         self.app.query_one("#project_preview").update_content()
-        self.app.log.error(self.app.active_project_path)
 
 
 class ProjectInteraction(Container):
@@ -82,7 +81,6 @@ class ProjectInteraction(Container):
         self.app.cfg.add_project(
             new_project_name="test2", new_project_path=Path().cwd().as_posix()
         )
-        self.app.log.error([(p, j) for p, j in self.app.cfg.config["projects"].items()])
 
         self.app.query_one(ProjectList).update()
 
