@@ -6,8 +6,6 @@ from textual.widgets import Static, Button
 from textual.widget import Widget
 from textual.containers import Container
 
-from rye_tui.rye_commands import rye_tools_list
-
 
 # installed tools/packages
 # installed python toolchains
@@ -23,5 +21,11 @@ class GeneralTab(Container):
 
     @work(thread=True)
     def on_mount(self, event: Mount) -> None:
-        self.tools.update(rye_tools_list())
+        # self.tools.update(rye_tools_list())
+        tool_str = "uncomment to get stuff"
+        tool_str += "\n"
+        # tool_str += rye_command_str_output('rye tools list')
+        # tool_str += '\n'
+        # tool_str += rye_command_str_output('rye toolchain list')
+        self.tools.update(tool_str)
         return super()._on_mount(event)

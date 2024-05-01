@@ -1,42 +1,25 @@
 from typing import Iterable
+from pathlib import Path
 
 from textual import on
 from textual.containers import VerticalScroll, Container, Horizontal, Vertical
 from textual.widget import Widget
-from textual.widgets import Label, Button, Static, ListView, ListItem
+from textual.widgets import Button, Static, ListView
 
 from rye_tui.config import cfg
+from rye_tui.components.helper_widgets import ProjectListItem
 
 
 class ProjectTab(Container):
-    info = Static("TestStatic")
-
     def compose(self) -> Iterable[Widget]:
         with Horizontal():
             with Vertical():
-                yield ProjectList()
-                yield ProjectInteraction()
+                yield ProjectList(id="project_list")
+                yield ProjectInteraction(id="project_interaction")
             with Vertical():
-                yield ProjectPreview()
+                yield ProjectPreview(id="project_preview")
 
         return super().compose()
-
-    # @on(Button.Pressed)
-    # def rye_load_package_list(self) -> None:
-    #     self.info.update("Loading...")
-    #     self.refresh_info()
-
-    # @work(thread=True)
-    # def refresh_info(self):
-    #     result = subprocess.run(
-    #         ["rye", "list"], capture_output=True, text=True, cwd=Path(".")
-    #     )
-    #     if result.returncode == 0:
-    #         msg = result.stdout
-    #         print(msg)
-    #         self.info.update(f"""{msg}""")
-    #     else:
-    #         self.info.update(f"""{result.stderr}""")
 
 
 class ProjectList(VerticalScroll):
@@ -44,11 +27,18 @@ class ProjectList(VerticalScroll):
         self.classes = "section"
         self.border_title = "Project List"
         yield ListView(
-            ListItem(Label("Test"), Button("Edit"), Button("Delete")),
-            ListItem(Label("Test1"), Button("Edit1"), Button("Delete")),
+            *[
+                ProjectListItem(project_title=f"{proj}\n{proj_path}")
+                for proj, proj_path in cfg.projects.items()
+            ],
+            ProjectListItem(project_title="Test"),
         )
 
         return super().compose()
+
+    def update(self):
+        self.remove()
+        self.app.mount(ProjectList(), before="#project_interaction")
 
 
 class ProjectInteraction(Container):
@@ -58,19 +48,29 @@ class ProjectInteraction(Container):
 
         with Vertical():
             with Horizontal():
-                yield Button("New Project")
-                yield Button("Add/Remove Packages")
+                yield Button("New Project", id="btn_new")
+                yield Button("Add/Remove Packages", id="btn_pkg")
                 yield Button("Rye Synch + Update")
             with Horizontal():
                 yield Button("Pin Python Version")
                 yield Button("Build")
-                yield Button("Publish")
+                yield Button("Publish", id="btn_publish")
 
         return super().compose()
 
-    @on(Button.Pressed)
+    @on(Button.Pressed, "#btn_publish")
     def rye_load_package_list(self) -> None:
         self.app.log.debug([(p, j) for p, j in cfg.config["projects"].items()])
+
+    @on(Button.Pressed, "#btn_new")
+    def rye_init_new_project(self) -> None:
+        # Open new Modal
+        cfg.add_project(
+            new_project_name="test2", new_project_path=Path().cwd().as_posix()
+        )
+        self.app.log.error([(p, j) for p, j in cfg.config["projects"].items()])
+
+        self.app.query_one(ProjectList).update()
 
 
 # TODO

@@ -35,9 +35,12 @@ class RyeTuiConfig:
     def projects(self) -> str:
         return self.config["projects"]
 
-    @projects.setter
-    def projects(self, new_project_name, new_project_path) -> str:
-        self.config["settings"][new_project_name] = new_project_path
+    def add_project(self, new_project_name, new_project_path) -> None:
+        self.config["projects"][new_project_name] = new_project_path
+        self.save()
+
+    def remove_project(self, project_name) -> None:
+        self.config["projects"].pop(project_name)
         self.save()
 
 
