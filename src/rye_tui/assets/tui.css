@@ -156,3 +156,11 @@ ProjectInteraction Button {
     background: rgb(44,55,58);
     margin: 0 1 0 1;
 }
+
+Header {
+    background: rgb(132,164,50);
+}
+
+Footer {
+    background: rgb(132,164,50);
+}

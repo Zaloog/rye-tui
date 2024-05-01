@@ -56,6 +56,10 @@ class RyeTuiConfig:
     def project_paths(self) -> str:
         return list(self.config["projects"].values())
 
+    @property
+    def project_names(self) -> str:
+        return list(self.config["projects"].keys())
+
     def add_project(self, new_project_name, new_project_path) -> None:
         self.config["projects"][new_project_name] = new_project_path
         self.save()

@@ -5,6 +5,7 @@ from textual import on, work
 from textual.containers import VerticalScroll, Container, Horizontal, Vertical
 from textual.widget import Widget
 from textual.widgets import Button, Static, ListView
+from rich_pixels import Pixels
 
 from rye_tui.components.helper_widgets import ProjectListItem
 from rye_tui.rye_commands import rye_command_str_output
@@ -31,7 +32,7 @@ class ProjectList(VerticalScroll):
         yield ListView(
             *[
                 ProjectListItem(project_title=proj)
-                for proj, _proj_path in self.app.cfg.projects.items()
+                for proj in self.app.cfg.project_names
             ],
             initial_index=None,
         )
@@ -95,7 +96,10 @@ class ProjectPreview(VerticalScroll):
         self.classes = "section"
         self.border_title = "Preview"
         self.id = "project_preview"
-        self.content = Static("please select a project", expand=True)
+        # with Image.open('images/rye_image.jpg') as image:
+        pixels = Pixels.from_image_path("images/rye_image.jpg", resize=(80, 55))
+        self.content = Static(pixels, shrink=True, expand=True)
+        # self.content = Static("please select a project", expand=True)
 
         yield self.content
 

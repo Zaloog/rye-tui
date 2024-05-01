@@ -2,7 +2,14 @@ from typing import Iterable
 
 from textual import on
 from textual.widget import Widget
-from textual.widgets import Button, Label, ListItem
+from textual.widgets import Button, Label, ListItem, Header
+
+
+class RyeHeader(Header):
+    def compose(self) -> Iterable[Widget]:
+        self._show_clock = True
+        self.tall = True
+        return super().compose()
 
 
 class EditButton(Widget):
@@ -24,8 +31,10 @@ class DeleteButton(Widget):
         self.app.active_project = ""
         self.app.active_project_path = ""
         self.app.cfg.remove_project(project_name=project_name)
+
         self.app.query_one("#project_list").update()
         self.app.query_one("#project_preview").update_content()
+
         self.notify(f"Project [red]{project_name}[/] deleted")
 
 

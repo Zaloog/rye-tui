@@ -5,9 +5,10 @@ from textual import work
 from textual.reactive import reactive
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal
-from textual.widgets import Header, Footer
+from textual.widgets import Footer
 
 from rye_tui.components.mainframe import MainFrame
+from rye_tui.components.helper_widgets import RyeHeader
 from rye_tui.rye_commands import rye_version
 from rye_tui.config import RyeTuiConfig
 
@@ -22,7 +23,7 @@ class RyeTui(App):
     def compose(self) -> ComposeResult:
         self.add_cwd_to_config()
 
-        yield Header()
+        yield RyeHeader()
         yield Footer()
         with Horizontal():
             yield MainFrame()
@@ -30,6 +31,7 @@ class RyeTui(App):
 
     @work(thread=True)
     def on_mount(self) -> None:
+        self.title = "RyeTui"
         self.sub_title = rye_version()
 
     @work(thread=True)
