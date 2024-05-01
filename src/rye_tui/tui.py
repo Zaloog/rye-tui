@@ -7,13 +7,14 @@ from textual.widgets import Header, Footer
 
 from rye_tui.components.mainframe import MainFrame
 from rye_tui.rye_commands import rye_version
+from rye_tui.config import RyeTuiConfig
 
 
 class RyeTui(App):
     CSS_PATH = Path("assets/tui.css")
 
     def compose(self) -> ComposeResult:
-        self.conf_dict = {}
+        self.cfg = RyeTuiConfig()
 
         yield Header()
         yield Footer()

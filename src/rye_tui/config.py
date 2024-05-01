@@ -42,9 +42,3 @@ class RyeTuiConfig:
     def remove_project(self, project_name) -> None:
         self.config["projects"].pop(project_name)
         self.save()
-
-
-if not check_config_exists():
-    create_init_config()
-
-cfg = RyeTuiConfig()

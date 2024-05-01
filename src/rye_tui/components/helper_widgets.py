@@ -1,5 +1,6 @@
 from typing import Iterable
 
+from textual import on
 from textual.widget import Widget
 from textual.widgets import Button, Label, ListItem
 
@@ -14,6 +15,10 @@ class DeleteButton(Widget):
     def compose(self) -> Iterable[Widget]:
         yield Button(label="Delete", classes="delete-button", variant="error")
         return super().compose()
+
+    @on(Button.Pressed)
+    def delete_project(self):
+        self.app.log.error(self.parent.project_title)
 
 
 class ProjectListItem(ListItem):

@@ -6,7 +6,6 @@ from textual.containers import VerticalScroll, Container, Horizontal, Vertical
 from textual.widget import Widget
 from textual.widgets import Button, Static, ListView
 
-from rye_tui.config import cfg
 from rye_tui.components.helper_widgets import ProjectListItem
 
 
@@ -29,7 +28,7 @@ class ProjectList(VerticalScroll):
         yield ListView(
             *[
                 ProjectListItem(project_title=f"{proj}\n{proj_path}")
-                for proj, proj_path in cfg.projects.items()
+                for proj, proj_path in self.app.cfg.projects.items()
             ],
             ProjectListItem(project_title="Test"),
         )
@@ -60,15 +59,15 @@ class ProjectInteraction(Container):
 
     @on(Button.Pressed, "#btn_publish")
     def rye_load_package_list(self) -> None:
-        self.app.log.debug([(p, j) for p, j in cfg.config["projects"].items()])
+        self.app.log.debug([(p, j) for p, j in self.app.cfg.config["projects"].items()])
 
     @on(Button.Pressed, "#btn_new")
     def rye_init_new_project(self) -> None:
         # Open new Modal
-        cfg.add_project(
+        self.app.cfg.add_project(
             new_project_name="test2", new_project_path=Path().cwd().as_posix()
         )
-        self.app.log.error([(p, j) for p, j in cfg.config["projects"].items()])
+        self.app.log.error([(p, j) for p, j in self.app.cfg.config["projects"].items()])
 
         self.app.query_one(ProjectList).update()
 
