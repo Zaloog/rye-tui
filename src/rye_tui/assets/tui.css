@@ -3,6 +3,13 @@ Tab {
     width: 1fr;
 }
 
+Switch > .switch--slider {
+        color: $error;
+    }
+
+Switch.-on > .switch--slider {
+        color: rgb(132,164,50);
+    }
 /* ConfigTab */
 ConfigTab Container {
     height: auto;

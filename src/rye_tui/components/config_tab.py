@@ -121,6 +121,7 @@ class ConfigSources(VerticalScroll):
         self.border_title = self.category
         for source in CONF_OPT_DICT[self.category]:
             with Collapsible(title=source["name"]):
+                # loop over url/username/pw/verify-ssl
                 for sources_val in SOURCES_VALUES:
                     if not source.get(sources_val):
                         continue
