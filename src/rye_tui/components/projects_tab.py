@@ -1,12 +1,13 @@
 from typing import Iterable
 from pathlib import Path
 
-from textual import on
+from textual import on, work
 from textual.containers import VerticalScroll, Container, Horizontal, Vertical
 from textual.widget import Widget
 from textual.widgets import Button, Static, ListView
 
 from rye_tui.components.helper_widgets import ProjectListItem
+from rye_tui.rye_commands import rye_command_str_output
 
 
 class ProjectTab(Container):
@@ -30,7 +31,8 @@ class ProjectList(VerticalScroll):
             *[
                 ProjectListItem(project_title=proj)
                 for proj, _proj_path in self.app.cfg.projects.items()
-            ]
+            ],
+            initial_index=None,
         )
 
         return super().compose()
@@ -38,6 +40,16 @@ class ProjectList(VerticalScroll):
     def update(self):
         self.remove()
         self.app.mount(ProjectList(), before="#project_interaction")
+
+    @on(ListView.Selected)
+    def get_project_infos(self, event: ListView.Selected):
+        self.app.active_project = event.item.project_title
+        self.app.active_project_path = self.app.cfg.config["projects"].get(
+            self.app.active_project
+        )
+
+        self.app.query_one("#project_preview").update_content()
+        self.app.log.error(self.app.active_project_path)
 
 
 class ProjectInteraction(Container):
@@ -82,10 +94,21 @@ class ProjectPreview(VerticalScroll):
         self.classes = "section"
         self.border_title = "Preview"
         self.id = "project_preview"
+        self.content = Static("please select a project", expand=True)
 
-        content = open(r"pyproject.toml").read()
-        project_infos = Static("[green]Hello[/]\n" + content, expand=True)
-
-        yield project_infos
+        yield self.content
 
         return super().compose()
+
+    @work(thread=True)
+    def update_content(self):
+        try:
+            if self.app.active_project_path:
+                content = rye_command_str_output(
+                    "rye show", cwd=self.app.active_project_path
+                )
+            else:
+                content = "please select a project"
+            self.content.update(content)
+        except FileNotFoundError:
+            self.content.update('it seems like theres no "pyproject.toml" here')

@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from textual import work
+from textual.reactive import reactive
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal
 from textual.widgets import Header, Footer
@@ -13,9 +14,10 @@ from rye_tui.config import RyeTuiConfig
 class RyeTui(App):
     CSS_PATH = Path("assets/tui.css")
 
-    def compose(self) -> ComposeResult:
-        self.cfg: RyeTuiConfig = RyeTuiConfig()
+    cfg: RyeTuiConfig = RyeTuiConfig()
+    active_project_path = reactive("")
 
+    def compose(self) -> ComposeResult:
         yield Header()
         yield Footer()
         with Horizontal():
