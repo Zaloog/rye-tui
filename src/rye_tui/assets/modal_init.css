@@ -5,7 +5,7 @@ ModalScreen{
 
 /* Modal for New File Selection */
 ModalScreen > Vertical {
-    width: 30%;
+    width: 40%;
     height: 75%;
     /* align:center bottom; */
     /* background: $panel;
@@ -16,7 +16,7 @@ ModalScreen > Vertical {
     width: 20%;
 }
 #input_path{
-    width: auto;
+    width: 1fr;
 }
 
 .horizontal-conf-cancel{
