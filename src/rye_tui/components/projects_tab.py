@@ -141,9 +141,7 @@ class ProjectPreview(VerticalScroll):
     def keep_image_size(self, event: Resize):
         if not self.app.active_project:
             new_width, new_height = event.size
-            self.app.log.error(new_width, new_height)
             pixels = Pixels.from_image_path(
-                # "images/rye_image.jpg", resize=(new_width, int(1.8 * new_height))
                 IMAGE_PATH,
                 resize=(new_width, int(1.8 * new_height)),
             )
