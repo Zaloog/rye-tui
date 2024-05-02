@@ -81,7 +81,7 @@ class ProjectInteraction(Container):
             new_project_name="test2", new_project_path=Path().cwd().as_posix()
         )
 
-        self.app.query_one(ProjectList).update()
+        self.app.query_one("#project_list").update()
         self.app.log.debug([(p, j) for p, j in self.app.cfg.config["projects"].items()])
 
     @on(Button.Pressed, "#btn_new")
@@ -118,7 +118,7 @@ class ProjectPreview(VerticalScroll):
                 self.content_info.clear()
                 self.content_info.write(project_infos)
 
-                table = Table("package", "version")
+                table = Table("package", "version", expand=True)
                 for pkg in project_packages.split("\n"):
                     if "==" in pkg:
                         pkg_name, pkg_version = pkg.split("==")

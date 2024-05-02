@@ -1,17 +1,21 @@
 from typing import Iterable
 from pathlib import Path
 
-from textual import on
+from textual import on, work
 from textual.widget import Widget
 from textual.screen import ModalScreen
 from textual.widgets import Input, Button, Collapsible, Static, Label
 from textual.containers import Vertical, Horizontal
 
+from rye_tui.rye_commands import rye_command_str_output
+
 
 class ModalRyeInit(ModalScreen):
-    CSS_PATH = Path("../assets/modal_init.css")
-    rye_command: str = "rye init"
-    rye_home = "C:User/grams/"
+    CSS_PATH: Path = Path("../assets/modal_init.css")
+    rye_command: str = ""
+    rye_home = "C:/Users/grams/Desktop/"
+    project_name: str = ""
+    project_path: str = ""
 
     def compose(self) -> Iterable[Widget]:
         with Vertical():
@@ -31,37 +35,59 @@ class ModalRyeInit(ModalScreen):
 
     @on(Input.Changed)
     def start_new_project(self):
-        project_name = self.query_one("#input_new_project").value
-        project_path = self.query_one("#input_path").value
+        self.project_name = self.query_one("#input_new_project").value
+        self.project_path = self.query_one("#input_path").value
 
-        if project_path == self.rye_home[:-1]:
-            project_path = ""
+        if self.project_path == self.rye_home[:-1]:
+            self.project_path = ""
             self.query_one("#input_path").value = ""
             self.query_one("#btn_home").variant = "warning"
 
-        if (not project_path.endswith("/")) and (project_path != ""):
-            self.app.log.error(repr(project_path))
-            project_path += "/"
+        if (not self.project_path.endswith("/")) and (self.project_path != ""):
+            self.project_path += "/"
 
-        command = self.rye_command
-        command += " "
-        command += f"[blue]{project_path}[/]"
-        command += f"[green]{project_name}[/]"
+        self.rye_command = "rye init"
+        self.rye_command += " "
+        self.rye_command += f"[blue]{self.project_path}[/]"
+        self.rye_command += f"[green]{self.project_name}[/]"
 
-        self.query_one("#preview_rye_command").update(command)
+        self.query_one("#preview_rye_command").update(self.rye_command)
 
     @on(Button.Pressed, "#btn_home")
     def toggle_rye_home(self):
-        project_path = self.query_one("#input_path").value
-        if self.rye_home in project_path:
-            project_path = self.query_one("#input_path").value.lstrip(self.rye_home)
+        self.project_path = self.query_one("#input_path").value
+        if self.rye_home in self.project_path:
+            self.project_path = self.query_one("#input_path").value.lstrip(
+                self.rye_home
+            )
             self.query_one("#btn_home").variant = "warning"
         else:
-            project_path = self.rye_home + self.query_one("#input_path").value
+            self.project_path = self.rye_home + self.query_one("#input_path").value
             self.query_one("#btn_home").variant = "success"
 
-        self.query_one("#input_path").value = project_path
+        self.query_one("#input_path").value = self.project_path
 
     @on(Button.Pressed, ".btn-cancel")
     def close_modal(self):
         self.dismiss()
+
+    work(thread=True)
+
+    @on(Button.Pressed, ".btn-continue")
+    def create_project(self):
+        self.loading = True
+        project_path = (Path(self.project_path) / self.project_name).as_posix()
+        command = f"rye init {project_path}"
+        output_str = rye_command_str_output(command=command)
+        self.notify(title="New Project created", message=output_str)
+
+        self.app.cfg.add_project(
+            new_project_name=self.project_name, new_project_path=project_path
+        )
+        self.notify(
+            f"[blue]{self.project_name}[/] was added to [b]rye-tui[/b] config",
+            title="Project List Updated",
+        )
+        self.loading = False
+        self.app.pop_screen()
+        self.app.query_one("#project_list").update()
