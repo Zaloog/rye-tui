@@ -98,6 +98,9 @@ class ProjectPreview(VerticalScroll):
         self.border_title = "Preview"
         self.id = "project_preview"
         # with Image.open('images/rye_image.jpg') as image:
+        self.content_info = Static()
+        # pixels = Pixels.from_image_path("images/rye_image.jpg", resize=self.container_size)
+        # self.content_info.update(pixels)
         pixels = Pixels.from_image_path("images/rye_image.jpg", resize=(80, 65))
         self.content_info = Static(pixels, shrink=True, expand=True, classes="image")
         self.content_table = DataTable(show_cursor=False, show_header=False)

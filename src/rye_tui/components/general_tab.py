@@ -24,6 +24,11 @@ class GeneralTab(Container):
         # self.tools.update(rye_tools_list())
         tool_str = "uncomment to get stuff"
         tool_str += "\n"
+        tool_str += "Rye Project home"
+        tool_str += "\n"
+        tool_str += "Rye Tools"
+        tool_str += "\n"
+        tool_str += "Rye Toolchains"
         # tool_str += rye_command_str_output('rye tools list')
         # tool_str += '\n'
         # tool_str += rye_command_str_output('rye toolchain list')

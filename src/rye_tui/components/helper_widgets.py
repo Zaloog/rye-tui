@@ -7,7 +7,6 @@ from textual.widgets import Button, Label, ListItem, Header, DataTable
 
 class RyeHeader(Header):
     def compose(self) -> Iterable[Widget]:
-        self._show_clock = True
         self.tall = True
         return super().compose()
 
