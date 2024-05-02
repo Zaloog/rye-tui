@@ -1,0 +1,32 @@
+ModalScreen{
+    align:center middle;
+}
+
+
+/* Modal for New File Selection */
+ModalScreen > Vertical {
+    width: 30%;
+    height: 75%;
+    /* align:center bottom; */
+    /* background: $panel;
+    border:black thick; */
+}
+
+#btn_home{
+    width: 20%;
+}
+#input_path{
+    width: auto;
+}
+
+.horizontal-conf-cancel{
+    align: center bottom;
+}
+
+.btn-cancel {
+    width: 1fr;
+}
+
+.btn-continue {
+    width: 1fr;
+}

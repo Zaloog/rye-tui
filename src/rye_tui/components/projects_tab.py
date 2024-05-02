@@ -4,10 +4,11 @@ from pathlib import Path
 from textual import on, work
 from textual.containers import VerticalScroll, Container, Horizontal, Vertical
 from textual.widget import Widget
-from textual.widgets import Button, Static, ListView, DataTable
+from textual.widgets import Button, Static, ListView, DataTable, Rule
 from rich_pixels import Pixels
 
 from rye_tui.components.helper_widgets import ProjectListItem
+from rye_tui.components.modals import ModalRyeInit
 from rye_tui.rye_commands import rye_command_str_output
 
 
@@ -73,35 +74,40 @@ class ProjectInteraction(Container):
 
     @on(Button.Pressed, "#btn_publish")
     def rye_load_package_list(self) -> None:
-        self.app.log.debug([(p, j) for p, j in self.app.cfg.config["projects"].items()])
-
-    @on(Button.Pressed, "#btn_new")
-    def rye_init_new_project(self) -> None:
         # Open new Modal
         self.app.cfg.add_project(
             new_project_name="test2", new_project_path=Path().cwd().as_posix()
         )
 
         self.app.query_one(ProjectList).update()
+        self.app.log.debug([(p, j) for p, j in self.app.cfg.config["projects"].items()])
+
+    @on(Button.Pressed, "#btn_new")
+    def rye_init_new_project(self) -> None:
+        self.app.push_screen(ModalRyeInit())
 
 
 # TODO
 # Collapsibles Infos/Packages
-## Rye show
-## Rye list
+## Placeholder Rye image
+## Rye show for General Project Infos
+## Rye list for Packages in Table?
 class ProjectPreview(VerticalScroll):
     def compose(self) -> Iterable[Widget]:
         self.classes = "section"
         self.border_title = "Preview"
         self.id = "project_preview"
         # with Image.open('images/rye_image.jpg') as image:
-        pixels = Pixels.from_image_path("images/rye_image.jpg", resize=(80, 55))
-        self.content_info = Static(pixels, shrink=True, expand=True)
+        pixels = Pixels.from_image_path("images/rye_image.jpg", resize=(80, 65))
+        self.content_info = Static(pixels, shrink=True, expand=True, classes="image")
         self.content_table = DataTable(show_cursor=False, show_header=False)
         self.content_table.add_columns("package", "version")
         # self.content = Static("please select a project", expand=True)
 
+        # with Collapsible(title='general infos', collapsed=False):
         yield self.content_info
+        yield Rule()
+        # with Collapsible(title='installed packages'):
         yield self.content_table
 
         return super().compose()
