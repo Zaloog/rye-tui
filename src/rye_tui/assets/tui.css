@@ -157,9 +157,13 @@ ProjectInteraction Button {
     margin: 0 1 0 1;
 }
 /* ProjectPreview */
-DataTable {
-    height: 1fr;
+ProjectPreview RichLog{
+    height: auto;
+    width: auto;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
+/* Header Footer */
 
 Header {
     background: rgb(132,164,50);
