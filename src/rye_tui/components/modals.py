@@ -69,12 +69,13 @@ class ModalRyeInit(ModalScreen):
 
     @on(Button.Pressed, ".btn-cancel")
     def close_modal(self):
-        self.dismiss()
+        self.app.pop_screen()
 
-    work(thread=True)
-
+    @work(
+        thread=False,
+    )
     @on(Button.Pressed, ".btn-continue")
-    def create_project(self):
+    async def create_project(self):
         self.loading = True
         project_path = (Path(self.project_path) / self.project_name).as_posix()
         command = f"rye init {project_path}"

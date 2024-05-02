@@ -12,6 +12,7 @@ from rich_pixels import Pixels
 from rye_tui.components.helper_widgets import ProjectListItem
 from rye_tui.components.modals import ModalRyeInit
 from rye_tui.rye_commands import rye_command_str_output
+from rye_tui.constants import IMAGE_PATH
 
 
 class ProjectTab(Container):
@@ -142,7 +143,9 @@ class ProjectPreview(VerticalScroll):
             new_width, new_height = event.size
             self.app.log.error(new_width, new_height)
             pixels = Pixels.from_image_path(
-                "images/rye_image.jpg", resize=(new_width, int(1.8 * new_height))
+                # "images/rye_image.jpg", resize=(new_width, int(1.8 * new_height))
+                IMAGE_PATH,
+                resize=(new_width, int(1.8 * new_height)),
             )
             self.content_info.clear()
             self.content_info.write(pixels)
