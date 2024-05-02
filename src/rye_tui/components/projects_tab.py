@@ -99,20 +99,9 @@ class ProjectPreview(VerticalScroll):
         self.classes = "section"
         self.border_title = "Preview"
         self.id = "project_preview"
-        # with Image.open('images/rye_image.jpg') as image:
-        # pixels = Pixels.from_image_path("images/rye_image.jpg", resize=self.container_size)
-        # self.content_info.update(pixels)
-        # pixels = Pixels.from_image_path("images/rye_image.jpg", resize=(80, 65))
-        # self.content_info = Static(pixels, shrink=True, expand=True)
         self.content_info = RichLog(wrap=False, auto_scroll=True)
-        # self.content_info.write(pixels)
-        # self.content = Static("please select a project", expand=True)
 
-        # with Collapsible(title='general infos', collapsed=False):
         yield self.content_info
-        # yield Rule()
-        # with Collapsible(title='installed packages'):
-        # yield self.content_table
 
         return super().compose()
 

@@ -157,6 +157,9 @@ ProjectInteraction Button {
     margin: 0 1 0 1;
 }
 /* ProjectPreview */
+ProjectPreview{
+    align:center middle;
+}
 ProjectPreview RichLog{
     height: auto;
     width: auto;
