@@ -43,9 +43,10 @@ class ProjectList(VerticalScroll):
 
         return super().compose()
 
-    def update(self):
+    async def update(self):
         self.remove()
         self.app.mount(ProjectList(), before="#project_interaction")
+        # self.app.query_one(ProjectList).focus()
 
     @on(ListView.Selected)
     def get_project_infos(self, event: ListView.Selected):
@@ -76,13 +77,13 @@ class ProjectInteraction(Container):
         return super().compose()
 
     @on(Button.Pressed, "#btn_publish")
-    def rye_load_package_list(self) -> None:
+    async def rye_load_package_list(self) -> None:
         # Open new Modal
         self.app.cfg.add_project(
             new_project_name="test2", new_project_path=Path().cwd().as_posix()
         )
 
-        self.app.query_one("#project_list").update()
+        await self.app.query_one("#project_list").update()
         self.app.log.debug([(p, j) for p, j in self.app.cfg.config["projects"].items()])
 
     @on(Button.Pressed, "#btn_new")
@@ -97,19 +98,18 @@ class ProjectInteraction(Container):
     @on(Button.Pressed, "#btn_sync")
     async def rye_sync_project(self) -> None:
         self.app.query_one("#project_preview").loading = True
-        output = rye_command_str_output(
-            command="rye sync -f", cwd=self.app.active_project_path
-        )
+        output = await self.aync_sync_function()
         self.app.log.error(output)
         self.app.query_one("#project_list").update()
         self.app.query_one("#project_preview").loading = False
 
+    async def aync_sync_function(self):
+        output = rye_command_str_output(
+            command="rye sync -f", cwd=self.app.active_project_path
+        )
+        return output
 
-# TODO
-# Collapsibles Infos/Packages
-## Placeholder Rye image
-## Rye show for General Project Infos
-## Rye list for Packages in Table?
+
 class ProjectPreview(VerticalScroll):
     def compose(self) -> Iterable[Widget]:
         self.classes = "section"

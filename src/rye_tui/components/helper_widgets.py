@@ -23,7 +23,7 @@ class DeleteButton(Widget):
         return super().compose()
 
     @on(Button.Pressed)
-    def delete_project(self):
+    async def delete_project(self):
         project_name = self.parent.project_title
         # TODO confirm button
         # TODO remove folders
@@ -31,7 +31,7 @@ class DeleteButton(Widget):
         self.app.active_project_path = ""
         self.app.cfg.remove_project(project_name=project_name)
 
-        self.app.query_one("#project_list").update()
+        await self.app.query_one("#project_list").update()
         self.app.query_one("#project_preview").update_content()
 
         self.notify(
