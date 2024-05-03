@@ -25,7 +25,7 @@ class ConfigTab(Container):
         return super().compose()
 
     @work(thread=True)
-    def on_mount(self):
+    async def on_mount(self):
         self.rye_config = get_rye_config_values()
         # prevent Messages on initial load
         with self.prevent(Switch.Changed):

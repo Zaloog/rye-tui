@@ -5,32 +5,14 @@ from pathlib import Path
 
 
 def rye_version() -> str:
-    result = subprocess.run(["rye", "--version"], capture_output=True, text=True)
-    if result.returncode == 0:
-        version = result.stdout.split("\n")[0].split(" ")[1]
-        return f"Rye Version: {version}"
-    return result.stderr
+    result = rye_command_str_output("rye --version")
+    version = result.split("\n")[0].split(" ")[1]
+    return f"Rye Version: {version}"
 
 
-def rye_package_list(cwd: Path = Path.cwd()) -> str:
-    result = subprocess.run(["rye", "list"], capture_output=True, text=True, cwd=cwd)
-    if result.returncode == 0:
-        packages = result.stdout
-        return packages
-    return result.stderr
-
-
-def rye_tools_list(cwd: Path = Path.cwd()) -> str:
-    result = subprocess.run(
-        ["rye", "tools", "list"], capture_output=True, text=True, cwd=cwd
-    )
-    if result.returncode == 0:
-        packages = result.stdout
-        return packages
-    return result.stderr
-
-
-def rye_command_str_output(command: str, cwd: Path = Path.cwd()):
+def rye_command_str_output(command: str, cwd: str | Path = Path.cwd()):
+    if isinstance(cwd, str):
+        cwd = Path(cwd).as_posix()
     result = subprocess.run(command.split(), capture_output=True, text=True, cwd=cwd)
     if result.returncode == 0:
         packages = result.stdout.strip()

@@ -9,7 +9,7 @@ CONFIG_PATH = Path(
 )
 CONFIG_FILE_PATH = CONFIG_PATH / CONFIG_FILE_NAME
 
-IMAGE_PATH = Path(__file__).resolve().parents[2] / "images/rye_image.jpg"
+IMAGE_PATH = Path(__file__).parent / "static/rye_image.jpg"
 
 CONF_OPT_DICT = {
     "default": {

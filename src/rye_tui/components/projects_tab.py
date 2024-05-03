@@ -10,7 +10,7 @@ from textual.widgets import Button, ListView, RichLog
 from rich_pixels import Pixels
 
 from rye_tui.components.helper_widgets import ProjectListItem
-from rye_tui.components.modals import ModalRyeInit
+from rye_tui.components.modals import ModalRyeInit, ModalRyePin
 from rye_tui.rye_commands import rye_command_str_output
 from rye_tui.constants import IMAGE_PATH
 
@@ -67,10 +67,10 @@ class ProjectInteraction(Container):
             with Horizontal():
                 yield Button("New Project", id="btn_new")
                 yield Button("Add/Remove Packages", id="btn_pkg")
-                yield Button("Rye Sync + Update")
+                yield Button("Rye Sync + Update", id="btn_sync")
             with Horizontal():
-                yield Button("Pin Python Version")
-                yield Button("Build")
+                yield Button("Pin Python Version", id="btn_pin")
+                yield Button("Build", id="btn_build")
                 yield Button("Publish", id="btn_publish")
 
         return super().compose()
@@ -88,6 +88,21 @@ class ProjectInteraction(Container):
     @on(Button.Pressed, "#btn_new")
     def rye_init_new_project(self) -> None:
         self.app.push_screen(ModalRyeInit())
+
+    @on(Button.Pressed, "#btn_pin")
+    def rye_pin_python_version(self) -> None:
+        self.app.push_screen(ModalRyePin())
+
+    @work(thread=True)
+    @on(Button.Pressed, "#btn_sync")
+    async def rye_sync_project(self) -> None:
+        self.app.query_one("#project_preview").loading = True
+        output = rye_command_str_output(
+            command="rye sync -f", cwd=self.app.active_project_path
+        )
+        self.app.log.error(output)
+        self.app.query_one("#project_list").update()
+        self.app.query_one("#project_preview").loading = False
 
 
 # TODO

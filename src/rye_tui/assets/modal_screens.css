@@ -4,12 +4,14 @@ ModalScreen{
 
 
 /* Modal for New File Selection */
-ModalScreen > Vertical {
+ModalRyeInit > Vertical {
     width: 40%;
     height: 75%;
-    /* align:center bottom; */
-    /* background: $panel;
-    border:black thick; */
+}
+ModalRyePin > Vertical {
+    width: 40%;
+    height: 30%;
+    min-height: 20%;
 }
 
 #btn_home{
