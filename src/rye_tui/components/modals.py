@@ -1,7 +1,7 @@
 from typing import Iterable
 from pathlib import Path
 
-from textual import on, work
+from textual import on
 from textual.widget import Widget
 from textual.validation import Regex
 from textual.screen import ModalScreen
@@ -72,15 +72,17 @@ class ModalRyeInit(ModalScreen):
     def close_modal(self):
         self.app.pop_screen()
 
-    @work(thread=False)
+    # @work(thread=True)
     @on(Button.Pressed, ".btn-continue")
     async def create_project(self):
         self.loading = True
         project_path = (Path(self.project_path) / self.project_name).as_posix()
         command = f"rye init {project_path}"
-        output_str = rye_command_str_output(command=command)
+        # output_str = rye_command_str_output(command=command)
+        output_str = await self.async_create_project(command=command)
         self.notify(title="New Project created", message=output_str)
 
+        self.loading = False
         self.app.cfg.add_project(
             new_project_name=self.project_name, new_project_path=project_path
         )
@@ -88,9 +90,12 @@ class ModalRyeInit(ModalScreen):
             f"[blue]{self.project_name}[/] was added to [b]rye-tui[/b] config",
             title="Project List Updated",
         )
-        self.loading = False
         self.app.pop_screen()
-        self.app.query_one("#project_list").update()
+        await self.app.query_one("#project_list").update()
+
+    async def async_create_project(self, command):
+        output_str = rye_command_str_output(command=command)
+        return output_str
 
 
 class ModalRyePin(ModalScreen):

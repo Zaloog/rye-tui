@@ -121,7 +121,7 @@ class ProjectPreview(VerticalScroll):
 
         return super().compose()
 
-    @work(thread=True)
+    @work(thread=True, exclusive=True)
     def update_content(self):
         try:
             if self.app.active_project_path:
