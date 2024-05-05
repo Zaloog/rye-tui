@@ -6,12 +6,14 @@ from rye_tui.constants import (
     CONFIG_FILE_NAME,
     CONFIG_FILE_PATH,
     CONFIG_PATH,
+    PROJECT_HOME_PATH,
 )
 
 
 def create_init_config(conf_path=CONFIG_PATH):
     config = configparser.ConfigParser(default_section=None)
     config.optionxform = str
+    config["general"] = {"project_home_path": PROJECT_HOME_PATH}
     config["projects"] = {}
 
     with open(conf_path / CONFIG_FILE_NAME, "w") as configfile:
@@ -49,6 +51,10 @@ class RyeTuiConfig:
             self.config.write(configfile)
 
     @property
+    def project_home_path(self) -> str:
+        return self.config["general"]["project_home_path"]
+
+    @property
     def projects(self) -> str:
         return self.config["projects"]
 
@@ -66,4 +72,8 @@ class RyeTuiConfig:
 
     def remove_project(self, project_name) -> None:
         self.config["projects"].pop(project_name)
+        self.save()
+
+    def update_home_path(self, new_home_path) -> None:
+        self.config["general"]["project_home_path"] = new_home_path
         self.save()

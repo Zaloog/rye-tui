@@ -15,11 +15,11 @@ from rye_tui.components.helper_widgets import ProjectListItem
 class ModalRyeInit(ModalScreen):
     CSS_PATH: Path = Path("../assets/modal_screens.css")
     rye_command: str = ""
-    rye_home = "C:/Users/grams/Desktop/"
     project_name: str = ""
     project_path: str = ""
 
     def compose(self) -> Iterable[Widget]:
+        self.rye_home = self.app.cfg.project_home_path
         with Vertical():
             yield Label("Create a new project")
             yield Input(placeholder="enter project name", id="input_new_project")
@@ -90,7 +90,6 @@ class ModalRyeInit(ModalScreen):
             title="Project List Updated",
         )
         self.app.pop_screen()
-        # await self.app.query_one("#project_list").update()
         project_list = self.app.query_one(ListView)
         project_list.append(item=ProjectListItem(project_title=self.project_name))
         num_project = project_list.children.__len__()

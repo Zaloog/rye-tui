@@ -103,7 +103,6 @@ class ProjectInteraction(Container):
         self.app.query_one("#project_preview").loading = True
         output = await self.async_sync_function()
         self.app.log.error(output)
-        # self.app.query_one("#project_list").update()
         self.app.query_one("#project_preview").loading = False
 
     async def async_sync_function(self):

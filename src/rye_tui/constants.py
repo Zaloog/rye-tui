@@ -3,6 +3,7 @@ from platformdirs import user_config_dir
 
 from rye_tui import tooltips as tt
 
+PROJECT_HOME_PATH = Path.home().as_posix()
 CONFIG_FILE_NAME = "rye-tui.ini"
 CONFIG_PATH = Path(
     user_config_dir(appname="rye-tui", appauthor=False, ensure_exists=True)

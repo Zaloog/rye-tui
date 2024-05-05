@@ -7,6 +7,7 @@ from rye_tui.cli_parser import parse_args
 def main(args):
     if not check_config_exists():
         create_init_config()
+        return
 
     args = parse_args(args=args)
     # if args.command == 'add':

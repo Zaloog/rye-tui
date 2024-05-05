@@ -16,19 +16,22 @@ Describe your project here.
             -[ ] open pyproject.toml in modal
     - button functionalities
         - [ ] New Project
+            - [X] update preview
             - [ ] extract path/options/name from command?
         - [ ] add/remove
             - [ ] modal with [Input of which package to add, DataTable for already present packages]
             - [ ] --dev functionality
             - [ ] Datatable view [package, synced, remove (Button)]
         - [X] sync
-            - [ ] update preview
+            - [X] update preview
         - [X] pin python version
-            - [ ] update preview
+            - [X] update preview
         - [ ] build
         - [ ] publish when wheels in dist/*
 - general tab
     - [ ] Add Rye Project Home from config.ini
+        - [x] Functionality added
+        - [ ] Input Validator for Path, ' ' in Path?
     - [ ] installed tools
     - [ ] installed toolchains
 - config tab

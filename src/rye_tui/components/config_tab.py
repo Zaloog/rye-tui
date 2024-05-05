@@ -176,14 +176,14 @@ class ConfigProxy(Container):
 
     @work(thread=True, exclusive=True)
     @on(Input.Submitted)
-    def update_value(event, message):
-        message.input.loading = True
-        new_value = str(message.value).lower()
-        category, option = message.input.id.split("_")
+    def update_value(self, event):
+        event.input.loading = True
+        new_value = str(event.value).lower()
+        category, option = event.input.id.split("_")
         rye_config_set_command(category=category, option=option, value=new_value)
-        message.input.loading = False
+        event.input.loading = False
         msg_show = f"set to [green]{new_value}[/]" if new_value else "[red]removed[/]"
-        event.notify(
+        self.notify(
             message=f"{category}.{option} {msg_show}",
             title="Config Updated",
         )

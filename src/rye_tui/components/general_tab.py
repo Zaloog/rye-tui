@@ -1,10 +1,10 @@
 from typing import Iterable
 
-from textual import work
+from textual import work, on
 from textual.events import Mount
-from textual.widgets import Static, Button
+from textual.widgets import Static, Button, Label, Input
 from textual.widget import Widget
-from textual.containers import Container
+from textual.containers import Container, Horizontal
 
 
 # installed tools/packages
@@ -14,6 +14,9 @@ class GeneralTab(Container):
     tools = Static("Test")
 
     def compose(self) -> Iterable[Widget]:
+        with Horizontal():
+            yield Label("Project :house:")
+            yield Input(self.app.cfg.project_home_path, id="input_project_home_path")
         yield self.tools
         yield Button("Test1")
         yield Button("Test2")
@@ -34,3 +37,12 @@ class GeneralTab(Container):
         # tool_str += rye_command_str_output('rye toolchain list')
         self.tools.update(tool_str)
         return super()._on_mount(event)
+
+    @on(Input.Submitted)
+    def update_home_path(self, event):
+        new_path = event.input.value
+        self.app.cfg.update_home_path(new_path)
+        self.notify(
+            message=f"set to {new_path}",
+            title="Project Home Path Updated",
+        )
