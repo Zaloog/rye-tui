@@ -8,6 +8,10 @@ ModalRyeInit > Vertical {
     width: 40%;
     height: 75%;
 }
+ModalRyeAdd > Vertical {
+    width: 40%;
+    height: 75%;
+}
 ModalRyePin > Vertical {
     width: 40%;
     height: 30%;

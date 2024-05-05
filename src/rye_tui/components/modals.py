@@ -5,7 +5,7 @@ from textual import on
 from textual.widget import Widget
 from textual.validation import Regex
 from textual.screen import ModalScreen
-from textual.widgets import Input, Button, Collapsible, Static, Label, ListView
+from textual.widgets import Input, Button, Collapsible, Static, Label, ListView, RichLog
 from textual.containers import Vertical, Horizontal
 
 from rye_tui.rye_commands import rye_command_str_output
@@ -143,3 +143,47 @@ class ModalRyePin(ModalScreen):
     @on(Input.Submitted, "#input_pin_python")
     def confirm_input(self):
         self.query_one(".btn-continue").press()
+
+
+class ModalRyeAdd(ModalScreen):
+    CSS_PATH: Path = Path("../assets/modal_screens.css")
+    packages: list = []
+
+    def compose(self) -> Iterable[Widget]:
+        with Vertical():
+            yield Label(
+                f"Add packages to your project [blue]{self.app.active_project}[/]"
+            )
+            self.pin_input = Input(
+                placeholder="enter python package to add",
+                # validators=[Regex("^3\.(?:[89]|1[012])$")],
+                id="input_add_package",
+            )
+            yield self.pin_input
+            yield RichLog(markup=True, highlight=True)
+            with Horizontal(classes="horizontal-conf-cancel"):
+                yield Button("continue", variant="success", classes="btn-continue")
+                yield Button("cancel", variant="error", classes="btn-cancel")
+        return super().compose()
+
+    @on(Input.Changed, "#input_add_package")
+    def new_package_to_list(self, message):
+        current_package = message.value
+        if current_package.endswith(" "):
+            self.packages.append(current_package.strip())
+            message.input.value = ""
+            self.query_one(RichLog).write(f"[blue]{current_package}[/]")
+
+    @on(Button.Pressed, ".btn-continue")
+    def pin_new_version(self):
+        self.log.error(self.packages)
+        # new_python_version = self.query_one("#input_pin_python").value
+
+        # rye_command_str_output(
+        #     command=f"rye pin {new_python_version}", cwd=self.app.active_project_path
+        # )
+        # self.app.pop_screen()
+
+    @on(Button.Pressed, ".btn-cancel")
+    def close_modal(self):
+        self.app.pop_screen()

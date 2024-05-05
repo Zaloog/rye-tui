@@ -43,6 +43,6 @@ class GeneralTab(Container):
         new_path = event.input.value
         self.app.cfg.update_home_path(new_path)
         self.notify(
-            message=f"set to {new_path}",
+            message=f"set to [blue]{new_path}[/]",
             title="Project Home Path Updated",
         )

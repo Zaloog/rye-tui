@@ -10,7 +10,7 @@ from textual.widgets import Button, ListView, RichLog
 from rich_pixels import Pixels
 
 from rye_tui.components.helper_widgets import ProjectListItem
-from rye_tui.components.modals import ModalRyeInit, ModalRyePin
+from rye_tui.components.modals import ModalRyeInit, ModalRyePin, ModalRyeAdd
 from rye_tui.rye_commands import rye_command_str_output
 from rye_tui.constants import IMAGE_PATH
 
@@ -93,6 +93,10 @@ class ProjectInteraction(Container):
     def rye_init_new_project(self) -> None:
         self.app.push_screen(ModalRyeInit())
 
+    @on(Button.Pressed, "#btn_pkg")
+    def rye_add_packages(self) -> None:
+        self.app.push_screen(ModalRyeAdd())
+
     @on(Button.Pressed, "#btn_pin")
     def rye_pin_python_version(self) -> None:
         self.app.push_screen(ModalRyePin())
@@ -101,8 +105,7 @@ class ProjectInteraction(Container):
     @on(Button.Pressed, "#btn_sync")
     async def rye_sync_project(self) -> None:
         self.app.query_one("#project_preview").loading = True
-        output = await self.async_sync_function()
-        self.app.log.error(output)
+        await self.async_sync_function()
         self.app.query_one("#project_preview").loading = False
 
     async def async_sync_function(self):
