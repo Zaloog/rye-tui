@@ -170,7 +170,7 @@ class ModalRyeAdd(ModalScreen):
             )
             yield self.pin_input
             yield RichLog(markup=True, highlight=True)
-            self.package_table = DataTable(cursor_type="cell")
+            self.package_table = DataTable(cursor_type="cell", header_height=2)
             self.package_table.add_columns("package", "version", "added", "synced")
             self.package_table.add_column("remove", key="remove")
             yield self.package_table
