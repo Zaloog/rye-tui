@@ -42,7 +42,7 @@ class DeleteButton(Widget):
 class ProjectListItem(ListItem):
     def __init__(self, project_title: str) -> None:
         self.project_title = project_title
-        super().__init__()
+        super().__init__(id=project_title)
 
     def compose(self) -> Iterable[Widget]:
         yield Label(self.project_title)

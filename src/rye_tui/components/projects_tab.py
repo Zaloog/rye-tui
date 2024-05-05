@@ -46,7 +46,6 @@ class ProjectList(VerticalScroll):
     async def update(self):
         self.remove()
         self.app.mount(ProjectList(), before="#project_interaction")
-        # self.app.query_one(ProjectList).focus()
 
     @on(ListView.Selected)
     def get_project_infos(self, event: ListView.Selected):
@@ -83,8 +82,12 @@ class ProjectInteraction(Container):
             new_project_name="test2", new_project_path=Path().cwd().as_posix()
         )
 
-        await self.app.query_one("#project_list").update()
-        self.app.log.debug([(p, j) for p, j in self.app.cfg.config["projects"].items()])
+        # Testing
+        project_list = self.app.query_one(ListView)
+        project_list.append(item=ProjectListItem(project_title="test2"))
+        num_project = project_list.children.__len__()
+        project_list.index = num_project
+        project_list.action_select_cursor()
 
     @on(Button.Pressed, "#btn_new")
     def rye_init_new_project(self) -> None:
@@ -98,15 +101,16 @@ class ProjectInteraction(Container):
     @on(Button.Pressed, "#btn_sync")
     async def rye_sync_project(self) -> None:
         self.app.query_one("#project_preview").loading = True
-        output = await self.aync_sync_function()
+        output = await self.async_sync_function()
         self.app.log.error(output)
-        self.app.query_one("#project_list").update()
+        # self.app.query_one("#project_list").update()
         self.app.query_one("#project_preview").loading = False
 
-    async def aync_sync_function(self):
+    async def async_sync_function(self):
         output = rye_command_str_output(
             command="rye sync -f", cwd=self.app.active_project_path
         )
+        self.app.query_one(ListView).action_select_cursor()
         return output
 
 
