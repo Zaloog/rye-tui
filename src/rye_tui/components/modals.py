@@ -1,7 +1,7 @@
 from typing import Iterable
 from pathlib import Path
 
-from textual import on
+from textual import on, work
 from textual.widget import Widget
 from textual.validation import Regex
 from textual.screen import ModalScreen
@@ -171,8 +171,11 @@ class ModalRyeAdd(ModalScreen):
             yield self.pin_input
             yield RichLog(markup=True, highlight=True)
             self.package_table = DataTable(cursor_type="cell", header_height=2)
-            self.package_table.add_columns("package", "version", "added", "synced")
-            self.package_table.add_column("remove", key="remove")
+            self.package_table.add_column("package", key="package", width=16)
+            self.package_table.add_column("version", key="version", width=12)
+            self.package_table.add_column("added", key="added", width=6)
+            self.package_table.add_column("synced", key="synced", width=6)
+            self.package_table.add_column("remove", key="remove", width=14)
             yield self.package_table
 
             with Horizontal(classes="horizontal-conf-cancel"):
@@ -190,21 +193,50 @@ class ModalRyeAdd(ModalScreen):
             self.package_table.add_row(
                 f"[blue]{current_package}[/]",
                 "00.00.00",
-                ":white_check_mark:",
+                # ":white_check_mark:",
                 ":cross_mark:",
-                "click to remove package",
+                ":cross_mark:",
+                "remove package",
                 key=current_package,
+            )
+            self.rye_add_package(current_package)
+
+    @work(thread=True)
+    def rye_add_package(self, package):
+        rye_add_str = rye_command_str_output(
+            command=f"rye add {package}", cwd=self.app.active_project_path
+        )
+        if rye_add_str.startswith("Added"):
+            self.notify(
+                message=rye_add_str.replace(package, f"[green]{package}[/]"),
+                title="Package Added",
+            )
+            package_version = rye_add_str.split()[1].lstrip(package)
+            self.package_table.update_cell(
+                row_key=package, column_key="version", value=package_version
+            )
+            self.package_table.update_cell(
+                row_key=package, column_key="added", value=":white_check_mark:"
             )
 
     @on(DataTable.CellSelected)
     def remove_package(self, event):
+        self.log.error(event)
         # Get the keys for the row and column under the cursor.
-        row_key, col_key = self.package_table.coordinate_to_cell_key(
-            self.package_table.cursor_coordinate
-        )
+        row_key = event.cell_key.row_key.value
+        col_key = event.cell_key.column_key.value
+
+        self.log.error(row_key, col_key)
         # Supply the row key to `remove_row` to delete the row.
         if col_key == "remove":
             self.package_table.remove_row(row_key)
+            rye_rm_str = rye_command_str_output(
+                command=f"rye remove {row_key}", cwd=self.app.active_project_path
+            )
+            self.notify(
+                title="Package Removed",
+                message=rye_rm_str.replace(row_key, f"[red]{row_key}[/]"),
+            )
             self.packages.remove(row_key)
 
     @on(Button.Pressed, ".btn-continue")

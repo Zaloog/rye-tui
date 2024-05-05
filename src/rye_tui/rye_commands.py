@@ -10,7 +10,7 @@ def rye_version() -> str:
     return f"Rye Version: {version}"
 
 
-def rye_command_str_output(command: str, cwd: str | Path = Path.cwd()):
+def rye_command_str_output(command: str, cwd: str | Path = Path.cwd().as_posix()):
     if isinstance(cwd, str):
         cwd = Path(cwd).as_posix()
     result = subprocess.run(command.split(), capture_output=True, text=True, cwd=cwd)

@@ -7,6 +7,8 @@ Describe your project here.
 
 # TODOS:
 - projects tab
+    - project_preview
+        - [ ] added dependencies
     - project_list
         - [ ] further check if folder is actually a rye project (based on .python-version?)
         - [ ] delete button functionality
