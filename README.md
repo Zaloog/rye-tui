@@ -12,6 +12,7 @@ Describe your project here.
         - [ ] delete button functionality
             - [ ] delete folder
             - [ ] modal confirm screen
+        - [ ] make buttons disappear, if project is not selected
         - [ ] edit button functionality
             -[ ] open pyproject.toml in modal
     - button functionalities

@@ -13,13 +13,17 @@ class RyeHeader(Header):
 
 class EditButton(Widget):
     def compose(self) -> Iterable[Widget]:
-        yield Button(label="Edit", classes="edit-button", variant="warning")
+        yield Button(
+            label=":hammer_and_wrench:  Edit", classes="edit-button", variant="warning"
+        )
         return super().compose()
 
 
 class DeleteButton(Widget):
     def compose(self) -> Iterable[Widget]:
-        yield Button(label="Delete", classes="delete-button", variant="error")
+        yield Button(
+            label=":cross_mark: Delete", classes="delete-button", variant="error"
+        )
         return super().compose()
 
     @on(Button.Pressed)

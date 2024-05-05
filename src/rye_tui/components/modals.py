@@ -5,7 +5,16 @@ from textual import on
 from textual.widget import Widget
 from textual.validation import Regex
 from textual.screen import ModalScreen
-from textual.widgets import Input, Button, Collapsible, Static, Label, ListView, RichLog
+from textual.widgets import (
+    Input,
+    Button,
+    Collapsible,
+    Static,
+    Label,
+    ListView,
+    RichLog,
+    DataTable,
+)
 from textual.containers import Vertical, Horizontal
 
 from rye_tui.rye_commands import rye_command_str_output
@@ -161,6 +170,11 @@ class ModalRyeAdd(ModalScreen):
             )
             yield self.pin_input
             yield RichLog(markup=True, highlight=True)
+            self.package_table = DataTable(cursor_type="cell")
+            self.package_table.add_columns("package", "version", "added", "synced")
+            self.package_table.add_column("remove", key="remove")
+            yield self.package_table
+
             with Horizontal(classes="horizontal-conf-cancel"):
                 yield Button("continue", variant="success", classes="btn-continue")
                 yield Button("cancel", variant="error", classes="btn-cancel")
@@ -168,11 +182,30 @@ class ModalRyeAdd(ModalScreen):
 
     @on(Input.Changed, "#input_add_package")
     def new_package_to_list(self, message):
-        current_package = message.value
-        if current_package.endswith(" "):
-            self.packages.append(current_package.strip())
+        current_package = message.value.strip()
+        if message.value.endswith(" "):
+            self.packages.append(current_package)
             message.input.value = ""
             self.query_one(RichLog).write(f"[blue]{current_package}[/]")
+            self.package_table.add_row(
+                f"[blue]{current_package}[/]",
+                "00.00.00",
+                ":white_check_mark:",
+                ":cross_mark:",
+                "click to remove package",
+                key=current_package,
+            )
+
+    @on(DataTable.CellSelected)
+    def remove_package(self, event):
+        # Get the keys for the row and column under the cursor.
+        row_key, col_key = self.package_table.coordinate_to_cell_key(
+            self.package_table.cursor_coordinate
+        )
+        # Supply the row key to `remove_row` to delete the row.
+        if col_key == "remove":
+            self.package_table.remove_row(row_key)
+            self.packages.remove(row_key)
 
     @on(Button.Pressed, ".btn-continue")
     def pin_new_version(self):
