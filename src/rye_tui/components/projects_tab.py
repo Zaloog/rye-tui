@@ -59,14 +59,20 @@ class ProjectList(VerticalScroll):
         ) as tomlfile:
             self.app.active_project_toml = tomllib.load(tomlfile)
 
-        with open(
-            Path(self.app.active_project_path) / "requirements.lock", "r"
-        ) as lockfile:
-            self.app.active_project_lock = [
-                line.split("==")[0]
-                for line in lockfile.readlines()
-                if not line.startswith("#")
-            ]
+        try:
+            with open(
+                Path(self.app.active_project_path) / "requirements.lock", "r"
+            ) as lockfile:
+                self.app.active_project_lock = [
+                    line.split("==")[0]
+                    for line in lockfile.readlines()
+                    if not line.startswith("#")
+                ]
+        except FileNotFoundError:
+            self.notify(
+                title="File not found",
+                message="[red]requirements.lock[/] is not present yet",
+            )
 
         self.app.query_one("#project_preview").update_content()
 
