@@ -1,5 +1,6 @@
 from typing import Iterable
 from pathlib import Path
+import tomllib
 
 from rich.table import Table
 from textual import on, work
@@ -53,6 +54,19 @@ class ProjectList(VerticalScroll):
         self.app.active_project_path = self.app.cfg.config["projects"].get(
             self.app.active_project
         )
+        with open(
+            Path(self.app.active_project_path) / "pyproject.toml", "rb"
+        ) as tomlfile:
+            self.app.active_project_toml = tomllib.load(tomlfile)
+
+        with open(
+            Path(self.app.active_project_path) / "requirements.lock", "r"
+        ) as lockfile:
+            self.app.active_project_lock = [
+                line.split("==")[0]
+                for line in lockfile.readlines()
+                if not line.startswith("#")
+            ]
 
         self.app.query_one("#project_preview").update_content()
 
@@ -139,6 +153,7 @@ class ProjectPreview(VerticalScroll):
                 )
                 self.content_info.clear()
                 self.content_info.write(project_infos)
+                self.content_info.write(self.app.active_project_toml)
 
                 table = Table("package", "version", expand=True)
                 for pkg in project_packages.split("\n"):

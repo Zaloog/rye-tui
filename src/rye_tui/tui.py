@@ -19,6 +19,8 @@ class RyeTui(App):
     cfg: RyeTuiConfig = RyeTuiConfig()
     active_project = reactive("")
     active_project_path = reactive("")
+    active_project_toml = reactive({})
+    active_project_lock = reactive([])
 
     def compose(self) -> ComposeResult:
         self.add_cwd_to_config()

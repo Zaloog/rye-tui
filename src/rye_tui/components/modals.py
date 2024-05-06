@@ -156,7 +156,6 @@ class ModalRyePin(ModalScreen):
 
 class ModalRyeAdd(ModalScreen):
     CSS_PATH: Path = Path("../assets/modal_screens.css")
-    packages: list = []
 
     def compose(self) -> Iterable[Widget]:
         with Vertical():
@@ -176,10 +175,27 @@ class ModalRyeAdd(ModalScreen):
             self.package_table.add_column("added", key="added", width=6)
             self.package_table.add_column("synced", key="synced", width=6)
             self.package_table.add_column("remove", key="remove", width=14)
+
+            for pkg_str in self.app.active_project_toml["project"]["dependencies"]:
+                pkg = pkg_str.split("=")[0][:-1]
+                version = pkg_str.lstrip(pkg)
+
+                self.package_table.add_row(
+                    f"[blue]{pkg}[/]",
+                    version,
+                    ":white_check_mark:",
+                    ":white_check_mark:"
+                    if pkg in self.app.active_project_lock
+                    else ":cross_mark:",
+                    "remove package",
+                    key=pkg,
+                )
             yield self.package_table
 
             with Horizontal(classes="horizontal-conf-cancel"):
-                yield Button("continue", variant="success", classes="btn-continue")
+                yield Button(
+                    "continue & sync", variant="success", classes="btn-continue"
+                )
                 yield Button("cancel", variant="error", classes="btn-cancel")
         return super().compose()
 
@@ -187,7 +203,6 @@ class ModalRyeAdd(ModalScreen):
     def new_package_to_list(self, message):
         current_package = message.value.strip()
         if message.value.endswith(" "):
-            self.packages.append(current_package)
             message.input.value = ""
             self.query_one(RichLog).write(f"[blue]{current_package}[/]")
             self.package_table.add_row(
@@ -221,13 +236,9 @@ class ModalRyeAdd(ModalScreen):
 
     @on(DataTable.CellSelected)
     def remove_package(self, event):
-        self.log.error(event)
-        # Get the keys for the row and column under the cursor.
         row_key = event.cell_key.row_key.value
         col_key = event.cell_key.column_key.value
 
-        self.log.error(row_key, col_key)
-        # Supply the row key to `remove_row` to delete the row.
         if col_key == "remove":
             self.package_table.remove_row(row_key)
             rye_rm_str = rye_command_str_output(
@@ -237,18 +248,13 @@ class ModalRyeAdd(ModalScreen):
                 title="Package Removed",
                 message=rye_rm_str.replace(row_key, f"[red]{row_key}[/]"),
             )
-            self.packages.remove(row_key)
 
     @on(Button.Pressed, ".btn-continue")
     def pin_new_version(self):
-        self.log.error(self.packages)
-        # new_python_version = self.query_one("#input_pin_python").value
-
-        # rye_command_str_output(
-        #     command=f"rye pin {new_python_version}", cwd=self.app.active_project_path
-        # )
-        # self.app.pop_screen()
+        self.app.pop_screen()
+        self.app.query_one("#btn_sync").press()
 
     @on(Button.Pressed, ".btn-cancel")
     def close_modal(self):
         self.app.pop_screen()
+        self.app.query_one(ListView).action_select_cursor()
