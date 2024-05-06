@@ -71,7 +71,8 @@ class ProjectList(VerticalScroll):
         except FileNotFoundError:
             self.notify(
                 title="File not found",
-                message="[red]requirements.lock[/] is not present yet",
+                message="[blue]requirements.lock[/] is not present yet",
+                severity="error",
             )
 
         self.app.query_one("#project_preview").update_content()
