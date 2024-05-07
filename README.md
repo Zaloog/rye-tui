@@ -2,7 +2,37 @@
 
 > Rye meets Textual. Manage your python projects with a Tui
 
-Describe your project here.
+rye-tui is a CLI tool to manage your project rye projects. It offers a user interface to interact with your projects.
+
+## Installation
+
+Currently still in development, you can already install a first release with one of the three options:
+
+```bash
+pip install rye-tui
+```
+
+```bash
+pipx install rye-tui
+```
+
+```bash
+rye install rye-tui
+```
+
+## Usage
+
+Once installed, you can open the tui with
+```bash
+trye
+```
+
+On first execution a configuration file is created, after that you have to use it again to get into the tui view.
+
+![demo_image](https://raw.githubusercontent.com/Zaloog/rye-tui/main/images/image_rye_demo_preview.png)
+
+
+
 * License: MIT
 
 # TODOS:
