@@ -31,11 +31,11 @@ class DeleteButton(Widget):
         project_name = self.parent.project_title
         # TODO confirm button
         # TODO remove folders
-        self.app.active_project = ""
-        self.app.active_project_path = ""
-        self.app.cfg.remove_project(project_name=project_name)
+        # self.app.active_project = ""
+        # self.app.active_project_path = ""
+        # self.app.cfg.remove_project(project_name=project_name)
+        # await self.app.query_one("#project_list").update()
 
-        await self.app.query_one("#project_list").update()
         self.app.query_one("#project_preview").update_content()
 
         self.notify(

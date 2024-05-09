@@ -8,21 +8,8 @@
 #   with-sources: false
 
 -e file:.
-aiohttp==3.9.5
-    # via textual-dev
-aiosignal==1.3.1
-    # via aiohttp
-attrs==23.2.0
-    # via aiohttp
-click==8.1.7
-    # via textual-dev
-colorama==0.4.6
-    # via click
-frozenlist==1.4.1
-    # via aiohttp
-    # via aiosignal
-idna==3.7
-    # via yarl
+cowsay==6.1
+    # via rye-tui
 linkify-it-py==2.0.3
     # via markdown-it-py
 markdown-it-py==3.0.0
@@ -33,13 +20,10 @@ mdit-py-plugins==0.4.0
     # via markdown-it-py
 mdurl==0.1.2
     # via markdown-it-py
-msgpack==1.0.8
-    # via textual-dev
-multidict==6.0.5
-    # via aiohttp
-    # via yarl
 pillow==10.3.0
     # via rich-pixels
+platformdirs==4.2.1
+    # via rye-tui
 pygments==2.17.2
     # via rich
 rich==13.7.1
@@ -49,13 +33,7 @@ rich-pixels==3.0.1
     # via rye-tui
 textual==0.58.1
     # via rye-tui
-    # via textual-dev
-textual-dev==1.5.1
-    # via rye-tui
 typing-extensions==4.11.0
     # via textual
-    # via textual-dev
 uc-micro-py==1.0.3
     # via linkify-it-py
-yarl==1.9.4
-    # via aiohttp

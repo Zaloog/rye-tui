@@ -103,7 +103,6 @@ class ModalRyeInit(ModalScreen):
         project_list.append(item=ProjectListItem(project_title=self.project_name))
         num_project = project_list.children.__len__()
         project_list.index = num_project
-        self.app.log.error(num_project)
         project_list.action_select_cursor()
 
     async def async_create_project(self, command):
@@ -196,7 +195,9 @@ class ModalRyeAdd(ModalScreen):
                 yield Button(
                     "continue & sync", variant="success", classes="btn-continue"
                 )
-                yield Button("cancel", variant="error", classes="btn-cancel")
+                yield Button(
+                    "go back & dont sync", variant="error", classes="btn-cancel"
+                )
         return super().compose()
 
     @on(Input.Changed, "#input_add_package")
@@ -252,9 +253,35 @@ class ModalRyeAdd(ModalScreen):
     @on(Button.Pressed, ".btn-continue")
     def pin_new_version(self):
         self.app.pop_screen()
+        self.app.query_one(ListView).action_select_cursor()
         self.app.query_one("#btn_sync").press()
 
     @on(Button.Pressed, ".btn-cancel")
     def close_modal(self):
         self.app.pop_screen()
         self.app.query_one(ListView).action_select_cursor()
+
+
+class ModalConfirm(ModalScreen):
+    CSS_PATH: Path = Path("../assets/modal_screens.css")
+
+    def compose(self) -> Iterable[Widget]:
+        with Vertical():
+            yield Label(f"Do you want to delete [blue]{self.app.active_project}[/]")
+            yield Label("This will [red]delete[/] all project files!")
+            with Horizontal(classes="horizontal-conf-cancel"):
+                yield Button(
+                    "delete all files", variant="success", classes="btn-continue"
+                )
+                yield Button(
+                    "remove from config", variant="error", classes="btn-cancel"
+                )
+        return super().compose()
+
+    @on(Button.Pressed, ".btn-continue")
+    def delete_all_files(self):
+        self.dismiss(True)
+
+    @on(Button.Pressed, ".btn-cancel")
+    def delete_only_config_entry(self):
+        self.dismiss(False)

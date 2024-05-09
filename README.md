@@ -4,9 +4,12 @@
 
 rye-tui is a CLI tool to manage your project rye projects. It offers a user interface to interact with your projects.
 
+## Currently still in development
+A 0.1.0 version is already released on PyPi
+
 ## Installation
 
-Currently still in development, you can already install a first release with one of the three options:
+you can already install a first release with one of the three options:
 
 ```bash
 pip install rye-tui

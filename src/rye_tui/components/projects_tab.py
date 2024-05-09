@@ -11,7 +11,12 @@ from textual.widgets import Button, ListView, RichLog
 from rich_pixels import Pixels
 
 from rye_tui.components.helper_widgets import ProjectListItem
-from rye_tui.components.modals import ModalRyeInit, ModalRyePin, ModalRyeAdd
+from rye_tui.components.modals import (
+    ModalRyeInit,
+    ModalRyePin,
+    ModalRyeAdd,
+    ModalConfirm,
+)
 from rye_tui.rye_commands import rye_command_str_output
 from rye_tui.constants import IMAGE_PATH
 
@@ -76,6 +81,22 @@ class ProjectList(VerticalScroll):
             )
 
         self.app.query_one("#project_preview").update_content()
+
+    @on(Button.Pressed, ".delete-button")
+    def delete_project(self, message):
+        self.log.error(message)
+
+        def check_delete(delete_files: bool) -> None:
+            if delete_files:
+                self.app.log.error("deleted all")
+            else:
+                self.app.log.error("deleted not all")
+
+        self.app.push_screen(ModalConfirm(), check_delete)
+        # list_view = self.app.query_one(ListView)
+        # for c in list_view.children:
+        #     self.log.error(c)
+        ...
 
 
 class ProjectInteraction(Container):

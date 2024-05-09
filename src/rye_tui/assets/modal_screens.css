@@ -17,6 +17,10 @@ ModalRyePin > Vertical {
     height: 30%;
     min-height: 20%;
 }
+ModalConfirm > Vertical {
+    width: 30%;
+    height: 20%;
+}
 
 #btn_home{
     width: 20%;
