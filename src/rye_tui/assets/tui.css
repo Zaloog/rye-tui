@@ -15,7 +15,7 @@ ConfigTab Container {
     height: auto;
 }
 .section {
-    border: rgb(132,164,50) heavy;
+    border: rgb(132,164,50) solid;
 }
 
 /* Default */
@@ -126,6 +126,9 @@ ProjectTab Vertical{
 }
 /* ProjectList */
 ProjectListItem{
+    height: 33%;
+    margin: 1 0 1 0;
+    align: left middle;
     layout:grid;
     grid-size: 4;
 }
@@ -182,4 +185,11 @@ Footer .footer--highlight {
 }
 Footer .footer--highlight-key {
     background: rgb(132,164,50);
+}
+
+.visible {
+    display: block;
+}
+.invisible {
+    display: None;
 }

@@ -82,6 +82,13 @@ class ProjectList(VerticalScroll):
 
         self.app.query_one("#project_preview").update_content()
 
+        btns = self.app.query("ProjectListItem Button")
+        for btn in btns:
+            btn.add_class("invisible")
+
+        event.item.query(Button).remove_class("invisible")
+        # event.item.query(Button).remove_class('invisible')
+
     @on(Button.Pressed, ".delete-button")
     def delete_project(self, message):
         self.log.error(message)
@@ -89,14 +96,21 @@ class ProjectList(VerticalScroll):
         def check_delete(delete_files: bool) -> None:
             if delete_files:
                 self.app.log.error("deleted all")
+                # self.app.cfg.remove_project(self.app.active_project)
             else:
                 self.app.log.error("deleted not all")
+                # self.app.cfg.remove_project(self.app.active_project)
+
+            project_list = self.app.query_one(ListView)
+
+            for i, project in enumerate(project_list.children):
+                if project.id == self.app.active_project:
+                    project_list.pop(i)
+            self.app.active_project = ""
+            self.app.active_project_path = ""
+            self.app.query_one("#project_preview").update_content()
 
         self.app.push_screen(ModalConfirm(), check_delete)
-        # list_view = self.app.query_one(ListView)
-        # for c in list_view.children:
-        #     self.log.error(c)
-        ...
 
 
 class ProjectInteraction(Container):

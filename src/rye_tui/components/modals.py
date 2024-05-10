@@ -281,7 +281,18 @@ class ModalConfirm(ModalScreen):
     @on(Button.Pressed, ".btn-continue")
     def delete_all_files(self):
         self.dismiss(True)
+        self.notify(
+            f"project [blue]{self.app.active_project}[/] and all files were deleted",
+            title="Project List Updated",
+        )
 
     @on(Button.Pressed, ".btn-cancel")
     def delete_only_config_entry(self):
         self.dismiss(False)
+        # self.app.active_project = ""
+        # self.app.active_project_path = ""
+
+        self.notify(
+            f"project [blue]{self.app.active_project}[/] was removed from config",
+            title="Project List Updated",
+        )

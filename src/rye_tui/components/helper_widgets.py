@@ -1,6 +1,5 @@
 from typing import Iterable
 
-from textual import on
 from textual.widget import Widget
 from textual.widgets import Button, Label, ListItem, Header, DataTable
 
@@ -14,7 +13,9 @@ class RyeHeader(Header):
 class EditButton(Widget):
     def compose(self) -> Iterable[Widget]:
         yield Button(
-            label=":hammer_and_wrench:  Edit", classes="edit-button", variant="warning"
+            label=":hammer_and_wrench:  Edit",
+            classes="edit-button invisible",
+            variant="warning",
         )
         return super().compose()
 
@@ -22,25 +23,11 @@ class EditButton(Widget):
 class DeleteButton(Widget):
     def compose(self) -> Iterable[Widget]:
         yield Button(
-            label=":cross_mark: Delete", classes="delete-button", variant="error"
+            label=":cross_mark: Delete",
+            classes="delete-button invisible",
+            variant="error",
         )
         return super().compose()
-
-    @on(Button.Pressed)
-    async def delete_project(self):
-        project_name = self.parent.project_title
-        # TODO confirm button
-        # TODO remove folders
-        # self.app.active_project = ""
-        # self.app.active_project_path = ""
-        # self.app.cfg.remove_project(project_name=project_name)
-        # await self.app.query_one("#project_list").update()
-
-        self.app.query_one("#project_preview").update_content()
-
-        self.notify(
-            f"project [blue]{project_name}[/] was deleted", title="Project List Updated"
-        )
 
 
 class ProjectListItem(ListItem):
