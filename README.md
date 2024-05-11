@@ -57,7 +57,9 @@ On first execution a configuration file is created, after that you have to use i
             - [ ] extract path/options/name from command, add flags?
         - [ ] add/remove
             - [X] modal with [Input of which package to add, DataTable for already present packages]
-            - [ ] --dev functionality, maybe other color/additional column
+            - [X] --dev functionality, maybe other color/additional column
+                - [x] --dev functionality remove package
+                - [ ] --dev packages display
             - [X] Datatable view [package, synced, remove (Button)]
         - [X] sync
             - [X] update preview

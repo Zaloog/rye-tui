@@ -283,14 +283,17 @@ class ModalRyeAdd(ModalScreen):
                     )
 
     @on(DataTable.CellSelected)
-    def remove_package(self, event):
+    def remove_package(self, event: DataTable.CellSelected):
         row_key = event.cell_key.row_key.value
         col_key = event.cell_key.column_key.value
+
+        is_dev = self.package_table.get_cell(row_key=row_key, column_key="--dev")
+        dev_flag = "--dev" if is_dev == ":white_check_mark:" else ""
 
         if col_key == "remove":
             self.package_table.remove_row(row_key)
             rye_rm_str = rye_command_str_output(
-                command=f"rye remove {row_key}", cwd=self.app.project["path"]
+                command=f"rye remove {row_key} {dev_flag}", cwd=self.app.project["path"]
             )
             self.notify(
                 title="Package Removed",
