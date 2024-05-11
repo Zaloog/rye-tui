@@ -5,7 +5,7 @@ from textual.widgets import Input, Static, Switch, Collapsible, Button, Select
 from textual.widget import Widget
 from textual.containers import Container, Vertical, Horizontal, VerticalScroll
 
-from rye_tui.rye_commands import get_rye_config_values, rye_config_set_command
+from rye_tui.utils import get_rye_config_values, rye_config_set_command
 from rye_tui.constants import CONF_OPT_DICT, OPT_DROPDOWN_DICT, SOURCES_VALUES
 
 

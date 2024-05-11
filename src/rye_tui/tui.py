@@ -9,7 +9,7 @@ from textual.widgets import Footer
 
 from rye_tui.components.mainframe import MainFrame
 from rye_tui.components.helper_widgets import RyeHeader
-from rye_tui.rye_commands import rye_version
+from rye_tui.utils import rye_version
 from rye_tui.config import RyeTuiConfig
 
 
@@ -55,3 +55,9 @@ class RyeTui(App):
                 )
             else:
                 self.notify("[red]NO[/] pyproject.toml found in [blue]CWD[/]")
+
+    def reset_project(self):
+        self.active_project = ""
+        self.active_project_path = ""
+        self.app.query_one("#project_preview").content_info.clear()
+        self.query_one("#project_preview").content_info.write("please select a file")

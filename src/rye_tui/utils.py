@@ -1,4 +1,5 @@
 import tomllib
+from shutil import rmtree
 
 import subprocess
 from pathlib import Path
@@ -33,3 +34,7 @@ def get_rye_config_values():
     config_file_path = rye_command_str_output(command="rye config --show-path")
     with open(config_file_path, "rb") as config_file:
         return tomllib.load(config_file)
+
+
+def delete_folder(folder_path: str | Path):
+    rmtree(folder_path)
