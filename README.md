@@ -78,4 +78,5 @@ On first execution a configuration file is created, after that you have to use i
     - [ ] helper widget [label, input/switch/dropdown] + css update
 - other stuff
     - [ ] focus widget color?
+    - [ ] Docs/Readme
     - [X] publish first version

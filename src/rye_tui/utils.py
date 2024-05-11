@@ -59,3 +59,13 @@ def read_lock(path: str):
         return packages
     except FileNotFoundError:
         return []
+
+
+def prettify_toml(toml_dict):
+    for k, v in toml_dict.items():
+        print(k)
+        print(v)
+
+
+if __name__ == "__main__":
+    prettify_toml(read_toml("."))

@@ -1,7 +1,7 @@
 [project]
 name = "rye-tui"
 version = "0.1.0"
-description = "Add your description here"
+description = "Rye meets Textual. Manage your python projects with a Tui"
 authors = [
     { name = "Zaloog", email = "gramslars@gmail.com" }
 ]
