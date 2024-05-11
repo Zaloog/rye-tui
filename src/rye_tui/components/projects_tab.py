@@ -55,6 +55,10 @@ class ProjectList(VerticalScroll):
 
     @on(ListView.Selected)
     def get_project_infos(self, event: ListView.Selected):
+        self.app.get_project_infos(project_name=event.item.project_title)
+
+        self.log.error(self.app.project)
+
         self.app.active_project = event.item.project_title
         self.app.active_project_path = self.app.cfg.config["projects"].get(
             self.app.active_project
@@ -189,7 +193,7 @@ class ProjectPreview(VerticalScroll):
     @work(thread=True, exclusive=True)
     def update_content(self):
         try:
-            if self.app.active_project_path:
+            if self.app.project["path"]:
                 project_infos = rye_command_str_output(
                     "rye show", cwd=self.app.active_project_path
                 )
@@ -198,7 +202,7 @@ class ProjectPreview(VerticalScroll):
                 )
                 self.content_info.clear()
                 self.content_info.write(project_infos)
-                self.content_info.write(self.app.active_project_toml)
+                self.content_info.write(self.app.project["toml"])
 
                 table = Table("package", "version", expand=True)
                 for pkg in project_packages.split("\n"):
@@ -213,14 +217,13 @@ class ProjectPreview(VerticalScroll):
                 self.content_info.clear()
                 self.content_info.write(content)
             # self.content = content
-        except Exception as e:
-            self.app.log.error(e)
+        except Exception:
             self.content_info.clear()
             self.content_info.write("error: project path name is not valid")
 
     @on(Resize)
     def keep_image_size(self, event: Resize):
-        if not self.app.active_project:
+        if not self.app.project["name"]:
             new_width, new_height = event.size
             pixels = Pixels.from_image_path(
                 IMAGE_PATH,

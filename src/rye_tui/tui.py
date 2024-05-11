@@ -9,7 +9,7 @@ from textual.widgets import Footer
 
 from rye_tui.components.mainframe import MainFrame
 from rye_tui.components.helper_widgets import RyeHeader
-from rye_tui.utils import rye_version
+from rye_tui.utils import rye_version, read_toml, read_lock
 from rye_tui.config import RyeTuiConfig
 
 
@@ -17,6 +17,7 @@ class RyeTui(App):
     CSS_PATH = Path("assets/tui.css")
 
     cfg: RyeTuiConfig = RyeTuiConfig()
+    project = reactive({"name": "", "path": "", "toml": {}, "lock": []})
     active_project = reactive("")
     active_project_path = reactive("")
     active_project_toml = reactive({})
@@ -63,3 +64,19 @@ class RyeTui(App):
         preview_window.content_info.clear()
         preview_window.content_info.write("please select a file")
         preview_window.border_subtitle = "no project selected"
+
+    def get_project_infos(self, project_name):
+        proj_dict = self.project
+        proj_dict["name"] = project_name
+        proj_dict["path"] = self.cfg.config["projects"].get(project_name)
+
+        proj_dict["toml"] = read_toml(path=proj_dict["path"])
+
+        proj_dict["lock"] = read_lock(path=proj_dict["path"])
+
+        if not proj_dict["lock"]:
+            self.notify(
+                title="File not found",
+                message=f"[blue]requirements.lock[/] is not present yet for [blue]{self.app.active_project}[/]",
+                severity="error",
+            )

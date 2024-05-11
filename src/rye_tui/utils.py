@@ -38,3 +38,24 @@ def get_rye_config_values():
 
 def delete_folder(folder_path: str | Path):
     rmtree(folder_path)
+
+
+def read_toml(path: str) -> dict:
+    try:
+        with open(Path(path) / "pyproject.toml", "rb") as tomlfile:
+            return tomllib.load(tomlfile)
+    except FileNotFoundError:
+        return {}
+
+
+def read_lock(path: str):
+    try:
+        with open(Path(path) / "requirements.lock", "r") as lockfile:
+            packages = [
+                line.split("==")[0].strip()
+                for line in lockfile.readlines()
+                if not line.strip().startswith("#")
+            ]
+        return packages
+    except FileNotFoundError:
+        return []

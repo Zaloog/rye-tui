@@ -90,8 +90,8 @@ class ModalRyeInit(ModalScreen):
         command = f"rye init {project_path}"
         output_str = await self.async_create_project(command=command)
         self.notify(title="New Project created", message=output_str)
-
         self.loading = False
+
         self.app.cfg.add_project(
             new_project_name=self.project_name, new_project_path=project_path
         )
@@ -100,10 +100,10 @@ class ModalRyeInit(ModalScreen):
             title="Project List Updated",
         )
         self.app.pop_screen()
+
         project_list = self.app.query_one(ListView)
         project_list.append(item=ProjectListItem(project_title=self.project_name))
-        num_project = project_list.children.__len__()
-        project_list.index = num_project
+        project_list.index = len(project_list.children)
         project_list.action_select_cursor()
 
     async def async_create_project(self, command):
