@@ -267,7 +267,7 @@ class ModalRyeAdd(ModalScreen):
     @on(Button.Pressed, ".btn-continue")
     def pin_new_version(self):
         self.app.pop_screen()
-        self.app.query_one(ListView).action_select_cursor()
+        # self.app.query_one(ListView).action_select_cursor()
         self.app.query_one("#btn_sync").press()
 
     @on(Button.Pressed, ".btn-cancel")

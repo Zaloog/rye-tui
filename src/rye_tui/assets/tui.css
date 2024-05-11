@@ -16,6 +16,9 @@ ConfigTab Container {
 }
 .section {
     border: rgb(132,164,50) solid;
+    border-title-color:black;
+    border-title-background:rgb(132,164,50);
+    border-subtitle-color: $error;
 }
 
 /* Default */
@@ -176,9 +179,11 @@ Header {
 }
 Footer {
     background: rgb(132,164,50);
+    height: auto;
 }
 Footer .footer--key {
-    background: rgb(132,164,50);
+    background: $error;
+    /* background: rgb(132,164,50); */
 }
 Footer .footer--highlight {
     background: rgb(132,164,50);

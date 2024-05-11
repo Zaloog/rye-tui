@@ -76,11 +76,13 @@ class ProjectList(VerticalScroll):
         except FileNotFoundError:
             self.notify(
                 title="File not found",
-                message="[blue]requirements.lock[/] is not present yet",
+                message=f"[blue]requirements.lock[/] is not present yet for [blue]{self.app.active_project}[/]",
                 severity="error",
             )
 
-        self.app.query_one("#project_preview").update_content()
+        preview_window = self.app.query_one("#project_preview")
+        preview_window.update_content()
+        preview_window.border_subtitle = self.app.active_project
 
         btns = self.app.query("ProjectListItem Button")
         for btn in btns:
@@ -176,6 +178,7 @@ class ProjectPreview(VerticalScroll):
     def compose(self) -> Iterable[Widget]:
         self.classes = "section"
         self.border_title = "Preview"
+        self.border_subtitle = "no project selected"
         self.id = "project_preview"
         self.content_info = RichLog(wrap=False, auto_scroll=True)
 

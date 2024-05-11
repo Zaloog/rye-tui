@@ -59,5 +59,7 @@ class RyeTui(App):
     def reset_project(self):
         self.active_project = ""
         self.active_project_path = ""
-        self.app.query_one("#project_preview").content_info.clear()
-        self.query_one("#project_preview").content_info.write("please select a file")
+        preview_window = self.app.query_one("#project_preview")
+        preview_window.content_info.clear()
+        preview_window.content_info.write("please select a file")
+        preview_window.border_subtitle = "no project selected"
