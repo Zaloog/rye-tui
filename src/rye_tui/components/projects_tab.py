@@ -1,6 +1,5 @@
 from typing import Iterable
 from pathlib import Path
-import tomllib
 
 from rich.table import Table
 from textual import on, work
@@ -59,34 +58,9 @@ class ProjectList(VerticalScroll):
 
         self.log.error(self.app.project)
 
-        self.app.active_project = event.item.project_title
-        self.app.active_project_path = self.app.cfg.config["projects"].get(
-            self.app.active_project
-        )
-        with open(
-            Path(self.app.active_project_path) / "pyproject.toml", "rb"
-        ) as tomlfile:
-            self.app.active_project_toml = tomllib.load(tomlfile)
-
-        try:
-            with open(
-                Path(self.app.active_project_path) / "requirements.lock", "r"
-            ) as lockfile:
-                self.app.active_project_lock = [
-                    line.split("==")[0]
-                    for line in lockfile.readlines()
-                    if not line.startswith("#")
-                ]
-        except FileNotFoundError:
-            self.notify(
-                title="File not found",
-                message=f"[blue]requirements.lock[/] is not present yet for [blue]{self.app.active_project}[/]",
-                severity="error",
-            )
-
         preview_window = self.app.query_one("#project_preview")
         preview_window.update_content()
-        preview_window.border_subtitle = self.app.active_project
+        preview_window.border_subtitle = self.app.project["name"]
 
         btns = self.app.query("ProjectListItem Button")
         for btn in btns:
@@ -96,24 +70,17 @@ class ProjectList(VerticalScroll):
 
     @on(Button.Pressed, ".delete-button")
     def delete_project(self, message):
-        self.log.error(message)
-
         def check_delete(delete_files: bool) -> None:
             if delete_files:
-                self.app.log.error("deleted all")
-                res = delete_folder(folder_path=self.app.active_project_path)
-                self.log.error(res)
-
-            else:
-                self.app.log.error("deleted not all")
+                delete_folder(folder_path=self.app.project["path"])
 
             project_list = self.app.query_one(ListView)
 
             for i, project in enumerate(project_list.children):
-                if project.id == self.app.active_project:
+                if project.id == self.app.project["name"]:
                     project_list.pop(i)
 
-            self.app.cfg.remove_project(self.app.active_project)
+            self.app.cfg.remove_project(self.app.project["name"])
             self.app.reset_project()
 
         self.app.push_screen(ModalConfirm(), check_delete)
@@ -172,7 +139,7 @@ class ProjectInteraction(Container):
 
     async def async_sync_function(self):
         output = rye_command_str_output(
-            command="rye sync -f", cwd=self.app.active_project_path
+            command="rye sync -f", cwd=self.app.project["path"]
         )
         self.app.query_one(ListView).action_select_cursor()
         return output
@@ -195,10 +162,10 @@ class ProjectPreview(VerticalScroll):
         try:
             if self.app.project["path"]:
                 project_infos = rye_command_str_output(
-                    "rye show", cwd=self.app.active_project_path
+                    "rye show", cwd=self.app.project["path"]
                 )
                 project_packages = rye_command_str_output(
-                    "rye list", cwd=self.app.active_project_path
+                    "rye list", cwd=self.app.project["path"]
                 )
                 self.content_info.clear()
                 self.content_info.write(project_infos)

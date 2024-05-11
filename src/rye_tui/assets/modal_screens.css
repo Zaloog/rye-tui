@@ -12,6 +12,18 @@ ModalRyeAdd > Vertical {
     width: 40%;
     height: 75%;
 }
+ModalRyeAdd  Input {
+    width: 3fr;
+    height: auto;
+}
+ModalRyeAdd  Button {
+    width: 1fr;
+    height: auto;
+}
+ModalRyeAdd  DataTable {
+    width: 1fr;
+    height: 1fr;
+}
 ModalRyePin > Vertical {
     width: 40%;
     height: 30%;

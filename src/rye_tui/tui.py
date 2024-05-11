@@ -18,10 +18,6 @@ class RyeTui(App):
 
     cfg: RyeTuiConfig = RyeTuiConfig()
     project = reactive({"name": "", "path": "", "toml": {}, "lock": []})
-    active_project = reactive("")
-    active_project_path = reactive("")
-    active_project_toml = reactive({})
-    active_project_lock = reactive([])
 
     def compose(self) -> ComposeResult:
         self.add_cwd_to_config()
@@ -58,8 +54,7 @@ class RyeTui(App):
                 self.notify("[red]NO[/] pyproject.toml found in [blue]CWD[/]")
 
     def reset_project(self):
-        self.active_project = ""
-        self.active_project_path = ""
+        self.project = reactive({"name": "", "path": "", "toml": {}, "lock": []})
         preview_window = self.app.query_one("#project_preview")
         preview_window.content_info.clear()
         preview_window.content_info.write("please select a file")
@@ -74,9 +69,10 @@ class RyeTui(App):
 
         proj_dict["lock"] = read_lock(path=proj_dict["path"])
 
-        if not proj_dict["lock"]:
-            self.notify(
-                title="File not found",
-                message=f"[blue]requirements.lock[/] is not present yet for [blue]{self.app.active_project}[/]",
-                severity="error",
-            )
+        # if not proj_dict["lock"]:
+        #     self.notify(
+        #         title="File not found",
+        #         message=f"[blue]requirements.lock[/] is not present yet for [blue]{self.app.project['name']}[/]",
+        #         severity="error",
+        #         timeout=1
+        #     )

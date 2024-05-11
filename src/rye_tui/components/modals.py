@@ -2,6 +2,7 @@ from typing import Iterable
 from pathlib import Path
 
 from textual import on, work
+from textual.reactive import reactive
 from textual.widget import Widget
 from textual.validation import Regex
 from textual.screen import ModalScreen
@@ -12,7 +13,6 @@ from textual.widgets import (
     Static,
     Label,
     ListView,
-    RichLog,
     DataTable,
 )
 from textual.containers import Vertical, Horizontal
@@ -116,7 +116,7 @@ class ModalRyePin(ModalScreen):
 
     def compose(self) -> Iterable[Widget]:
         with Vertical():
-            yield Label(f"Pin Python Version of [blue]{self.app.active_project}[/]")
+            yield Label(f"Pin Python Version of [blue]{self.app.project['name']}[/]")
             self.pin_input = Input(
                 placeholder="enter python version to pin",
                 validators=[Regex("^3\.(?:[89]|1[012])$")],
@@ -135,7 +135,7 @@ class ModalRyePin(ModalScreen):
         new_python_version = self.query_one("#input_pin_python").value
 
         rye_command_str_output(
-            command=f"rye pin {new_python_version}", cwd=self.app.active_project_path
+            command=f"rye pin {new_python_version}", cwd=self.app.project["path"]
         )
 
         self.app.pop_screen()
@@ -156,39 +156,52 @@ class ModalRyePin(ModalScreen):
 
 class ModalRyeAdd(ModalScreen):
     CSS_PATH: Path = Path("../assets/modal_screens.css")
+    option_flags = reactive([])
 
     def compose(self) -> Iterable[Widget]:
         with Vertical():
             yield Label(
-                f"Add packages to your project [blue]{self.app.active_project}[/]"
+                f"Add packages to your project [blue]{self.app.project['name']}[/]",
             )
             self.pin_input = Input(
                 placeholder="enter python package to add",
                 # validators=[Regex("^3\.(?:[89]|1[012])$")],
                 id="input_add_package",
             )
-            yield self.pin_input
-            yield RichLog(markup=True, highlight=True)
+            with Horizontal():
+                yield self.pin_input
+                yield Button("--dev", id="option_button_dev", variant="warning")
+
+            # All Dev Options
+            with Collapsible(title="Options"):
+                yield Label("still to come")
+            #     yield VerticalScroll(*[
+            #         Horizontal(Label(flag), Input(f'{flag_type}'))
+            #         for flag, flag_type in ADD_OPTIONS_DICT.items()
+            #         ])
+
             self.package_table = DataTable(cursor_type="cell", header_height=2)
             self.package_table.add_column("package", key="package", width=16)
-            self.package_table.add_column("version", key="version", width=12)
+            self.package_table.add_column("version", key="version", width=10)
             self.package_table.add_column("added", key="added", width=6)
             self.package_table.add_column("synced", key="synced", width=6)
-            self.package_table.add_column("remove", key="remove", width=14)
+            self.package_table.add_column("--dev", key="--dev", width=6)
+            self.package_table.add_column("remove", key="remove", width=8)
 
             # Add present packages
-            for pkg_str in self.app.active_project_toml["project"]["dependencies"]:
+            for pkg_str in self.app.project["toml"]["project"]["dependencies"]:
                 pkg = pkg_str.split("=")[0][:-1]
                 version = pkg_str.lstrip(pkg)
 
                 self.package_table.add_row(
-                    f"[blue]{pkg}[/]",
+                    f"[white]{pkg}[/]",
                     version,
                     ":white_check_mark:",
                     ":white_check_mark:"
-                    if pkg in self.app.active_project_lock
+                    if pkg in self.app.project["lock"]
                     else ":cross_mark:",
-                    "remove package",
+                    ":cross_mark:",
+                    "remove",
                     key=pkg,
                 )
             yield self.package_table
@@ -198,32 +211,45 @@ class ModalRyeAdd(ModalScreen):
                     "continue & sync", variant="success", classes="btn-continue"
                 )
                 yield Button(
-                    "go back & dont sync", variant="error", classes="btn-cancel"
+                    "continue & dont sync", variant="error", classes="btn-cancel"
                 )
         return super().compose()
 
     @on(Input.Changed, "#input_add_package")
+    @on(Input.Submitted, "#input_add_package")
     def new_package_to_list(self, message):
+        self.log.error(message)
         current_package = message.value.strip()
-        if message.value.endswith(" "):
+        if message.value.endswith(" ") or isinstance(message, Input.Submitted):
             message.input.value = ""
 
-            self.query_one(RichLog).write(f"[blue]{current_package}[/]")
             self.package_table.add_row(
-                f"[blue]{current_package}[/]",
+                f"[white]{current_package}[/]",
                 "00.00.00",
                 ":cross_mark:",
                 ":cross_mark:",
-                "remove package",
+                ":cross_mark:",
+                "remove",
                 key=current_package,
             )
             self.rye_add_package(current_package)
 
+    @on(Button.Pressed, "#option_button_dev")
+    def use_dev_flag(self, message: Button.Pressed):
+        if "--dev" in self.option_flags:
+            self.option_flags.remove("--dev")
+            message.button.variant = "warning"
+
+        else:
+            self.option_flags.append("--dev")
+            message.button.variant = "success"
+
     @work(thread=True)
     def rye_add_package(self, package):
+        flags = " ".join(self.option_flags)
         worker = get_current_worker()
         rye_add_str = rye_command_str_output(
-            command=f"rye add {package}", cwd=self.app.active_project_path
+            command=f"rye add {package} {flags}", cwd=self.app.project["path"]
         )
         if rye_add_str.startswith("Initializing"):
             rye_add_str = rye_add_str.split("\n")[-1]
@@ -248,6 +274,13 @@ class ModalRyeAdd(ModalScreen):
                     column_key="added",
                     value=":white_check_mark:",
                 )
+                if "--dev" in self.option_flags:
+                    self.app.call_from_thread(
+                        self.package_table.update_cell,
+                        row_key=package,
+                        column_key="--dev",
+                        value=":white_check_mark:",
+                    )
 
     @on(DataTable.CellSelected)
     def remove_package(self, event):
@@ -257,7 +290,7 @@ class ModalRyeAdd(ModalScreen):
         if col_key == "remove":
             self.package_table.remove_row(row_key)
             rye_rm_str = rye_command_str_output(
-                command=f"rye remove {row_key}", cwd=self.app.active_project_path
+                command=f"rye remove {row_key}", cwd=self.app.project["path"]
             )
             self.notify(
                 title="Package Removed",
@@ -267,7 +300,6 @@ class ModalRyeAdd(ModalScreen):
     @on(Button.Pressed, ".btn-continue")
     def pin_new_version(self):
         self.app.pop_screen()
-        # self.app.query_one(ListView).action_select_cursor()
         self.app.query_one("#btn_sync").press()
 
     @on(Button.Pressed, ".btn-cancel")
@@ -281,7 +313,7 @@ class ModalConfirm(ModalScreen):
 
     def compose(self) -> Iterable[Widget]:
         with Vertical():
-            yield Label(f"Do you want to delete [blue]{self.app.active_project}[/]")
+            yield Label(f"Do you want to delete [blue]{self.app.project['name']}[/]")
             yield Label("This will [red]delete[/] all project files!")
             with Horizontal(classes="horizontal-conf-cancel"):
                 yield Button(
@@ -296,17 +328,14 @@ class ModalConfirm(ModalScreen):
     def delete_all_files(self):
         self.dismiss(True)
         self.notify(
-            f"project [blue]{self.app.active_project}[/] and all files were deleted",
+            f"project [blue]{self.app.project['name']}[/] and all files were deleted",
             title="Project List Updated",
         )
 
     @on(Button.Pressed, ".btn-cancel")
     def delete_only_config_entry(self):
         self.dismiss(False)
-        # self.app.active_project = ""
-        # self.app.active_project_path = ""
-
         self.notify(
-            f"project [blue]{self.app.active_project}[/] was removed from config",
+            f"project [blue]{self.app.project['name']}[/] was removed from config",
             title="Project List Updated",
         )

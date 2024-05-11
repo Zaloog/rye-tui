@@ -113,3 +113,21 @@ OPT_DROPDOWN_DICT = {
 }
 
 SOURCES_VALUES = ["url", "username", "password", "verify-ssl"]
+
+ADD_OPTIONS_DICT = {
+    "--dev": bool,
+    "--git": str,
+    "--url": str,
+    "--path": str,
+    "--absolute": bool,
+    "--tag": str,
+    "--rev": str,
+    "--branch": str,
+    "--features": str,
+    "--excluded": bool,
+    "--optional": str,
+    "--pre": bool,
+    "--pin": str,
+    "--sync": bool,
+    "--no-sync": bool,
+}
