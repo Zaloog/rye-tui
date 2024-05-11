@@ -41,23 +41,24 @@ On first execution a configuration file is created, after that you have to use i
 # TODOS:
 - projects tab
     - project_preview
-        - [ ] added dependencies
+        - [X] added dependencies
+        - [ ] make view nicer
     - project_list
         - [ ] further check if folder is actually a rye project (based on .python-version?)
-        - [ ] delete button functionality
-            - [ ] delete folder
-            - [ ] modal confirm screen
-        - [ ] make buttons disappear, if project is not selected
+        - [X] delete button functionality
+            - [X] delete folder
+            - [X] modal confirm screen
+        - [X] make buttons disappear, if project is not selected
         - [ ] edit button functionality
             -[ ] open pyproject.toml in modal
     - button functionalities
         - [ ] New Project
             - [X] update preview
-            - [ ] extract path/options/name from command?
+            - [ ] extract path/options/name from command, add flags?
         - [ ] add/remove
-            - [ ] modal with [Input of which package to add, DataTable for already present packages]
-            - [ ] --dev functionality
-            - [ ] Datatable view [package, synced, remove (Button)]
+            - [X] modal with [Input of which package to add, DataTable for already present packages]
+            - [ ] --dev functionality, maybe other color/additional column
+            - [X] Datatable view [package, synced, remove (Button)]
         - [X] sync
             - [X] update preview
         - [X] pin python version
@@ -75,4 +76,4 @@ On first execution a configuration file is created, after that you have to use i
     - [ ] helper widget [label, input/switch/dropdown] + css update
 - other stuff
     - [ ] focus widget color?
-    - [ ] publish first version
+    - [X] publish first version
