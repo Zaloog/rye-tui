@@ -32,6 +32,8 @@ class ProjectTab(Container):
         return super().compose()
 
 
+########################################################################################
+# Project List
 class ProjectList(VerticalScroll):
     def compose(self) -> Iterable[Widget]:
         self.classes = "section"
@@ -86,6 +88,8 @@ class ProjectList(VerticalScroll):
         self.app.push_screen(ModalConfirm(), check_delete)
 
 
+########################################################################################
+# Project Interaction
 class ProjectInteraction(Container):
     def compose(self) -> Iterable[Widget]:
         self.classes = "section"
@@ -145,6 +149,8 @@ class ProjectInteraction(Container):
         return output
 
 
+########################################################################################
+# Project Preview
 class ProjectPreview(VerticalScroll):
     def compose(self) -> Iterable[Widget]:
         self.classes = "section"

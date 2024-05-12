@@ -71,8 +71,8 @@ On first execution a configuration file is created, after that you have to use i
     - [ ] Add Rye Project Home from config.ini
         - [x] Functionality added
         - [ ] Input Validator for Path, ' ' in Path?
-    - [ ] installed tools
-    - [ ] installed toolchains
+    - [X] installed tools
+    - [X] installed toolchains
 - config tab
     - [ ] source adding/removing
     - [ ] helper widget [label, input/switch/dropdown] + css update

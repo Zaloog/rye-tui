@@ -56,7 +56,7 @@ def read_lock(path: str):
                 for line in lockfile.readlines()
                 if not line.strip().startswith("#")
             ]
-        return packages
+        return [package for package in packages if package]
     except FileNotFoundError:
         return []
 
