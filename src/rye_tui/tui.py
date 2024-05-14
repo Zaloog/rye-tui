@@ -67,7 +67,8 @@ class RyeTui(App):
 
         proj_dict["toml"] = read_toml(path=proj_dict["path"])
 
-        proj_dict["lock"] = read_lock(path=proj_dict["path"])
+        proj_dict["lock"] = read_lock(path=proj_dict["path"], dev=False)
+        proj_dict["dev_lock"] = read_lock(path=proj_dict["path"], dev=True)
 
         # if not proj_dict["lock"]:
         #     self.notify(

@@ -59,7 +59,7 @@ On first execution a configuration file is created, after that you have to use i
             - [X] modal with [Input of which package to add, DataTable for already present packages]
             - [X] --dev functionality, maybe other color/additional column
                 - [x] --dev functionality remove package
-                - [ ] --dev packages display
+                - [X] --dev packages display
             - [X] Datatable view [package, synced, remove (Button)]
         - [X] sync
             - [X] update preview

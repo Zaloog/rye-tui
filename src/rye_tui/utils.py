@@ -48,9 +48,10 @@ def read_toml(path: str) -> dict:
         return {}
 
 
-def read_lock(path: str):
+def read_lock(path: str, dev: bool):
     try:
-        with open(Path(path) / "requirements.lock", "r") as lockfile:
+        lock_name = "requirements-dev.lock" if dev else "requirements.lock"
+        with open(Path(path) / lock_name, "r") as lockfile:
             packages = [
                 line.split("==")[0].strip()
                 for line in lockfile.readlines()
@@ -62,6 +63,7 @@ def read_lock(path: str):
 
 
 def fill_package_table(package_table, project_dict):
+    # packages
     for pkg_str in project_dict["toml"]["project"]["dependencies"]:
         pkg = pkg_str.split("=")[0][:-1]
         version = pkg_str.lstrip(pkg)
@@ -75,7 +77,20 @@ def fill_package_table(package_table, project_dict):
             "remove",
             key=pkg,
         )
-    ...
+    # --dev packages
+    for pkg_str in project_dict["toml"]["tool"]["rye"]["dev-dependencies"]:
+        pkg = pkg_str.split("=")[0][:-1]
+        version = pkg_str.lstrip(pkg)
+
+        package_table.add_row(
+            f"[white]{pkg}[/]",
+            version,
+            ":white_check_mark:",
+            ":white_check_mark:" if pkg in project_dict["dev_lock"] else ":cross_mark:",
+            ":white_check_mark:",
+            "remove",
+            key=pkg,
+        )
 
 
 def prettify_toml(toml_dict):
