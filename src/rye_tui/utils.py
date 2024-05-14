@@ -61,6 +61,23 @@ def read_lock(path: str):
         return []
 
 
+def fill_package_table(package_table, project_dict):
+    for pkg_str in project_dict["toml"]["project"]["dependencies"]:
+        pkg = pkg_str.split("=")[0][:-1]
+        version = pkg_str.lstrip(pkg)
+
+        package_table.add_row(
+            f"[white]{pkg}[/]",
+            version,
+            ":white_check_mark:",
+            ":white_check_mark:" if pkg in project_dict["lock"] else ":cross_mark:",
+            ":cross_mark:",
+            "remove",
+            key=pkg,
+        )
+    ...
+
+
 def prettify_toml(toml_dict):
     for k, v in toml_dict.items():
         print(k)

@@ -18,7 +18,7 @@ from textual.widgets import (
 from textual.containers import Vertical, Horizontal
 from textual.worker import get_current_worker
 
-from rye_tui.utils import rye_command_str_output
+from rye_tui.utils import rye_command_str_output, fill_package_table
 from rye_tui.components.helper_widgets import ProjectListItem
 
 
@@ -189,21 +189,25 @@ class ModalRyeAdd(ModalScreen):
             self.package_table.add_column("remove", key="remove", width=8)
 
             # Add present packages
-            for pkg_str in self.app.project["toml"]["project"]["dependencies"]:
-                pkg = pkg_str.split("=")[0][:-1]
-                version = pkg_str.lstrip(pkg)
+            fill_package_table(
+                package_table=self.package_table, project_dict=self.app.project
+            )
 
-                self.package_table.add_row(
-                    f"[white]{pkg}[/]",
-                    version,
-                    ":white_check_mark:",
-                    ":white_check_mark:"
-                    if pkg in self.app.project["lock"]
-                    else ":cross_mark:",
-                    ":cross_mark:",
-                    "remove",
-                    key=pkg,
-                )
+            # for pkg_str in self.app.project["toml"]["project"]["dependencies"]:
+            #     pkg = pkg_str.split("=")[0][:-1]
+            #     version = pkg_str.lstrip(pkg)
+
+            #     self.package_table.add_row(
+            #         f"[white]{pkg}[/]",
+            #         version,
+            #         ":white_check_mark:",
+            #         ":white_check_mark:"
+            #         if pkg in self.app.project["lock"]
+            #         else ":cross_mark:",
+            #         ":cross_mark:",
+            #         "remove",
+            #         key=pkg,
+            #     )
             yield self.package_table
 
             with Horizontal(classes="horizontal-conf-cancel"):
