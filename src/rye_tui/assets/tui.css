@@ -1,6 +1,17 @@
 
+LoadingIndicator{
+    color: rgb(132,164,50);
+}
 Tab {
     width: 1fr;
+}
+Tab.-active {
+    color: $error;
+}
+
+Underline .underline--bar {
+    background: rgb(132,164,50);
+    color: $error;
 }
 
 Switch > .switch--slider {
@@ -128,6 +139,10 @@ ProjectTab Vertical{
     height: auto;
 }
 /* ProjectList */
+ProjectListItem.--highlight{
+    background: rgb(132,164,50);
+
+}
 ProjectListItem{
     height: 33%;
     margin: 1 0 1 0;

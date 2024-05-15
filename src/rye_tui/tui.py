@@ -60,6 +60,7 @@ class RyeTui(App):
         preview_window.content_info.write("please select a file")
         preview_window.border_subtitle = "no project selected"
 
+    @work(thread=True, exclusive=True)
     def get_project_infos(self, project_name):
         proj_dict = self.project
         proj_dict["name"] = project_name

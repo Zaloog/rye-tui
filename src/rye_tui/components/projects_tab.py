@@ -62,7 +62,6 @@ class ProjectList(VerticalScroll):
 
         preview_window = self.app.query_one("#project_preview")
         preview_window.update_content()
-        preview_window.border_subtitle = self.app.project["name"]
 
         btns = self.app.query("ProjectListItem Button")
         for btn in btns:
@@ -165,6 +164,7 @@ class ProjectPreview(VerticalScroll):
 
     @work(thread=True, exclusive=True)
     def update_content(self):
+        self.loading = True
         try:
             if self.app.project["path"]:
                 project_infos = rye_command_str_output(
@@ -185,6 +185,8 @@ class ProjectPreview(VerticalScroll):
 
                 self.content_info.write(table)
 
+                self.border_subtitle = self.app.project["name"]
+
             else:
                 content = "please select a project"
                 self.content_info.clear()
@@ -193,6 +195,8 @@ class ProjectPreview(VerticalScroll):
         except Exception:
             self.content_info.clear()
             self.content_info.write("error: project path name is not valid")
+
+        self.loading = False
 
     @on(Resize)
     def keep_image_size(self, event: Resize):
