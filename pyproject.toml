@@ -14,6 +14,25 @@ readme = "README.md"
 requires-python = ">= 3.8"
 license = { text = "MIT" }
 
+keywords = ["rye", "python", "textual", "tui"]
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3 :: Only",
+]
+
+[project.urls]
+Repository = "https://github.com/Zaloog/rye-tui"
+Changelog = "https://github.com/Zaloog/rye-tui/blob/main/CHANGELOG.md"
+
 [project.scripts]
 trye = "rye_tui.app:run"
 

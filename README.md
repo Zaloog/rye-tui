@@ -1,10 +1,17 @@
+
+[![Rye](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/rye/main/artwork/badge.json)](https://rye-up.com)
+[![PyPI-Server](https://img.shields.io/pypi/v/rye-tui.svg)](https://pypi.org/project/rye-tui/)
+[![Pyversions](https://img.shields.io/pypi/pyversions/rye-tui.svg)](https://pypi.python.org/pypi/rye-tui)
+[![Licence](https://img.shields.io/pypi/l/rye-tui.svg)](https://github.com/astral-sh/rye-tui/blob/main/LICENSE)
+[![Downloads](https://static.pepy.tech/badge/rye-tui)](https://pepy.tech/project/rye-tui)
+
 # rye-tui
 
 > Rye meets Textual. Manage your python projects with a Tui
 
 rye-tui is a CLI tool to manage your project rye projects. It offers a user interface to interact with your projects.
 
-## Currently still in development
+## Currently still under development
 A 0.1.0 version is already released on PyPi
 
 ## Installation
@@ -55,7 +62,7 @@ On first execution a configuration file is created, after that you have to use i
         - [ ] New Project
             - [X] update preview
             - [ ] extract path/options/name from command, add flags?
-        - [ ] add/remove
+        - [X] add/remove
             - [X] modal with [Input of which package to add, DataTable for already present packages]
             - [X] --dev functionality, maybe other color/additional column
                 - [x] --dev functionality remove package
