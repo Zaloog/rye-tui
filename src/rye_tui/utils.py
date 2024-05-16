@@ -62,7 +62,7 @@ def read_lock(path: str, dev: bool):
         return []
 
 
-def fill_package_table(package_table, project_dict):
+def fill_package_add_table(package_table, project_dict):
     # packages
     for pkg_str in project_dict["toml"]["project"]["dependencies"]:
         pkg = pkg_str.split("=")[0][:-1]

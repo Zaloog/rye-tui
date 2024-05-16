@@ -20,7 +20,7 @@ mdurl==0.1.2
     # via markdown-it-py
 pillow==10.3.0
     # via rich-pixels
-platformdirs==4.2.1
+platformdirs==4.2.2
     # via rye-tui
 pygments==2.18.0
     # via rich
@@ -29,7 +29,7 @@ rich==13.7.1
     # via textual
 rich-pixels==3.0.1
     # via rye-tui
-textual==0.60.0
+textual==0.60.1
     # via rye-tui
 typing-extensions==4.11.0
     # via textual

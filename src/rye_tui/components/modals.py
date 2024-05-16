@@ -18,7 +18,7 @@ from textual.widgets import (
 from textual.containers import Vertical, Horizontal
 from textual.worker import get_current_worker
 
-from rye_tui.utils import rye_command_str_output, fill_package_table
+from rye_tui.utils import rye_command_str_output, fill_package_add_table
 from rye_tui.components.helper_widgets import ProjectListItem
 
 
@@ -189,7 +189,7 @@ class ModalRyeAdd(ModalScreen):
             self.package_table.add_column("remove", key="remove", width=8)
 
             # Add present packages
-            fill_package_table(
+            fill_package_add_table(
                 package_table=self.package_table, project_dict=self.app.project
             )
 

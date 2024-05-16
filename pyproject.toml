@@ -6,9 +6,9 @@ authors = [
     { name = "Zaloog", email = "gramslars@gmail.com" }
 ]
 dependencies = [
-    "textual>=0.56.4",
+    "textual>=0.60.1",
     "rich-pixels>=3.0.1",
-    "platformdirs>=4.2.1",
+    "platformdirs>=4.2.2",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -43,7 +43,7 @@ build-backend = "hatchling.build"
 [tool.rye]
 managed = true
 dev-dependencies = [
-    "pre-commit>=3.7.0",
+    "pre-commit>=3.7.1",
     "textual-dev>=1.5.1",
 ]
 

@@ -50,7 +50,7 @@ nodeenv==1.8.0
     # via pre-commit
 pillow==10.3.0
     # via rich-pixels
-platformdirs==4.2.1
+platformdirs==4.2.2
     # via rye-tui
     # via virtualenv
 pre-commit==3.7.1
@@ -65,7 +65,7 @@ rich-pixels==3.0.1
     # via rye-tui
 setuptools==69.5.1
     # via nodeenv
-textual==0.60.0
+textual==0.60.1
     # via rye-tui
     # via textual-dev
 textual-dev==1.5.1
