@@ -1,7 +1,6 @@
 ModalScreen{
-    align:center middle;
+    align: center middle;
 }
-
 
 /* Modal for New File Selection */
 ModalRyeInit > Vertical {

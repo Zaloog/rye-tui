@@ -93,6 +93,9 @@ Rye-Tui is following the [XDG] basedir-spec. Therefore the configuration file is
     - [ ] focus widget color?
     - [ ] Docs/Readme
     - [X] publish first version
+- css
+    - [ ] scrollbar
+    - [ ] outer border?
 
 
 [XDG]: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html

@@ -171,7 +171,7 @@ class ProjectPreview(VerticalScroll):
                 )
                 self.content_info.clear()
                 # self.content_info.write(project_infos)
-                self.content_info.write(self.app.project["toml"])
+                # self.content_info.write(self.app.project["toml"])
                 try:
                     table2 = display_project_infos(toml=self.app.project["toml"])
                     self.content_info.write(table2)

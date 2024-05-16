@@ -1,3 +1,9 @@
+VerticalScroll{
+    /* scrollbar-background: $error; */
+    scrollbar-color: rgb(132,164,50);
+    scrollbar-color-active: $error;
+    scrollbar-color-hover: $error;
+}
 
 LoadingIndicator{
     color: rgb(132,164,50);
@@ -8,7 +14,7 @@ Tab {
 Tab.-active {
     color: $error;
 }
-
+/* Tab Underline Color */
 Underline .underline--bar {
     background: rgb(132,164,50);
     color: $error;
@@ -35,7 +41,7 @@ ConfigTab Container {
 /* Default */
 .config-default-container {
     layout: grid;
-    grid-size:2;
+    grid-size: 2;
     height: auto;
 }
 .config-default-container > Static {
@@ -64,7 +70,7 @@ ConfigTab Container {
 /* Behavior */
 .config-behavior-container {
     layout: grid;
-    grid-size:2;
+    grid-size: 2;
     height: auto;
 }
 .config-behavior-container Static {
@@ -86,7 +92,7 @@ ConfigTab Container {
 /* Proxy */
 .config-proxy-container {
     layout: grid;
-    grid-size:2;
+    grid-size: 2;
     height: auto;
 }
 .config-proxy-container > Static {
@@ -108,7 +114,7 @@ ConfigTab Container {
 /* Sources */
 .config-sources-container {
     layout: grid;
-    grid-size:2;
+    grid-size: 2;
     height: auto;
 }
 .config-sources-container Static {
@@ -168,7 +174,7 @@ ProjectInteraction Horizontal {
     height: 1fr;
     width: auto;
     layout: grid;
-    grid-size:3;
+    grid-size: 3;
     margin: 1 0 1 0;
 }
 ProjectInteraction Button {

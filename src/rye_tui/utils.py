@@ -103,7 +103,8 @@ def display_project_infos(toml: dict):
         if isinstance(v1, dict):
             table.add_section()
             val = display_project_infos(toml=v1)
-            table.add_row(k1, val)
+            # table.add_row(k1, val)
+            table.add_row(f"[green]{k1}[/]", val)
         elif isinstance(v1, list):
             table.add_section()
             for i, el in enumerate(v1):
@@ -113,10 +114,10 @@ def display_project_infos(toml: dict):
                 else:
                     val = f"{el}"
 
-                table.add_row(k1 if i == 0 else "", val)
+                table.add_row(f"[green]{k1}[/]" if i == 0 else "", val)
         else:
             val = f"{v1}"
-            table.add_row(k1, val)
+            table.add_row(f"[green]{k1}[/]", val)
 
     return table
 
