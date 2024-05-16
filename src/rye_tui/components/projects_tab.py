@@ -16,7 +16,7 @@ from rye_tui.components.modals import (
     ModalRyeAdd,
     ModalConfirm,
 )
-from rye_tui.utils import rye_command_str_output, delete_folder
+from rye_tui.utils import rye_command_str_output, delete_folder, display_project_infos
 from rye_tui.constants import IMAGE_PATH
 
 
@@ -163,15 +163,20 @@ class ProjectPreview(VerticalScroll):
         self.loading = True
         try:
             if self.app.project["path"]:
-                project_infos = rye_command_str_output(
-                    "rye show", cwd=self.app.project["path"]
-                )
+                # project_infos = rye_command_str_output(
+                #     "rye show", cwd=self.app.project["path"]
+                # )
                 project_packages = rye_command_str_output(
                     "rye list", cwd=self.app.project["path"]
                 )
                 self.content_info.clear()
-                self.content_info.write(project_infos)
+                # self.content_info.write(project_infos)
                 self.content_info.write(self.app.project["toml"])
+                try:
+                    table2 = display_project_infos(toml=self.app.project["toml"])
+                    self.content_info.write(table2)
+                except Exception as e:
+                    self.log.error(e)
 
                 table = Table("package", "version", expand=True)
                 for pkg in project_packages.split("\n"):

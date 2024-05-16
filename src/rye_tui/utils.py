@@ -3,6 +3,7 @@ from shutil import rmtree
 
 import subprocess
 from pathlib import Path
+from rich.table import Table
 
 
 def rye_version() -> str:
@@ -91,6 +92,33 @@ def fill_package_add_table(package_table, project_dict):
             "remove",
             key=pkg,
         )
+
+
+def display_project_infos(toml: dict):
+    table = Table(
+        show_header=False, padding=(0, 0), show_edge=False, expand=True, highlight=True
+    )
+
+    for k1, v1 in toml.items():
+        if isinstance(v1, dict):
+            table.add_section()
+            val = display_project_infos(toml=v1)
+            table.add_row(k1, val)
+        elif isinstance(v1, list):
+            table.add_section()
+            for i, el in enumerate(v1):
+                # table.show_lines = False if i > 0 else True
+                if isinstance(el, dict):
+                    val = display_project_infos(toml=el)
+                else:
+                    val = f"{el}"
+
+                table.add_row(k1 if i == 0 else "", val)
+        else:
+            val = f"{v1}"
+            table.add_row(k1, val)
+
+    return table
 
 
 def prettify_toml(toml_dict):
