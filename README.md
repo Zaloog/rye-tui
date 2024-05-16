@@ -9,14 +9,14 @@
 
 > Rye meets Textual. Manage your python projects with a Tui
 
-rye-tui is a CLI tool to manage your project rye projects. It offers a user interface to interact with your projects.
+rye-tui is a CLI tool to manage your [rye] projects. It offers a UI to interact with your projects.
 
 ## Currently still under development
 A 0.1.0 version is already released on PyPi
 
 ## Installation
 
-you can already install a first release with one of the three options:
+You can already install a first release with one of the three options:
 
 ```bash
 pip install rye-tui
@@ -29,6 +29,7 @@ pipx install rye-tui
 ```bash
 rye install rye-tui
 ```
+I recommend using [pipx] or [rye] to install CLI Tools into an isolated environment.
 
 ## Usage
 
@@ -37,7 +38,12 @@ Once installed, you can open the tui with
 trye
 ```
 
-On first execution a configuration file is created, after that you have to use it again to get into the tui view.
+On first execution a configuration file is created. Afterwards you can run `trye` again to get into the tui view.
+
+The configuration file contains a list of the paths of your rye-managed pojects.
+Also a project home directory is defined (default: `HOMEPATH`), which helps initializing new projects under a certain location.
+
+Rye-Tui is following the [XDG] basedir-spec. Therefore the configuration file is located under your OS specific `config_user_dir`.
 
 ![demo_image](https://raw.githubusercontent.com/Zaloog/rye-tui/main/images/image_rye_demo_preview.png)
 
@@ -87,3 +93,10 @@ On first execution a configuration file is created, after that you have to use i
     - [ ] focus widget color?
     - [ ] Docs/Readme
     - [X] publish first version
+
+
+[XDG]: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+[platformdirs]: https://platformdirs.readthedocs.io/en/latest/
+[textual]: https://textual.textualize.io
+[pipx]: https://github.com/pypa/pipx
+[rye]: https://rye-up.com
