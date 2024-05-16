@@ -9,9 +9,6 @@ from textual.containers import Container, Horizontal
 from rye_tui.utils import rye_command_str_output
 
 
-# installed tools/packages
-# installed python toolchains
-# add new toolchain?
 class GeneralTab(Container):
     def compose(self) -> Iterable[Widget]:
         self.project_home = Horizontal(classes="section")

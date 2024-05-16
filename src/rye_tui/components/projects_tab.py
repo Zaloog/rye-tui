@@ -45,20 +45,16 @@ class ProjectList(VerticalScroll):
                 ProjectListItem(project_title=proj)
                 for proj in self.app.cfg.project_names
             ],
-            initial_index=None,
         )
 
         return super().compose()
 
-    async def update(self):
-        self.remove()
-        self.app.mount(ProjectList(), before="#project_interaction")
+    def on_mount(self):
+        self.query_one(ListView).index = None
 
     @on(ListView.Selected)
     def get_project_infos(self, event: ListView.Selected):
         self.app.get_project_infos(project_name=event.item.project_title)
-
-        self.log.error(self.app.project)
 
         preview_window = self.app.query_one("#project_preview")
         preview_window.update_content()

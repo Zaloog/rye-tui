@@ -141,8 +141,8 @@ ProjectTab Vertical{
 /* ProjectList */
 ProjectListItem.--highlight{
     background: rgb(132,164,50);
-
 }
+
 ProjectListItem{
     height: 33%;
     margin: 1 0 1 0;

@@ -89,7 +89,7 @@ class ModalRyeInit(ModalScreen):
         project_path = (Path(self.project_path) / self.project_name).as_posix()
         command = f"rye init {project_path}"
         output_str = await self.async_create_project(command=command)
-        self.notify(title="New Project created", message=output_str)
+        self.notify(title="New Project created", message=output_str, timeout=1)
         self.loading = False
 
         self.app.cfg.add_project(
@@ -98,6 +98,7 @@ class ModalRyeInit(ModalScreen):
         self.notify(
             f"[blue]{self.project_name}[/] was added to [b]rye-tui[/b] config",
             title="Project List Updated",
+            timeout=1,
         )
         self.app.pop_screen()
 
@@ -193,21 +194,6 @@ class ModalRyeAdd(ModalScreen):
                 package_table=self.package_table, project_dict=self.app.project
             )
 
-            # for pkg_str in self.app.project["toml"]["project"]["dependencies"]:
-            #     pkg = pkg_str.split("=")[0][:-1]
-            #     version = pkg_str.lstrip(pkg)
-
-            #     self.package_table.add_row(
-            #         f"[white]{pkg}[/]",
-            #         version,
-            #         ":white_check_mark:",
-            #         ":white_check_mark:"
-            #         if pkg in self.app.project["lock"]
-            #         else ":cross_mark:",
-            #         ":cross_mark:",
-            #         "remove",
-            #         key=pkg,
-            #     )
             yield self.package_table
 
             with Horizontal(classes="horizontal-conf-cancel"):
