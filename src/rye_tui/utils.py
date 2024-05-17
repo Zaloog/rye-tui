@@ -103,7 +103,6 @@ def display_project_infos(toml: dict):
         if isinstance(v1, dict):
             table.add_section()
             val = display_project_infos(toml=v1)
-            # table.add_row(k1, val)
             table.add_row(f"[green]{k1}[/]", val)
         elif isinstance(v1, list):
             table.add_section()

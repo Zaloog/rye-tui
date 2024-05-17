@@ -1,4 +1,3 @@
-import tomllib
 from pathlib import Path
 
 from textual import work
@@ -33,14 +32,12 @@ class RyeTui(App):
         self.title = "RyeTui"
         self.sub_title = rye_version()
 
-    @work(thread=True)
     def add_cwd_to_config(self):
         project_path = Path().cwd().as_posix()
         if project_path not in self.cfg.project_paths:
             toml_path = Path().cwd() / "pyproject.toml"
             if toml_path.exists():
-                with open(toml_path, "rb") as tomlfile:
-                    project_infos = tomllib.load(tomlfile)
+                project_infos = read_toml(path=project_path)
 
                 project_name = project_infos["project"]["name"]
                 self.cfg.add_project(

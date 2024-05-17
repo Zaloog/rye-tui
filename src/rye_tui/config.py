@@ -1,6 +1,7 @@
 import tomllib
 import configparser
 from pathlib import Path
+from rich.console import Console
 
 from rye_tui.constants import (
     CONFIG_FILE_NAME,
@@ -16,8 +17,15 @@ def create_init_config(conf_path=CONFIG_PATH):
     config["general"] = {"project_home_path": PROJECT_HOME_PATH}
     config["projects"] = {}
 
+    console = Console(log_path=False)
+
+    console.log('Thank you for using "rye-tui".')
     with open(conf_path / CONFIG_FILE_NAME, "w") as configfile:
         config.write(configfile)
+    console.log(
+        'Since this is your first time using "rye-tui" a Configuration-File was created [green]successfully[/].'
+    )
+    console.log('You can now use "trye" again to start working with rye-tui.')
 
 
 def check_config_exists(path=CONFIG_FILE_PATH):
