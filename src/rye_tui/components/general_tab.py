@@ -30,20 +30,33 @@ class GeneralTab(Container):
     @work(thread=True)
     def on_mount(self, event: Mount) -> None:
         tool_str = rye_command_str_output("rye tools list")
-        self.query_one("#log_tools", RichLog).write(tool_str)
-        toolchain_str = rye_command_str_output("rye toolchain list")
-        table = Table(expand=True)
-        table.add_column("Toolchain")
-        table.add_column("Version")
-        table.add_column("Path")
+        tools = tool_str.split("\n")
+        t_table = Table(expand=True)
+        t_table.add_column("Tool")
+        t_table.add_column("Version")
+        t_table.add_column("PyPi")
 
-        for tc in toolchain_str.split("\n"):
+        for tool in tools:
+            t_table.add_row(tool, "version", "path")
+
+        log_tools = self.query_one("#log_tools", RichLog)
+        log_tools.write(t_table, expand=True)
+
+        toolchain_str = rye_command_str_output("rye toolchain list")
+        toolchains = toolchain_str.split("\n")
+        tc_table = Table(expand=True)
+        tc_table.add_column("Toolchain")
+        tc_table.add_column("Version")
+        tc_table.add_column("Path")
+
+        for tc in toolchains:
             py_str, path = tc.split(" ", maxsplit=1)
+            path = path.replace("(", "").replace(")", "")
             python, version = py_str.split("@")
-            table.add_row(python, version, path)
+            tc_table.add_row(python, version, path)
 
         log_toolchains = self.query_one("#log_toolchains", RichLog)
-        log_toolchains.write(table, expand=True)
+        log_toolchains.write(tc_table, expand=True)
 
         return super()._on_mount(event)
 
