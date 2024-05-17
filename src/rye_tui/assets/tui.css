@@ -194,7 +194,7 @@ ProjectPreview{
 }
 ProjectPreview RichLog{
     height: auto;
-    width: auto;
+    width: 1fr;
     overflow-y: hidden;
     overflow-x: hidden;
 }

@@ -94,22 +94,52 @@ def fill_package_add_table(package_table, project_dict):
         )
 
 
-def display_project_infos(toml: dict):
+def display_general_project_infos(path) -> Table:
     table = Table(
-        show_header=False, padding=(0, 0), show_edge=False, expand=True, highlight=True
+        title="[blue]general[/]",
+        show_header=False,
+        padding=(0, 0),
+        show_edge=True,
+        expand=True,
+        highlight=True,
+    )
+    project_infos = rye_command_str_output("rye show", cwd=path).split("\n")
+
+    for pi in project_infos:
+        key, val = pi.split(":", maxsplit=1)
+        if key == "path":
+            table.add_row(key, val)
+        elif key == "venv python":
+            version = val.split("@")[1]
+            table.add_row(key, version)
+        elif key == "virtual":
+            bool_val = "True" if val == "true" else "False"
+            table.add_row(key, bool_val)
+
+    return table
+
+
+def display_toml_project_infos(toml: dict, header: bool = False) -> Table:
+    table = Table(
+        title="[blue]toml-file[/]" if header else None,
+        show_header=False,
+        padding=(0, 0),
+        show_edge=True if header else False,
+        expand=True,
+        highlight=True,
     )
 
     for k1, v1 in toml.items():
         if isinstance(v1, dict):
             table.add_section()
-            val = display_project_infos(toml=v1)
+            val = display_toml_project_infos(toml=v1)
             table.add_row(f"[green]{k1}[/]", val)
         elif isinstance(v1, list):
             table.add_section()
             for i, el in enumerate(v1):
                 # table.show_lines = False if i > 0 else True
                 if isinstance(el, dict):
-                    val = display_project_infos(toml=el)
+                    val = display_toml_project_infos(toml=el)
                 else:
                     val = f"{el}"
 

@@ -1,7 +1,6 @@
 from typing import Iterable
 from pathlib import Path
 
-from rich.table import Table
 from textual import on, work
 from textual.events import Resize
 from textual.containers import VerticalScroll, Container, Horizontal, Vertical
@@ -16,7 +15,12 @@ from rye_tui.components.modals import (
     ModalRyeAdd,
     ModalConfirm,
 )
-from rye_tui.utils import rye_command_str_output, delete_folder, display_project_infos
+from rye_tui.utils import (
+    rye_command_str_output,
+    delete_folder,
+    display_toml_project_infos,
+    display_general_project_infos,
+)
 from rye_tui.constants import IMAGE_PATH
 
 
@@ -163,28 +167,31 @@ class ProjectPreview(VerticalScroll):
         self.loading = True
         try:
             if self.app.project["path"]:
-                # project_infos = rye_command_str_output(
-                #     "rye show", cwd=self.app.project["path"]
-                # )
-                project_packages = rye_command_str_output(
-                    "rye list", cwd=self.app.project["path"]
-                )
                 self.content_info.clear()
-                # self.content_info.write(project_infos)
-                # self.content_info.write(self.app.project["toml"])
-                try:
-                    table2 = display_project_infos(toml=self.app.project["toml"])
-                    self.content_info.write(table2, expand=True)
-                except Exception as e:
-                    self.log.error(e)
 
-                table = Table("package", "version", expand=True)
-                for pkg in project_packages.split("\n"):
-                    if "==" in pkg:
-                        pkg_name, pkg_version = pkg.split("==")
-                        table.add_row(pkg_name, pkg_version)
+                # path
+                # python version
+                # sources
+                general_table = display_general_project_infos(
+                    path=self.app.project["path"]
+                )
+                self.content_info.write(general_table, expand=True)
 
-                self.content_info.write(table)
+                # project_packages = rye_command_str_output(
+                #     "rye list", cwd=self.app.project["path"]
+                # )
+                toml_table = display_toml_project_infos(
+                    toml=self.app.project["toml"], header=True
+                )
+                self.content_info.write(toml_table, expand=True)
+
+                # table = Table("package", "version", expand=True)
+                # for pkg in project_packages.split("\n"):
+                #     if "==" in pkg:
+                #         pkg_name, pkg_version = pkg.split("==")
+                #         table.add_row(pkg_name, pkg_version)
+
+                # self.content_info.write(table)
 
                 self.border_subtitle = self.app.project["name"]
 
