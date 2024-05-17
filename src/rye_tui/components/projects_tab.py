@@ -174,7 +174,7 @@ class ProjectPreview(VerticalScroll):
                 # self.content_info.write(self.app.project["toml"])
                 try:
                     table2 = display_project_infos(toml=self.app.project["toml"])
-                    self.content_info.write(table2)
+                    self.content_info.write(table2, expand=True)
                 except Exception as e:
                     self.log.error(e)
 

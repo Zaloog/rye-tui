@@ -5,6 +5,7 @@ from textual.events import Mount
 from textual.widgets import Label, Input, RichLog
 from textual.widget import Widget
 from textual.containers import Container, Horizontal
+from rich.table import Table
 
 from rye_tui.utils import rye_command_str_output
 
@@ -31,7 +32,19 @@ class GeneralTab(Container):
         tool_str = rye_command_str_output("rye tools list")
         self.query_one("#log_tools", RichLog).write(tool_str)
         toolchain_str = rye_command_str_output("rye toolchain list")
-        self.query_one("#log_toolchains", RichLog).write(toolchain_str)
+        table = Table(expand=True)
+        table.add_column("Toolchain")
+        table.add_column("Version")
+        table.add_column("Path")
+
+        for tc in toolchain_str.split("\n"):
+            py_str, path = tc.split(" ", maxsplit=1)
+            python, version = py_str.split("@")
+            table.add_row(python, version, path)
+
+        log_toolchains = self.query_one("#log_toolchains", RichLog)
+        log_toolchains.write(table, expand=True)
+
         return super()._on_mount(event)
 
     @on(Input.Submitted)

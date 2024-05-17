@@ -13,17 +13,25 @@ from rye_tui.components.config_tab import ConfigTab
 class MainFrame(Horizontal):
     BINDINGS = [
         Binding(
-            "ctrl+j",
-            "show_tab('Projects')",
-            "Projects",
+            key="ctrl+j",
+            action="show_tab('Projects')",
+            description="Projects",
             key_display="^j",
             priority=True,
         ),
         Binding(
-            "ctrl+k", "show_tab('General')", "General", key_display="^k", priority=True
+            key="ctrl+k",
+            action="show_tab('General')",
+            description="General",
+            key_display="^k",
+            priority=True,
         ),
         Binding(
-            "ctrl+l", "show_tab('Config')", "Config", key_display="^l", priority=True
+            key="ctrl+l",
+            action="show_tab('Config')",
+            description="Config",
+            key_display="^l",
+            priority=True,
         ),
     ]
 

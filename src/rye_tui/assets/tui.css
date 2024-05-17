@@ -1,5 +1,4 @@
 VerticalScroll{
-    /* scrollbar-background: $error; */
     scrollbar-color: rgb(132,164,50);
     scrollbar-color-active: $error;
     scrollbar-color-hover: $error;
@@ -27,6 +26,12 @@ Switch > .switch--slider {
 Switch.-on > .switch--slider {
         color: rgb(132,164,50);
     }
+/* General */
+GeneralTab Label {
+    height: auto;
+    margin: 1 0 0 0;
+}
+
 /* ConfigTab */
 ConfigTab Container {
     height: auto;
