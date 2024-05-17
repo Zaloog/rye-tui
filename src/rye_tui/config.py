@@ -1,6 +1,4 @@
-import tomllib
 import configparser
-from pathlib import Path
 from rich.console import Console
 
 from rye_tui.constants import (
@@ -30,21 +28,6 @@ def create_init_config(conf_path=CONFIG_PATH):
 
 def check_config_exists(path=CONFIG_FILE_PATH):
     return path.exists()
-
-
-def add_cwd_to_config():
-    toml_path = Path().cwd() / "pyproject.toml"
-    if toml_path.exists():
-        with open(toml_path, "rb") as tomlfile:
-            project_infos = tomllib.load(tomlfile)
-
-        project_name = project_infos["project"]["name"]
-        project_path = Path().cwd().as_posix()
-        cfg = RyeTuiConfig()
-        cfg.add_project(new_project_name=project_name, new_project_path=project_path)
-        print(f"Added {project_name} under {project_path} to rye-tui")
-    else:
-        print("error: did not find pyproject.toml")
 
 
 class RyeTuiConfig:
