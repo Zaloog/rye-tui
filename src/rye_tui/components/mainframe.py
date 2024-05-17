@@ -12,9 +12,19 @@ from rye_tui.components.config_tab import ConfigTab
 
 class MainFrame(Horizontal):
     BINDINGS = [
-        Binding("ctrl+j", "show_tab('Projects')", "Projects", priority=True),
-        Binding("ctrl+k", "show_tab('General')", "General", priority=True),
-        Binding("ctrl+l", "show_tab('Config')", "Config", priority=True),
+        Binding(
+            "ctrl+j",
+            "show_tab('Projects')",
+            "Projects",
+            key_display="^j",
+            priority=True,
+        ),
+        Binding(
+            "ctrl+k", "show_tab('General')", "General", key_display="^k", priority=True
+        ),
+        Binding(
+            "ctrl+l", "show_tab('Config')", "Config", key_display="^l", priority=True
+        ),
     ]
 
     def compose(self) -> Iterable[Widget]:
