@@ -7,6 +7,7 @@ from textual.containers import Container, Vertical, Horizontal, VerticalScroll
 
 from rye_tui.utils import get_rye_config_values, rye_config_set_command
 from rye_tui.constants import CONF_OPT_DICT, OPT_DROPDOWN_DICT, SOURCES_VALUES
+from rye_tui.components.helper_widgets import ConfigOptionChanger
 
 
 class ConfigTab(Container):
@@ -155,17 +156,9 @@ class ConfigProxy(Container):
         self.classes = "section"
         self.border_title = self.category
         for opt, opt_dict in CONF_OPT_DICT[self.category].items():
-            opt_name = Static(opt)
-            opt_name.tooltip = opt_dict["tooltip"]
-            opt_value = Input(
-                value=opt_dict["default"],
-                placeholder="enter proxy and press enter",
-                id=f"{self.category}_{opt}",
+            yield ConfigOptionChanger(
+                category=self.category, option=opt, opt_dict=opt_dict
             )
-            opt_value.loading = True
-            with Horizontal(classes=f"config-{self.category}-container"):
-                yield opt_name
-                yield opt_value
         return super().compose()
 
     def load_current(self, conf_dict):

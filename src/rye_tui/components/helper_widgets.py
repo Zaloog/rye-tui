@@ -1,7 +1,8 @@
 from typing import Iterable
 
 from textual.widget import Widget
-from textual.widgets import Button, Label, ListItem, Header, DataTable
+from textual.widgets import Button, Label, ListItem, Header, Input, Switch, Static
+from textual.containers import Horizontal
 
 
 class RyeHeader(Header):
@@ -43,8 +44,30 @@ class ProjectListItem(ListItem):
         return super().compose()
 
 
-# Config Widget Line
-class ProjectPreviewPackageTable(DataTable):
-    def __init__(self, reihe) -> None:
-        self.add_rows(reihe)
+class ConfigOptionChanger(Horizontal):
+    def __init__(self, category: str, option: str, opt_dict: dict) -> None:
+        self.category = category
+        self.option = option
+        self.option_dict = opt_dict
         super().__init__()
+
+    def compose(self) -> Iterable[Widget]:
+        option_name = Static(self.option)
+        option_name.tooltip = self.option_dict["tooltip"]
+
+        if self.option_dict["type"] == str:
+            change_widget = Input(
+                value=self.option_dict["default"],
+                placeholder="enter proxy and press enter",
+                id=f"{self.category}_{self.option}",
+            )
+        if self.option_dict["type"] == bool:
+            change_widget = Switch(
+                value=self.option_dict["default"],
+                id=f"{self.category}_{self.option}",
+            )
+
+        yield option_name
+        yield change_widget
+
+        return super().compose()

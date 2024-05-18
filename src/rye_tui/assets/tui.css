@@ -95,12 +95,12 @@ ConfigTab Container {
 }
 
 /* Proxy */
-.config-proxy-container {
+ConfigOptionChanger {
     layout: grid;
     grid-size: 2;
     height: auto;
 }
-.config-proxy-container > Static {
+ConfigOptionChanger > Static {
     
     color: white;
     height: auto;
@@ -108,14 +108,12 @@ ConfigTab Container {
     content-align: left middle;
     margin: 1 0 0 0;
 }
-
-.config-proxy-container > Input {
+ConfigOptionChanger Input {
     
     height: auto;
     width: 1fr;
     margin: 0 0 0 0;
 }
-
 /* Sources */
 .config-sources-container {
     layout: grid;

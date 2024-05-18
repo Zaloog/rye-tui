@@ -37,8 +37,7 @@ class ModalRyeInit(ModalScreen):
                 yield Button(":house:", id="btn_home", variant="warning")
                 yield Input(placeholder="project path [default: .]", id="input_path")
             with Collapsible(title="other Options"):
-                yield Label("Test")
-                yield Label("Test2")
+                yield Label("coming soon ...")
             yield Static(self.rye_command, id="preview_rye_command")
             with Horizontal(classes="horizontal-conf-cancel"):
                 yield Button("continue", variant="success", classes="btn-continue")
@@ -169,13 +168,14 @@ class ModalRyeAdd(ModalScreen):
                 # validators=[Regex("^3\.(?:[89]|1[012])$")],
                 id="input_add_package",
             )
+            self.pin_input.tooltip = "press enter or space to submit"
             with Horizontal():
                 yield self.pin_input
                 yield Button("--dev", id="option_button_dev", variant="warning")
 
             # All Dev Options
             with Collapsible(title="Options"):
-                yield Label("still to come")
+                yield Label("coming soon")
             #     yield VerticalScroll(*[
             #         Horizontal(Label(flag), Input(f'{flag_type}'))
             #         for flag, flag_type in ADD_OPTIONS_DICT.items()

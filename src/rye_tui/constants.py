@@ -48,12 +48,14 @@ CONF_OPT_DICT = {
     "proxy": {
         "http": {
             "default": "",
-            "type": bool,
+            "type": str,
+            "placeholder": "enter proxy and press enter",
             "tooltip": tt.TT_PROXY_HTTP,
         },
         "https": {
             "default": "",
-            "type": bool,
+            "type": str,
+            "placeholder": "enter proxy and press enter",
             "tooltip": tt.TT_PROXY_HTTPS,
         },
     },
