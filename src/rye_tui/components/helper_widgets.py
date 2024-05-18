@@ -10,13 +10,24 @@ from textual.widgets import (
     Switch,
     Static,
     Select,
+    LoadingIndicator,
 )
-from textual.containers import Horizontal
+from textual.containers import Horizontal, Vertical
 
 
 class RyeHeader(Header):
     def compose(self) -> Iterable[Widget]:
         self.tall = True
+        return super().compose()
+
+
+class SyncButton(Button):
+    def get_loading_widget(self):
+        return CustomLoading(text="Syncing...")
+
+    def compose(self) -> Iterable[Widget]:
+        self.label = "Rye Sync"
+        self.id = "btn_sync"
         return super().compose()
 
 
@@ -87,3 +98,13 @@ class ConfigOptionChanger(Horizontal):
         yield change_widget
 
         return super().compose()
+
+
+class CustomLoading(Vertical):
+    def __init__(self, text: str) -> None:
+        self.text = text
+        super().__init__()
+
+    def compose(self):
+        yield Label(self.text)
+        yield LoadingIndicator()

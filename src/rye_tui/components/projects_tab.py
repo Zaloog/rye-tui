@@ -8,7 +8,7 @@ from textual.widget import Widget
 from textual.widgets import Button, ListView, RichLog
 from rich_pixels import Pixels
 
-from rye_tui.components.helper_widgets import ProjectListItem
+from rye_tui.components.helper_widgets import ProjectListItem, CustomLoading, SyncButton
 from rye_tui.components.modals import (
     ModalRyeInit,
     ModalRyePin,
@@ -20,6 +20,7 @@ from rye_tui.utils import (
     delete_folder,
     display_toml_project_infos,
     display_general_project_infos,
+    display_package_project_infos,
 )
 from rye_tui.constants import IMAGE_PATH
 
@@ -99,7 +100,7 @@ class ProjectInteraction(Container):
             with Horizontal():
                 yield Button("New Project", id="btn_new")
                 yield Button("Add/Remove Packages", id="btn_pkg")
-                yield Button("Rye Sync + Update", id="btn_sync")
+                yield SyncButton()
             with Horizontal():
                 yield Button("Pin Python Version", id="btn_pin")
                 yield Button("Build", id="btn_build")
@@ -135,10 +136,13 @@ class ProjectInteraction(Container):
 
     @work(thread=True)
     @on(Button.Pressed, "#btn_sync")
-    async def rye_sync_project(self) -> None:
-        self.app.query_one("#project_preview").loading = True
+    async def rye_sync_project(self, message) -> None:
+        self.app.query_one("#project_preview").focus()
+        message.button.loading = True
+        # self.app.query_one("#project_preview").loading = True
         await self.async_sync_function()
-        self.app.query_one("#project_preview").loading = False
+        # self.app.query_one("#project_preview").loading = False
+        message.button.loading = False
 
     async def async_sync_function(self):
         output = rye_command_str_output(
@@ -161,6 +165,9 @@ class ProjectPreview(VerticalScroll):
         yield self.content_info
 
         return super().compose()
+
+    def get_loading_widget(self) -> Widget:
+        return CustomLoading(text="Loading Project Infos...")
 
     @work(thread=True, exclusive=True)
     def update_content(self):
@@ -185,13 +192,17 @@ class ProjectPreview(VerticalScroll):
                 )
                 self.content_info.write(toml_table, expand=True)
 
+                package_table = display_package_project_infos(
+                    path=self.app.project["path"]
+                )
+
                 # table = Table("package", "version", expand=True)
                 # for pkg in project_packages.split("\n"):
                 #     if "==" in pkg:
                 #         pkg_name, pkg_version = pkg.split("==")
                 #         table.add_row(pkg_name, pkg_version)
 
-                # self.content_info.write(table)
+                self.content_info.write(package_table, expand=True)
 
                 self.border_subtitle = self.app.project["name"]
 
@@ -200,7 +211,8 @@ class ProjectPreview(VerticalScroll):
                 self.content_info.clear()
                 self.content_info.write(content)
             # self.content = content
-        except Exception:
+        except Exception as e:
+            self.app.log.error(e)
             self.content_info.clear()
             self.content_info.write("error: project path name is not valid")
 

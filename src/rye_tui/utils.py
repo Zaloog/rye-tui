@@ -99,7 +99,6 @@ def display_general_project_infos(path) -> Table:
         title="[blue]general[/]",
         show_header=False,
         padding=(0, 0),
-        show_edge=True,
         expand=True,
         highlight=True,
     )
@@ -155,15 +154,17 @@ def display_package_project_infos(path) -> Table:
         title="[blue]installed packages[/]",
         show_header=False,
         padding=(0, 0),
-        show_edge=True,
         expand=True,
         highlight=True,
     )
     package_infos = rye_command_str_output("rye list", cwd=path).split("\n")
 
     for package_str in package_infos:
-        pass
+        try:
+            package, version = package_str.split("==")
+        except Exception:
+            continue
         # if key == "path":
-        #     table.add_row(key, val)
+        table.add_row(package, version)
 
     return table

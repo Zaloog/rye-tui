@@ -208,7 +208,6 @@ class ModalRyeAdd(ModalScreen):
     @on(Input.Changed, "#input_add_package")
     @on(Input.Submitted, "#input_add_package")
     def new_package_to_list(self, message):
-        self.log.error(message)
         current_package = message.value.strip()
         if message.value.endswith(" ") or isinstance(message, Input.Submitted):
             message.input.value = ""
