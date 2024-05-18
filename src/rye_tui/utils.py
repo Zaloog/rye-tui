@@ -159,17 +159,11 @@ def display_package_project_infos(path) -> Table:
         expand=True,
         highlight=True,
     )
-    project_infos = rye_command_str_output("rye list", cwd=path).split("\n")
+    package_infos = rye_command_str_output("rye list", cwd=path).split("\n")
 
-    for pi in project_infos:
-        key, val = pi.split(":", maxsplit=1)
-        if key == "path":
-            table.add_row(key, val)
-        elif key == "venv python":
-            version = val.split("@")[1]
-            table.add_row(key, version)
-        elif key == "virtual":
-            bool_val = "True" if val == "true" else "False"
-            table.add_row(key, bool_val)
+    for package_str in package_infos:
+        pass
+        # if key == "path":
+        #     table.add_row(key, val)
 
     return table

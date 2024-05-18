@@ -43,34 +43,6 @@ ConfigTab Container {
     border-subtitle-color: $error;
 }
 
-/* Default */
-.config-default-container {
-    layout: grid;
-    grid-size: 2;
-    height: auto;
-}
-.config-default-container > Static {
-    
-    color: white;
-    height: auto;
-    width: 1fr;
-    content-align: left middle;
-    margin: 1 0 0 0;
-}
-.config-default-container Select{
-    
-    color: white;
-    height: auto;
-    content-align: left middle;
-    width: 1fr;
-}
-
-.config-default-container Input {
-    
-    height: auto;
-    width: 1fr;
-    margin: 0 0 0 0;
-}
 
 
 ConfigOptionChanger {

@@ -6,7 +6,7 @@ from textual.widget import Widget
 from textual.containers import Container, Vertical, Horizontal, VerticalScroll
 
 from rye_tui.utils import get_rye_config_values, rye_config_set_command
-from rye_tui.constants import CONF_OPT_DICT, SOURCES_VALUES
+from rye_tui.constants import CONF_OPT_DICT, SOURCES_VALUES, SOURCES_DICT
 from rye_tui.components.helper_widgets import ConfigOptionChanger
 
 
@@ -37,7 +37,7 @@ class ConfigTab(Container):
 
 ########################################################################################
 # Default
-class ConfigDefault(Container):
+class ConfigDefault(VerticalScroll):
     category: str = "default"
     category_dict: dict = CONF_OPT_DICT[category]
 
@@ -59,7 +59,7 @@ class ConfigDefault(Container):
 
 ########################################################################################
 # Behavior
-class ConfigBehavior(Container):
+class ConfigBehavior(VerticalScroll):
     category: str = "behavior"
     category_dict: dict = CONF_OPT_DICT[category]
 
@@ -106,6 +106,13 @@ class ConfigSources(VerticalScroll):
         for source in CONF_OPT_DICT[self.category]:
             with Collapsible(title=source["name"]):
                 # loop over url/username/pw/verify-ssl
+                for sources_val, sources_val_dict in SOURCES_DICT.items():
+                    yield ConfigOptionChanger(
+                        category=self.category,
+                        option=sources_val,
+                        opt_dict=sources_val_dict,
+                    )
+
                 for sources_val in SOURCES_VALUES:
                     if not source.get(sources_val):
                         continue
@@ -132,7 +139,7 @@ class ConfigSources(VerticalScroll):
 
 ########################################################################################
 # Proxy
-class ConfigProxy(Container):
+class ConfigProxy(VerticalScroll):
     category: str = "proxy"
     category_dict: dict = CONF_OPT_DICT[category]
 

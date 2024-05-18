@@ -116,7 +116,35 @@ CONF_OPT_DICT = {
 }
 
 
+SOURCES_DICT = {
+    "url": {
+        "default": "",
+        "type": str,
+        "placeholder": "enter url of package index",
+        "tooltip": "",
+    },
+    "username": {
+        "default": "",
+        "type": str,
+        "placeholder": "enter username",
+        "tooltip": "",
+    },
+    "password": {
+        "default": "",
+        "type": str,
+        "placeholder": "enter password",
+        "tooltip": "",
+    },
+    "verify-ssl": {
+        "default": True,
+        "type": bool,
+        "tooltip": "",
+    },
+}
+
 SOURCES_VALUES = ["url", "username", "password", "verify-ssl"]
+
+INIT_OPTIONS_DICT = {}
 
 ADD_OPTIONS_DICT = {
     "--dev": bool,
