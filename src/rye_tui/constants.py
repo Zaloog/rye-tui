@@ -29,19 +29,25 @@ CONF_OPT_DICT = {
         "build-system": {
             "default": "hatchling",
             "type": str,
-            "tooltip": tt.TT_DEFAULT_BUILD_SYSTEM,
             "placeholder": "enter build-system",
+            "tooltip": tt.TT_DEFAULT_BUILD_SYSTEM,
         },
-        "license": {"default": "MIT", "type": str, "tooltip": tt.TT_DEFAULT_LICENCE},
+        "license": {
+            "default": "MIT",
+            "type": list,
+            "options": ["MIT"],
+            "tooltip": tt.TT_DEFAULT_LICENCE,
+        },
         "author": {
             "default": "",
             "type": str,
-            "tooltip": tt.TT_DEFAULT_AUTHOR,
             "placeholder": "enter mail to override git",
+            "tooltip": tt.TT_DEFAULT_AUTHOR,
         },
         "dependency-operator": {
             "default": ">=",
-            "type": str,
+            "options": [">=", "~=", "=="],
+            "type": list,
             "tooltip": tt.TT_DEFAULT_DEPENDENCY_OPERATOR,
         },
     },
@@ -109,10 +115,6 @@ CONF_OPT_DICT = {
     ],
 }
 
-OPT_DROPDOWN_DICT = {
-    "license": ["MIT", "TEST"],
-    "dependency-operator": [">=", "~=", "=="],
-}
 
 SOURCES_VALUES = ["url", "username", "password", "verify-ssl"]
 

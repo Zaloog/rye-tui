@@ -1,7 +1,16 @@
 from typing import Iterable
 
 from textual.widget import Widget
-from textual.widgets import Button, Label, ListItem, Header, Input, Switch, Static
+from textual.widgets import (
+    Button,
+    Label,
+    ListItem,
+    Header,
+    Input,
+    Switch,
+    Static,
+    Select,
+)
 from textual.containers import Horizontal
 
 
@@ -58,12 +67,19 @@ class ConfigOptionChanger(Horizontal):
         if self.option_dict["type"] == str:
             change_widget = Input(
                 value=self.option_dict["default"],
-                placeholder="enter proxy and press enter",
+                placeholder=self.option_dict["placeholder"],
                 id=f"{self.category}_{self.option}",
             )
         if self.option_dict["type"] == bool:
             change_widget = Switch(
                 value=self.option_dict["default"],
+                id=f"{self.category}_{self.option}",
+            )
+        if self.option_dict["type"] == list:
+            change_widget = Select(
+                value=self.option_dict["default"],
+                options=[(opt, opt) for opt in self.option_dict["options"]],
+                allow_blank=False,
                 id=f"{self.category}_{self.option}",
             )
 

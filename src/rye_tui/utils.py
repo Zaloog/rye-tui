@@ -137,7 +137,6 @@ def display_toml_project_infos(toml: dict, header: bool = False) -> Table:
         elif isinstance(v1, list):
             table.add_section()
             for i, el in enumerate(v1):
-                # table.show_lines = False if i > 0 else True
                 if isinstance(el, dict):
                     val = display_toml_project_infos(toml=el)
                 else:
@@ -151,11 +150,26 @@ def display_toml_project_infos(toml: dict, header: bool = False) -> Table:
     return table
 
 
-def prettify_toml(toml_dict):
-    for k, v in toml_dict.items():
-        print(k)
-        print(v)
+def display_package_project_infos(path) -> Table:
+    table = Table(
+        title="[blue]installed packages[/]",
+        show_header=False,
+        padding=(0, 0),
+        show_edge=True,
+        expand=True,
+        highlight=True,
+    )
+    project_infos = rye_command_str_output("rye list", cwd=path).split("\n")
 
+    for pi in project_infos:
+        key, val = pi.split(":", maxsplit=1)
+        if key == "path":
+            table.add_row(key, val)
+        elif key == "venv python":
+            version = val.split("@")[1]
+            table.add_row(key, version)
+        elif key == "virtual":
+            bool_val = "True" if val == "true" else "False"
+            table.add_row(key, bool_val)
 
-if __name__ == "__main__":
-    prettify_toml(read_toml("."))
+    return table
