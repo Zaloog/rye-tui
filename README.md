@@ -65,6 +65,9 @@ Rye-Tui is following the [XDG] basedir-spec. Therefore the configuration file is
         - [ ] build
         - [ ] publish when wheels in dist/*
 - general tab
+    - [ ] Use Version and script info with flags:
+        - --include-scripts
+        - --include-versions
     - [ ] Add Rye Project Home from config.ini
         - [ ] Input Validator for Path, ' ' in Path?
 - config tab
