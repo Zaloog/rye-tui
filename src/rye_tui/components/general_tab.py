@@ -27,7 +27,7 @@ class GeneralTab(Container):
             yield RichLog(id="log_toolchains")
         return super().compose()
 
-    @work(thread=True)
+    # @work(thread=True)
     def on_mount(self, event: Mount) -> None:
         tool_str = rye_command_str_output("rye tools list")
         tools = tool_str.split("\n")
@@ -43,6 +43,17 @@ class GeneralTab(Container):
         log_tools.write(t_table, expand=True)
 
         toolchain_str = rye_command_str_output("rye toolchain list")
+        #         toolchain_str = """aaaa@asdasd asdasdasdasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        # aaaa@asdasd asdasdasdasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        # aaaa@asdasd asdasdasdasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        # aaaa@asdasd asdasdasdasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        # aaaa@asdasd asdasdasdasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        # aaaa@asdasd asdasdasdasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        # aaaa@asdasd asdasdasdasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        # aaaa@asdasd asdasdasdasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        # aaaa@asdasd asdasdasdasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        # aaaa@asdasd asdasdasdasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        # aaaa@asdasd asdasdasdasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"""
         toolchains = toolchain_str.split("\n")
         tc_table = Table(expand=True)
         tc_table.add_column("Toolchain")
@@ -57,8 +68,40 @@ class GeneralTab(Container):
 
         log_toolchains = self.query_one("#log_toolchains", RichLog)
         log_toolchains.write(tc_table, expand=True)
+        # self.app.call_from_thread(log_toolchains.write,
+        #                           tc_table,
+        #                           expand=True)
 
         return super()._on_mount(event)
+
+    @work(thread=True)
+    def get_tools_string(self):
+        toolchain_str = rye_command_str_output("rye toolchain list")
+        return toolchain_str
+
+    @work(thread=True)
+    def get_toolchains_string(self):
+        toolchain_str = rye_command_str_output("rye toolchain list")
+        return toolchain_str
+
+        toolchains = toolchain_str.split("\n")
+        tc_table = Table(expand=True)
+        tc_table.add_column("Toolchain")
+        tc_table.add_column("Version")
+        tc_table.add_column("Path")
+
+        for tc in toolchains:
+            py_str, path = tc.split(" ", maxsplit=1)
+            path = path.replace("(", "").replace(")", "")
+            python, version = py_str.split("@")
+            tc_table.add_row(python, version, path)
+
+        # log_toolchains = self.query_one("#log_toolchains", RichLog)
+        # self.app.call_from_thread(log_toolchains.write,
+        #                           tc_table,
+        #                           expand=True)
+
+        return tc_table
 
     @on(Input.Submitted)
     def update_home_path(self, event):

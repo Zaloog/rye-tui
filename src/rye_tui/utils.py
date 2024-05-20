@@ -95,76 +95,86 @@ def fill_package_add_table(package_table, project_dict):
 
 
 def display_general_project_infos(path) -> Table:
-    table = Table(
-        title="[blue]general[/]",
-        show_header=False,
-        padding=(0, 0),
-        expand=True,
-        highlight=True,
-    )
-    project_infos = rye_command_str_output("rye show", cwd=path).split("\n")
+    try:
+        table = Table(
+            title="[blue]general[/]",
+            show_header=False,
+            padding=(0, 0),
+            expand=True,
+            highlight=True,
+        )
+        project_infos = rye_command_str_output("rye show", cwd=path).split("\n")
 
-    for pi in project_infos:
-        key, val = pi.split(":", maxsplit=1)
-        if key == "path":
-            table.add_row(key, val)
-        elif key == "venv python":
-            version = val.split("@")[1]
-            table.add_row(key, version)
-        elif key == "virtual":
-            bool_val = "True" if val == "true" else "False"
-            table.add_row(key, bool_val)
-
-    return table
+        for pi in project_infos:
+            key, val = pi.split(":", maxsplit=1)
+            if key == "path":
+                table.add_row(key, val)
+            elif key == "venv python":
+                version = val.split("@")[1]
+                table.add_row(key, version)
+            elif key == "virtual":
+                bool_val = "True" if val == "true" else "False"
+                table.add_row(key, bool_val)
+        return table
+    except Exception:
+        return "error getting general info"
 
 
 def display_toml_project_infos(toml: dict, header: bool = False) -> Table:
-    table = Table(
-        title="[blue]toml-file[/]" if header else None,
-        show_header=False,
-        padding=(0, 0),
-        show_edge=True if header else False,
-        expand=True,
-        highlight=True,
-    )
+    try:
+        table = Table(
+            title="[blue]toml-file[/]" if header else None,
+            show_header=False,
+            padding=(0, 0),
+            show_edge=True if header else False,
+            expand=True,
+            highlight=True,
+        )
 
-    for k1, v1 in toml.items():
-        if isinstance(v1, dict):
-            table.add_section()
-            val = display_toml_project_infos(toml=v1)
-            table.add_row(f"[green]{k1}[/]", val)
-        elif isinstance(v1, list):
-            table.add_section()
-            for i, el in enumerate(v1):
-                if isinstance(el, dict):
-                    val = display_toml_project_infos(toml=el)
-                else:
-                    val = f"{el}"
+        for k1, v1 in toml.items():
+            if isinstance(v1, dict):
+                table.add_section()
+                val = display_toml_project_infos(toml=v1)
+                table.add_row(f"[green]{k1}[/]", val)
+            elif isinstance(v1, list):
+                table.add_section()
+                for i, el in enumerate(v1):
+                    if isinstance(el, dict):
+                        val = display_toml_project_infos(toml=el)
+                    else:
+                        val = f"{el}"
 
-                table.add_row(f"[green]{k1}[/]" if i == 0 else "", val)
-        else:
-            val = f"{v1}"
-            table.add_row(f"[green]{k1}[/]", val)
+                    table.add_row(f"[green]{k1}[/]" if i == 0 else "", val)
+            else:
+                val = f"{v1}"
+                table.add_row(f"[green]{k1}[/]", val)
 
-    return table
+        return table
+    except Exception:
+        return "error getting toml info"
 
 
 def display_package_project_infos(path) -> Table:
-    table = Table(
-        title="[blue]installed packages[/]",
-        show_header=False,
-        padding=(0, 0),
-        expand=True,
-        highlight=True,
-    )
-    package_infos = rye_command_str_output("rye list", cwd=path).split("\n")
+    try:
+        table = Table(
+            title="[blue]installed packages[/]",
+            show_header=False,
+            padding=(0, 0),
+            expand=True,
+            highlight=True,
+        )
+        package_infos = rye_command_str_output("rye list", cwd=path).split("\n")
 
-    for package_str in package_infos:
-        try:
-            package, version = package_str.split("==")
-        except Exception:
-            continue
-        # if key == "path":
-        table.add_row(package, version)
+        for package_str in package_infos:
+            try:
+                package, version = package_str.split("==")
+            except Exception:
+                continue
+            # if key == "path":
+            table.add_row(package, version)
 
-    return table
+        if table.rows:
+            return table
+        return "no packages synced yet, add packages and use [blue]rye sync[/]"
+    except Exception:
+        return "error getting toml info"

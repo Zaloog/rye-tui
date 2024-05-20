@@ -1,3 +1,4 @@
+ /* Loading */
 CustomLoading {
     width: 100%;
     height: 100%;
@@ -11,6 +12,9 @@ CustomLoading {
         content-align: center middle;
     }
 }
+LoadingIndicator{
+    color: rgb(132,164,50);
+}
 
 VerticalScroll{
     scrollbar-color: rgb(132,164,50);
@@ -18,9 +22,6 @@ VerticalScroll{
     scrollbar-color-hover: $error;
 }
 
-LoadingIndicator{
-    color: rgb(132,164,50);
-}
 Tab {
     width: 1fr;
 }
@@ -44,6 +45,16 @@ Switch.-on > .switch--slider {
 GeneralTab Label {
     height: auto;
     margin: 1 0 0 0;
+}
+GeneralTab Input {
+    height: auto;
+    width: 1fr;
+}
+GeneralTab RichLog{
+    height: auto;
+    width: 1fr;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 /* ConfigTab */
@@ -117,7 +128,7 @@ ConfigOptionChanger Select{
     margin: 0 0 0 0;
 }
 
-/* Projects */
+/* Projects Tab*/
 ProjectTab Vertical{
     height: auto;
 }
@@ -171,7 +182,6 @@ ProjectPreview RichLog{
     overflow-x: hidden;
 }
 /* Header Footer */
-
 Header {
     background: rgb(132,164,50);
 }

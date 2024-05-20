@@ -57,6 +57,7 @@ class ProjectList(VerticalScroll):
     def on_mount(self):
         self.query_one(ListView).index = None
 
+    @work(thread=True, exclusive=True)
     @on(ListView.Selected)
     def get_project_infos(self, event: ListView.Selected):
         self.app.get_project_infos(project_name=event.item.project_title)
@@ -109,18 +110,22 @@ class ProjectInteraction(Container):
         return super().compose()
 
     @on(Button.Pressed, "#btn_publish")
-    async def rye_load_package_list(self) -> None:
+    async def rye_publish(self) -> None:
         # Open new Modal
         self.app.cfg.add_project(
             new_project_name="test2", new_project_path=Path().cwd().as_posix()
         )
 
-        # Testing
+        # for testing
         project_list = self.app.query_one(ListView)
         project_list.append(item=ProjectListItem(project_title="test2"))
         num_project = project_list.children.__len__()
         project_list.index = num_project
         project_list.action_select_cursor()
+
+    @on(Button.Pressed, "#btn_publish")
+    def rye_build(self) -> None:
+        self.app.push_screen(ModalRyeInit())
 
     @on(Button.Pressed, "#btn_new")
     def rye_init_new_project(self) -> None:
@@ -160,7 +165,7 @@ class ProjectPreview(VerticalScroll):
         self.border_title = "Preview"
         self.border_subtitle = "no project selected"
         self.id = "project_preview"
-        self.content_info = RichLog(wrap=False, auto_scroll=True)
+        self.content_info = RichLog(wrap=False, auto_scroll=True, markup=True)
 
         yield self.content_info
 
@@ -169,24 +174,18 @@ class ProjectPreview(VerticalScroll):
     def get_loading_widget(self) -> Widget:
         return CustomLoading(text="Loading Project Infos...")
 
-    @work(thread=True, exclusive=True)
+    # @work(thread=True, exclusive=True)
     def update_content(self):
         self.loading = True
         try:
             if self.app.project["path"]:
                 self.content_info.clear()
 
-                # path
-                # python version
-                # sources
                 general_table = display_general_project_infos(
                     path=self.app.project["path"]
                 )
                 self.content_info.write(general_table, expand=True)
 
-                # project_packages = rye_command_str_output(
-                #     "rye list", cwd=self.app.project["path"]
-                # )
                 toml_table = display_toml_project_infos(
                     toml=self.app.project["toml"], header=True
                 )
@@ -195,13 +194,6 @@ class ProjectPreview(VerticalScroll):
                 package_table = display_package_project_infos(
                     path=self.app.project["path"]
                 )
-
-                # table = Table("package", "version", expand=True)
-                # for pkg in project_packages.split("\n"):
-                #     if "==" in pkg:
-                #         pkg_name, pkg_version = pkg.split("==")
-                #         table.add_row(pkg_name, pkg_version)
-
                 self.content_info.write(package_table, expand=True)
 
                 self.border_subtitle = self.app.project["name"]
