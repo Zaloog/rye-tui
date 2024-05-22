@@ -177,4 +177,41 @@ def display_package_project_infos(path) -> Table:
             return table
         return "no packages synced yet, add packages and use [blue]rye sync[/]"
     except Exception:
+        return "error getting package info with [blue]rye list[/]"
+
+
+def display_installed_tools() -> Table:
+    try:
+        table = Table(
+            padding=(0, 0),
+            expand=True,
+            highlight=True,
+        )
+        table.add_column("Package")
+        table.add_column("Version")
+        table.add_column("Py Version")
+        table.add_column("Scripts")
+        tool_str = rye_command_str_output(
+            "rye tools list --include-version --include-scripts"
+        ).split("\n")
+
+        for tool in tool_str:
+            if not tool.startswith(" "):
+                command_no = 0
+                package, version, pyversion = tool.split(" ")
+                pyversion = pyversion.replace("(", "").replace(")", "")
+                continue
+            else:
+                command = tool.strip()
+                command_no += 1
+                if command_no == 1:
+                    table.add_row(package, version, pyversion, command)
+                else:
+                    table.add_row("", "", "", command)
+
+        if table.rows:
+            return table
+        return "no tools installed yet"
+    except Exception as e:
+        print(e)
         return "error getting toml info"
