@@ -27,9 +27,11 @@ class GeneralTab(Container):
             yield RichLog(id="log_toolchains")
         return super().compose()
 
-    # @work(thread=True)
+    @work(thread=True)
     def on_mount(self, event: Mount) -> None:
-        tool_str = rye_command_str_output("rye tools list")
+        tool_str = rye_command_str_output(
+            "rye tools list --include-version --include-scripts"
+        )
         tools = tool_str.split("\n")
         t_table = Table(expand=True)
         t_table.add_column("Tool")
@@ -40,7 +42,8 @@ class GeneralTab(Container):
             t_table.add_row(tool, "version", "path")
 
         log_tools = self.query_one("#log_tools", RichLog)
-        log_tools.write(t_table, expand=True)
+        # log_tools.write(t_table, expand=True)
+        self.app.call_from_thread(log_tools.write, t_table, expand=True)
 
         toolchain_str = rye_command_str_output("rye toolchain list")
         toolchains = toolchain_str.split("\n")
@@ -56,22 +59,10 @@ class GeneralTab(Container):
             tc_table.add_row(python, version, path)
 
         log_toolchains = self.query_one("#log_toolchains", RichLog)
-        log_toolchains.write(tc_table, expand=True)
-        # self.app.call_from_thread(log_toolchains.write,
-        #                           tc_table,
-        #                           expand=True)
+        # log_toolchains.write(tc_table, expand=True)
+        self.app.call_from_thread(log_toolchains.write, tc_table, expand=True)
 
         return super()._on_mount(event)
-
-    @work(thread=True)
-    def get_tools_string(self):
-        toolchain_str = rye_command_str_output("rye toolchain list")
-        return toolchain_str
-
-    @work(thread=True)
-    def get_toolchains_string(self):
-        toolchain_str = rye_command_str_output("rye toolchain list")
-        return toolchain_str
 
         toolchains = toolchain_str.split("\n")
         tc_table = Table(expand=True)

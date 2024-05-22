@@ -184,16 +184,17 @@ class ProjectPreview(VerticalScroll):
                 general_table = display_general_project_infos(
                     path=self.app.project["path"]
                 )
-                self.content_info.write(general_table, expand=True)
 
                 toml_table = display_toml_project_infos(
                     toml=self.app.project["toml"], header=True
                 )
-                self.content_info.write(toml_table, expand=True)
 
                 package_table = display_package_project_infos(
                     path=self.app.project["path"]
                 )
+
+                self.content_info.write(general_table, expand=True)
+                self.content_info.write(toml_table, expand=True)
                 self.content_info.write(package_table, expand=True)
 
                 self.border_subtitle = self.app.project["name"]

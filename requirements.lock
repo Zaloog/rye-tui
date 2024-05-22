@@ -6,6 +6,7 @@
 #   features: []
 #   all-features: false
 #   with-sources: false
+#   generate-hashes: false
 
 -e file:.
 linkify-it-py==2.0.3
@@ -29,7 +30,7 @@ rich==13.7.1
     # via textual
 rich-pixels==3.0.1
     # via rye-tui
-textual==0.61.0
+textual==0.63.0
     # via rye-tui
 typing-extensions==4.11.0
     # via textual

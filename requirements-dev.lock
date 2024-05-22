@@ -6,6 +6,7 @@
 #   features: []
 #   all-features: false
 #   with-sources: false
+#   generate-hashes: false
 
 -e file:.
 aiohttp==3.9.5
@@ -63,9 +64,9 @@ rich==13.7.1
     # via textual
 rich-pixels==3.0.1
     # via rye-tui
-setuptools==69.5.1
+setuptools==70.0.0
     # via nodeenv
-textual==0.61.0
+textual==0.63.0
     # via rye-tui
     # via textual-dev
 textual-dev==1.5.1
