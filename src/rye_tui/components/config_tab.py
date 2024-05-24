@@ -1,12 +1,12 @@
 from typing import Iterable
 
 from textual import work, on
-from textual.widgets import Input, Static, Switch, Collapsible, Button
+from textual.widgets import Input, Switch, Collapsible, Button
 from textual.widget import Widget
 from textual.containers import Container, Vertical, Horizontal, VerticalScroll
 
 from rye_tui.utils import get_rye_config_values, rye_config_set_command
-from rye_tui.constants import CONF_OPT_DICT, SOURCES_VALUES, SOURCES_DICT
+from rye_tui.constants import CONF_OPT_DICT, SOURCES_DICT
 from rye_tui.components.helper_widgets import ConfigOptionChanger
 
 
@@ -113,28 +113,10 @@ class ConfigSources(VerticalScroll):
                         opt_dict=sources_val_dict,
                     )
 
-                for sources_val in SOURCES_VALUES:
-                    if not source.get(sources_val):
-                        continue
-                    opt_name = Static(sources_val)
-                    # opt_name.tooltip = opt_dict["tooltip"]
-                    if sources_val == "verify-ssl":
-                        opt_value = Switch(
-                            value=source[sources_val],
-                            id=f"{self.category}_{source['name']}_{sources_val}",
-                        )
-                    else:
-                        opt_value = Input(
-                            value=source[sources_val],
-                            id=f"{self.category}_{source['name']}_{sources_val}",
-                        )
-                    # opt_value.loading = True
-                    with Horizontal(classes=f"config-{self.category}-container"):
-                        yield opt_name
-                        yield opt_value
-
         yield Button("Add new Source")
         return super().compose()
+
+    def load_current(self, conf_dict): ...
 
 
 ########################################################################################

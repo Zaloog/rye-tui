@@ -11,8 +11,10 @@
 
 rye-tui is a CLI tool to manage your [rye] projects. It offers a UI to interact with your projects.
 
+![header_image](https://raw.githubusercontent.com/Zaloog/rye-tui/main/images/image_rye_demo_preview.png)
+
 ## Currently still under development
-A 0.1.0 version is already released on PyPi
+A 0.2.0 version is already released on [PyPi]
 
 ## Installation
 
@@ -45,18 +47,37 @@ Also a project home directory is defined (default: `HOMEPATH`), which helps init
 
 Rye-Tui is following the [XDG] basedir-spec. Therefore the configuration file is located under your OS specific `config_user_dir`.
 
-![demo_image](https://raw.githubusercontent.com/Zaloog/rye-tui/main/images/image_rye_demo_preview.png)
+
+## Features
+
+Rye-Tui is divided into 3 Tabs:
+1. Projects
+2. General
+3. Config
+
+### Projects Tab
+The Projects Tab holds all your rye projects and gives you an overview to each project based on the `pyproject.toml` and installed packages.
+![project_image](https://raw.githubusercontent.com/Zaloog/rye-tui/main/images/image_rye_project.png)
+
+`rye add` and  `rye add --dev` is already supported, flags are still missing currently.
+![project_image](https://raw.githubusercontent.com/Zaloog/rye-tui/main/images/image_rye_add.png)
+
+### General Tab
+The General Tab has an input field to define your project-home path, which acts as an default location, to easily create a new project there.
+Furthermore you get an overview over your globally installed tools including version and available scripts.
+The final section lists all installed toolchain.
+![general_image](https://raw.githubusercontent.com/Zaloog/rye-tui/main/images/image_rye_general.png)
+
+### Config Tab
+The Config Tab can be used to change rye's underlying config.
+![config_image](https://raw.githubusercontent.com/Zaloog/rye-tui/main/images/image_rye_config.png)
 
 
-
-* License: MIT
 
 # TODOS:
 - projects tab
-    - project_preview
-        - [ ] added dependencies
     - project_list
-        - [ ] further check if folder is actually a rye project (based on .python-version?)
+        - [ ] further check if folder is actually a rye project
         - [ ] edit button functionality
             -[ ] open pyproject.toml in modal
     - button functionalities
@@ -65,20 +86,13 @@ Rye-Tui is following the [XDG] basedir-spec. Therefore the configuration file is
         - [ ] build
         - [ ] publish when wheels in dist/*
 - general tab
-    - [ ] Use Version and script info with flags:
-        - --include-scripts
-        - --include-versions
     - [ ] Add Rye Project Home from config.ini
-        - [ ] Input Validator for Path, ' ' in Path?
 - config tab
     - [ ] source adding/removing
-    - [ ] helper widget [label, input/switch/dropdown] + css update
-- other stuff
+- other/general stuff
     - [ ] focus widget color?
     - [ ] Docs/Readme
-- css
-    - [ ] scrollbar
-    - [ ] outer border?
+    - [ ] Input Validators for Path
 
 
 [XDG]: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
@@ -86,3 +100,4 @@ Rye-Tui is following the [XDG] basedir-spec. Therefore the configuration file is
 [textual]: https://textual.textualize.io
 [pipx]: https://github.com/pypa/pipx
 [rye]: https://rye-up.com
+[PyPi]: https://pypi.org/project/rye-tui/
