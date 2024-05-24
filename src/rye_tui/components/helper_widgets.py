@@ -31,6 +31,16 @@ class SyncButton(Button):
         return super().compose()
 
 
+class BuildButton(Button):
+    def get_loading_widget(self):
+        return CustomLoading(text="Building...")
+
+    def compose(self) -> Iterable[Widget]:
+        self.label = "Build"
+        self.id = "btn_build"
+        return super().compose()
+
+
 class EditButton(Widget):
     def compose(self) -> Iterable[Widget]:
         yield Button(

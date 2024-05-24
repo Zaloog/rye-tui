@@ -8,7 +8,12 @@ from textual.widget import Widget
 from textual.widgets import Button, ListView, RichLog
 from rich_pixels import Pixels
 
-from rye_tui.components.helper_widgets import ProjectListItem, CustomLoading, SyncButton
+from rye_tui.components.helper_widgets import (
+    ProjectListItem,
+    CustomLoading,
+    SyncButton,
+    BuildButton,
+)
 from rye_tui.components.modals import (
     ModalRyeInit,
     ModalRyePin,
@@ -104,7 +109,8 @@ class ProjectInteraction(Container):
                 yield SyncButton()
             with Horizontal():
                 yield Button("Pin Python Version", id="btn_pin")
-                yield Button("Build", id="btn_build")
+                yield BuildButton()
+                # yield Button("Build", id="btn_build")
                 yield Button("Publish", id="btn_publish")
 
         return super().compose()
@@ -123,9 +129,21 @@ class ProjectInteraction(Container):
         project_list.index = num_project
         project_list.action_select_cursor()
 
-    @on(Button.Pressed, "#btn_publish")
-    def rye_build(self) -> None:
-        self.app.push_screen(ModalRyeInit())
+    # Rye build
+    @work(thread=True)
+    @on(Button.Pressed, "#btn_build")
+    async def rye_build(self, message: Button.Pressed) -> None:
+        self.app.query_one("#project_preview").focus()
+        message.button.loading = True
+        await self.async_build_function()
+        message.button.loading = False
+
+    async def async_build_function(self):
+        output = rye_command_str_output(
+            command="rye build", cwd=self.app.project["path"]
+        )
+        self.app.query_one(ListView).action_select_cursor()
+        return output
 
     @on(Button.Pressed, "#btn_new")
     def rye_init_new_project(self) -> None:
@@ -139,14 +157,13 @@ class ProjectInteraction(Container):
     def rye_pin_python_version(self) -> None:
         self.app.push_screen(ModalRyePin())
 
+    # Rye Sync
     @work(thread=True)
     @on(Button.Pressed, "#btn_sync")
-    async def rye_sync_project(self, message) -> None:
+    async def rye_sync_project(self, message: Button.Pressed) -> None:
         self.app.query_one("#project_preview").focus()
         message.button.loading = True
-        # self.app.query_one("#project_preview").loading = True
         await self.async_sync_function()
-        # self.app.query_one("#project_preview").loading = False
         message.button.loading = False
 
     async def async_sync_function(self):
