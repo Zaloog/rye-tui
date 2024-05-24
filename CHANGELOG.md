@@ -1,3 +1,5 @@
+# v0.2.1
+- Update Readme
 # v0.2.0
 - add `rye init` functionality (flags still missing)
 - add `rye add` + `rye add --dev` functionality (flags still missing)

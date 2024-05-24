@@ -57,10 +57,11 @@ Rye-Tui is divided into 3 Tabs:
 
 ### Projects Tab
 The Projects Tab holds all your rye projects and gives you an overview to each project based on the `pyproject.toml` and installed packages.
+`Edit`- Button function to open pyproject.toml is still missing currently. 
 ![project_image](https://raw.githubusercontent.com/Zaloog/rye-tui/main/images/image_rye_project.png)
 
 `rye add` and  `rye add --dev` is already supported, flags are still missing currently.
-![project_image](https://raw.githubusercontent.com/Zaloog/rye-tui/main/images/image_rye_add.png)
+![add_image](https://raw.githubusercontent.com/Zaloog/rye-tui/main/images/image_rye_add.png)
 
 ### General Tab
 The General Tab has an input field to define your project-home path, which acts as an default location, to easily create a new project there.
@@ -70,26 +71,25 @@ The final section lists all installed toolchain.
 
 ### Config Tab
 The Config Tab can be used to change rye's underlying config.
+`default` and `sources` sections functionality is still missing currently
 ![config_image](https://raw.githubusercontent.com/Zaloog/rye-tui/main/images/image_rye_config.png)
 
 
 
-# TODOS:
+# Open Points:
 - projects tab
     - project_list
         - [ ] further check if folder is actually a rye project
         - [ ] edit button functionality
-            -[ ] open pyproject.toml in modal
     - button functionalities
-        - [ ] New Project
-            - [ ] extract path/options/name from command, add flags?
-        - [ ] build
+        - [ ] Add Flags to Rye Init and Rye add
         - [ ] publish when wheels in dist/*
 - general tab
     - [ ] Add Rye Project Home from config.ini
 - config tab
     - [ ] source adding/removing
 - other/general stuff
+    - [ ] Add more tooltips
     - [ ] focus widget color?
     - [ ] Docs/Readme
     - [ ] Input Validators for Path
