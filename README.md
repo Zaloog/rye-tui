@@ -74,9 +74,11 @@ The Config Tab can be used to change rye's underlying config.
 `default` and `sources` sections functionality is still missing currently
 ![config_image](https://raw.githubusercontent.com/Zaloog/rye-tui/main/images/image_rye_config.png)
 
+## Feedback and Issues
+Feel free to reach out and share your feedback, or open an Issue, if something doesnt work as expected.
+Also check the [Changelog](https://github.com/Zaloog/rye-tui/blob/main/CHANGELOG.md) for new updates.
 
-
-# Open Points:
+## Open Points:
 - projects tab
     - project_list
         - [ ] further check if folder is actually a rye project
@@ -93,7 +95,6 @@ The Config Tab can be used to change rye's underlying config.
     - [ ] focus widget color?
     - [ ] Docs/Readme
     - [ ] Input Validators for Path
-
 
 [XDG]: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
 [platformdirs]: https://platformdirs.readthedocs.io/en/latest/
