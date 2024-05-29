@@ -118,8 +118,8 @@ class ModalRyePin(ModalScreen):
         with Vertical():
             yield Label(f"Pin Python Version of [blue]{self.app.project['name']}[/]")
             self.pin_input = Input(
-                placeholder="enter python version to pin",
-                validators=[Regex("^3\.(?:[89]|1[012])$")],
+                placeholder="enter python version to pin (e.g. 3.11)",
+                validators=[Regex(r"^3\.(?:[89]|1[012])$")],
                 id="input_pin_python",
             )
             yield self.pin_input

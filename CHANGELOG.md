@@ -1,3 +1,6 @@
+# v0.2.2
+- Fix Regex Expression in Modal Pin by prepending `r`
+
 # v0.2.1
 - Update Readme
 
