@@ -215,3 +215,9 @@ def display_installed_tools() -> Table:
     except Exception as e:
         print(e)
         return "error getting toml info"
+
+
+def check_for_rye_project(toml_dict: dict) -> bool:
+    if not toml_dict.get("tool", False):
+        return False
+    return toml_dict.get("tool").get("rye", False)

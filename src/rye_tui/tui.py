@@ -8,7 +8,7 @@ from textual.widgets import Footer
 
 from rye_tui.components.mainframe import MainFrame
 from rye_tui.components.helper_widgets import RyeHeader
-from rye_tui.utils import rye_version, read_toml, read_lock
+from rye_tui.utils import rye_version, read_toml, read_lock, check_for_rye_project
 from rye_tui.config import RyeTuiConfig
 
 
@@ -38,17 +38,18 @@ class RyeTui(App):
             toml_path = Path().cwd() / "pyproject.toml"
             if toml_path.exists():
                 project_infos = read_toml(path=project_path)
-
-                project_name = project_infos["project"]["name"]
-                self.cfg.add_project(
-                    new_project_name=project_name, new_project_path=project_path
-                )
-                self.notify(
-                    f"[blue]{project_name}[/] was added to [b]rye-tui[/b] config",
-                    title="Project List Updated",
-                )
-            else:
-                self.notify("[red]NO[/] pyproject.toml found in [blue]CWD[/]")
+                if check_for_rye_project(toml_dict=project_infos):
+                    project_name = project_infos["project"]["name"]
+                    self.cfg.add_project(
+                        new_project_name=project_name, new_project_path=project_path
+                    )
+                    self.notify(
+                        f"[blue]{project_name}[/] was added to [b]rye-tui[/b] config",
+                        title="Project List Updated",
+                    )
+                    return True
+            self.notify("[red]NO[/] pyproject.toml found in [blue]CWD[/]")
+        return False
 
     def reset_project(self):
         self.project = {"name": "", "path": "", "toml": {}, "lock": []}

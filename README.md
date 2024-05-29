@@ -81,14 +81,16 @@ Also check the [Changelog](https://github.com/Zaloog/rye-tui/blob/main/CHANGELOG
 ## Open Points:
 - projects tab
     - project_list
-        - [ ] further check if folder is actually a rye project
         - [ ] edit button functionality
+        - [ ] Button to go directly to Folder
     - button functionalities
         - [ ] Add Flags to Rye Init and Rye add
         - [ ] publish when wheels in dist/*
+            - [ ] Check if current build in dist/* aligns with version
 - general tab
-    - [ ] Add Rye Project Home from config.ini
+    - [ ] Enable Rye Tool Management
 - config tab
+    - [ ] Add default Sections
     - [ ] source adding/removing
 - other/general stuff
     - [ ] Add more tooltips
