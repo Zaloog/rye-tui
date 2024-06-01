@@ -1,4 +1,5 @@
 from typing import Iterable
+# from importlib.metadata import version
 
 from textual.widget import Widget
 from textual.widgets import (
@@ -39,6 +40,12 @@ class BuildButton(Button):
         self.label = "Build"
         self.id = "btn_build"
         return super().compose()
+
+    # def update_label():
+    #     for build_file in Path()
+    #     if version('rye tiu')
+
+    #     ...
 
 
 class EditButton(Widget):

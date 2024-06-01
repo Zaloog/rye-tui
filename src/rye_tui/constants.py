@@ -142,8 +142,6 @@ SOURCES_DICT = {
     },
 }
 
-SOURCES_VALUES = ["url", "username", "password", "verify-ssl"]
-
 INIT_OPTIONS_DICT = {}
 
 ADD_OPTIONS_DICT = {

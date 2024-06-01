@@ -1,3 +1,7 @@
+# v0.2.3
+- Check for rye section of `pyproject.toml` when using `trye`
+- 
+
 # v0.2.2
 - Fix Regex Expression in Modal Pin by prepending `r`
 

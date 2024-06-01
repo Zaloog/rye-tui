@@ -30,9 +30,11 @@ class ConfigTab(Container):
         self.rye_config = get_rye_config_values()
         # prevent Messages on initial load
         with self.prevent(Switch.Changed):
-            self.conf_default.load_current(conf_dict=self.rye_config["default"])
-            self.conf_behavior.load_current(conf_dict=self.rye_config["behavior"])
-            self.conf_proxy.load_current(conf_dict=self.rye_config["proxy"])
+            self.conf_default.load_current(conf_dict=self.rye_config.get("default", {}))
+            self.conf_behavior.load_current(
+                conf_dict=self.rye_config.get("behavior", {})
+            )
+            self.conf_proxy.load_current(conf_dict=self.rye_config.get("proxy", {}))
 
 
 ########################################################################################
@@ -54,7 +56,6 @@ class ConfigDefault(VerticalScroll):
         for opt, opt_dict in self.category_dict.items():
             opt_widget = self.query_one(f"#{self.category}_{opt}")
             opt_widget.value = conf_dict.get(opt, opt_dict["default"])
-            opt_widget.loading = False
 
 
 ########################################################################################
@@ -77,7 +78,6 @@ class ConfigBehavior(VerticalScroll):
         for opt, opt_dict in self.category_dict.items():
             opt_widget = self.query_one(f"#{self.category}_{opt}")
             opt_widget.value = conf_dict.get(opt, opt_dict["default"])
-            opt_widget.loading = False
 
     @work(thread=True, exclusive=True)
     @on(Switch.Changed)
@@ -138,7 +138,6 @@ class ConfigProxy(VerticalScroll):
         for opt, opt_dict in self.category_dict.items():
             opt_widget = self.query_one(f"#{self.category}_{opt}")
             opt_widget.value = conf_dict.get(opt, opt_dict["default"])
-            opt_widget.loading = False
 
     @work(thread=True, exclusive=True)
     @on(Input.Submitted)

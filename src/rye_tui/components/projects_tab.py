@@ -110,11 +110,11 @@ class ProjectInteraction(Container):
             with Horizontal():
                 yield Button("Pin Python Version", id="btn_pin")
                 yield BuildButton()
-                # yield Button("Build", id="btn_build")
                 yield Button("Publish", id="btn_publish")
 
         return super().compose()
 
+    # Rye publish
     @on(Button.Pressed, "#btn_publish")
     async def rye_publish(self) -> None:
         # Open new Modal
@@ -145,14 +145,17 @@ class ProjectInteraction(Container):
         self.app.query_one(ListView).action_select_cursor()
         return output
 
+    # Rye init
     @on(Button.Pressed, "#btn_new")
     def rye_init_new_project(self) -> None:
         self.app.push_screen(ModalRyeInit())
 
+    # Rye add
     @on(Button.Pressed, "#btn_pkg")
     def rye_add_packages(self) -> None:
         self.app.push_screen(ModalRyeAdd())
 
+    # Rye Pin
     @on(Button.Pressed, "#btn_pin")
     def rye_pin_python_version(self) -> None:
         self.app.push_screen(ModalRyePin())
