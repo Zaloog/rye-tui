@@ -31,6 +31,7 @@ class ConfigTab(Container):
         # prevent Messages on initial load
         with self.prevent(Switch.Changed):
             self.conf_default.load_current(conf_dict=self.rye_config.get("default", {}))
+            self.conf_sources.load_current(sources=self.rye_config.get("sources", []))
             self.conf_behavior.load_current(
                 conf_dict=self.rye_config.get("behavior", {})
             )
@@ -62,22 +63,25 @@ class ConfigDefault(VerticalScroll):
 # Behavior
 class ConfigBehavior(VerticalScroll):
     category: str = "behavior"
-    category_dict: dict = CONF_OPT_DICT[category]
+    default_category_dict: dict = CONF_OPT_DICT[category]
 
     def compose(self) -> Iterable[Widget]:
         self.classes = "section"
         self.border_title = self.category
-        for opt, opt_dict in self.category_dict.items():
+
+        for conf_option, conf_option_dict in self.default_category_dict.items():
             yield ConfigOptionChanger(
-                category=self.category, option=opt, opt_dict=opt_dict
+                category=self.category, option=conf_option, opt_dict=conf_option_dict
             )
 
         return super().compose()
 
     def load_current(self, conf_dict):
-        for opt, opt_dict in self.category_dict.items():
-            opt_widget = self.query_one(f"#{self.category}_{opt}")
-            opt_widget.value = conf_dict.get(opt, opt_dict["default"])
+        for conf_option, conf_option_dict in self.default_category_dict.items():
+            option_widget = self.query_one(f"#{self.category}_{conf_option}")
+            option_widget.value = conf_dict.get(
+                conf_option, conf_option_dict["default"]
+            )
 
     @work(thread=True, exclusive=True)
     @on(Switch.Changed)
@@ -98,25 +102,50 @@ class ConfigBehavior(VerticalScroll):
 # Sources
 class ConfigSources(VerticalScroll):
     category: str = "sources"
-    # category_dict: dict = CONF_OPT_DICT[category]
+    default_source_list: dict = CONF_OPT_DICT["sources"]
 
     def compose(self) -> Iterable[Widget]:
         self.classes = "section"
         self.border_title = self.category
-        for source in CONF_OPT_DICT[self.category]:
+        for source in self.default_source_list:
             with Collapsible(title=source["name"]):
                 # loop over url/username/pw/verify-ssl
-                for sources_val, sources_val_dict in SOURCES_DICT.items():
+                for source_option, source_value_dict in SOURCES_DICT.items():
                     yield ConfigOptionChanger(
-                        category=self.category,
-                        option=sources_val,
-                        opt_dict=sources_val_dict,
+                        category=f"{self.category}_{source['name']}",
+                        option=source_option,
+                        opt_dict=source_value_dict,
                     )
 
-        yield Button("Add new Source")
+        yield Button("Add new Source", id="btn_new_source")
         return super().compose()
 
-    def load_current(self, conf_dict): ...
+    @work()
+    async def load_current(self, sources):
+        for source in sources:
+            if source["name"] != "default":
+                await self.mount(
+                    Collapsible(
+                        *[
+                            ConfigOptionChanger(
+                                category=f"{self.category}_{source['name']}",
+                                option=source_option,
+                                opt_dict=source_option_dict,
+                            )
+                            for source_option, source_option_dict in SOURCES_DICT.items()
+                        ],
+                        title=source["name"],
+                    ),
+                    before="#btn_new_source",
+                )
+
+            for source_option, source_option_dict in SOURCES_DICT.items():
+                option_widget = self.query_one(
+                    f"#{self.category}_{source['name']}_{source_option}"
+                )
+                option_widget.value = source.get(
+                    source_option, source_option_dict["default"]
+                )
 
 
 ########################################################################################
@@ -128,16 +157,18 @@ class ConfigProxy(VerticalScroll):
     def compose(self) -> Iterable[Widget]:
         self.classes = "section"
         self.border_title = self.category
-        for opt, opt_dict in self.category_dict.items():
+        for conf_option, conf_option_dict in self.category_dict.items():
             yield ConfigOptionChanger(
-                category=self.category, option=opt, opt_dict=opt_dict
+                category=self.category, option=conf_option, opt_dict=conf_option_dict
             )
         return super().compose()
 
     def load_current(self, conf_dict):
-        for opt, opt_dict in self.category_dict.items():
-            opt_widget = self.query_one(f"#{self.category}_{opt}")
-            opt_widget.value = conf_dict.get(opt, opt_dict["default"])
+        for conf_option, conf_option_dict in self.category_dict.items():
+            option_widget = self.query_one(f"#{self.category}_{conf_option}")
+            option_widget.value = conf_dict.get(
+                conf_option, conf_option_dict["default"]
+            )
 
     @work(thread=True, exclusive=True)
     @on(Input.Submitted)

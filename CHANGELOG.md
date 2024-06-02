@@ -1,6 +1,6 @@
-# v0.2.3
-- Check for rye section of `pyproject.toml` when using `trye`
-- 
+# v0.3.0
+- add check for rye section of `pyproject.toml` when using `trye`
+- add fallback to default config section if config section not present in rye config
 
 # v0.2.2
 - Fix Regex Expression in Modal Pin by prepending `r`

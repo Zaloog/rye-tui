@@ -105,13 +105,13 @@ CONF_OPT_DICT = {
             "password": "",
             "verify-ssl": True,
         },
-        {
-            "name": "test",
-            "url": "https://test.pypi.org/simple/",
-            "username": "bla",
-            "password": "blopb",
-            "verify-ssl": True,
-        },
+        # {
+        #     "name": "test",
+        #     "url": "https://test.pypi.org/simple/",
+        #     "username": "bla",
+        #     "password": "blopb",
+        #     "verify-ssl": True,
+        # },
     ],
 }
 
