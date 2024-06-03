@@ -46,11 +46,20 @@ is written into new pyproject.toml
 files for the `project.requires-python` key
 """
 
-TT_DEFAULT_TOOLCHAIN = """"""
-TT_DEFAULT_BUILD_SYSTEM = """"""
-TT_DEFAULT_LICENCE = """"""
-TT_DEFAULT_AUTHOR = """"""
-TT_DEFAULT_DEPENDENCY_OPERATOR = """"""
+TT_DEFAULT_TOOLCHAIN = """This is the default toolchain that
+is used"""
+TT_DEFAULT_BUILD_SYSTEM = """This is the default build system
+that is used"""
+TT_DEFAULT_LICENCE = """This is the default license that is used"""
+TT_DEFAULT_AUTHOR = """This sets the default author
+(overrides the defaults from git).
+The format here is `Name <email>`."""
+TT_DEFAULT_DEPENDENCY_OPERATOR = """The dependency operator to use
+by default for dependencies. The
+options are '>=', '~=', and '=='.
+The default currently is '>='.
+This affects the behavior of `rye add`.
+"""
 
 TT_PROXY_HTTP = """the proxy to use for HTTP
 (overridden by the http_proxy environment variable)"""

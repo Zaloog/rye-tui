@@ -34,8 +34,8 @@ CONF_OPT_DICT = {
         },
         "license": {
             "default": "MIT",
-            "type": list,
             "options": ["MIT"],
+            "type": list,
             "tooltip": tt.TT_DEFAULT_LICENCE,
         },
         "author": {
@@ -105,13 +105,6 @@ CONF_OPT_DICT = {
             "password": "",
             "verify-ssl": True,
         },
-        # {
-        #     "name": "test",
-        #     "url": "https://test.pypi.org/simple/",
-        #     "username": "bla",
-        #     "password": "blopb",
-        #     "verify-ssl": True,
-        # },
     ],
 }
 

@@ -30,9 +30,9 @@ rich==13.7.1
     # via textual
 rich-pixels==3.0.1
     # via rye-tui
-textual==0.63.0
+textual==0.63.6
     # via rye-tui
-typing-extensions==4.11.0
+typing-extensions==4.12.1
     # via textual
 uc-micro-py==1.0.3
     # via linkify-it-py

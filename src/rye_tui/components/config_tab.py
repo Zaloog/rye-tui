@@ -1,7 +1,7 @@
 from typing import Iterable
 
 from textual import work, on
-from textual.widgets import Input, Switch, Collapsible, Button
+from textual.widgets import Input, Switch, Collapsible, Button, Select
 from textual.widget import Widget
 from textual.containers import Container, Vertical, Horizontal, VerticalScroll
 
@@ -26,16 +26,16 @@ class ConfigTab(Container):
         return super().compose()
 
     @work(thread=True)
-    async def on_mount(self):
+    def on_mount(self):
         self.rye_config = get_rye_config_values()
         # prevent Messages on initial load
-        with self.prevent(Switch.Changed):
+        with self.prevent(Select.Changed, Switch.Changed, Input.Submitted):
             self.conf_default.load_current(conf_dict=self.rye_config.get("default", {}))
-            self.conf_sources.load_current(sources=self.rye_config.get("sources", []))
             self.conf_behavior.load_current(
                 conf_dict=self.rye_config.get("behavior", {})
             )
             self.conf_proxy.load_current(conf_dict=self.rye_config.get("proxy", {}))
+            self.conf_sources.load_current(sources=self.rye_config.get("sources", []))
 
 
 ########################################################################################
@@ -57,6 +57,43 @@ class ConfigDefault(VerticalScroll):
         for opt, opt_dict in self.category_dict.items():
             opt_widget = self.query_one(f"#{self.category}_{opt}")
             opt_widget.value = conf_dict.get(opt, opt_dict["default"])
+
+    @work(thread=True, exclusive=True)
+    @on(Input.Submitted)
+    def update_input_value(self, message: Input.Submitted):
+        message.input.loading = True
+        new_value = message.value
+        category, option = message.input.id.split("_")
+        rye_config_set_command(category=category, option=option, value=new_value)
+        message.input.loading = False
+
+        msg_show = (
+            f"set to [green]{new_value}[/]" if new_value else "set to [red]default[/]"
+        )
+        self.notify(
+            message=f"{category}.{option} {msg_show}",
+            title="Config Updated",
+        )
+
+    @work(thread=True, exclusive=True)
+    @on(Select.Changed)
+    def update_select_value(self, message: Select.Changed):
+        self.log.error(message.control)
+        message.select.loading = True
+        new_value = message.value
+        category, option = message.select.id.split("_")
+        rye_config_set_command(category=category, option=option, value=new_value)
+        message.select.loading = False
+
+        msg_show = (
+            f"set to [green]{new_value}[/]"
+            if new_value != ">="
+            else "set to [red]default[/]"
+        )
+        self.notify(
+            message=f"{category}.{option} {msg_show}",
+            title="Config Updated",
+        )
 
 
 ########################################################################################
@@ -85,7 +122,7 @@ class ConfigBehavior(VerticalScroll):
 
     @work(thread=True, exclusive=True)
     @on(Switch.Changed)
-    def update_value(event, message):
+    def update_value(event, message: Switch.Changed):
         message.switch.loading = True
         new_value = str(message.value).lower()
         category, option = message.switch.id.split("_")
@@ -117,7 +154,7 @@ class ConfigSources(VerticalScroll):
                         opt_dict=source_value_dict,
                     )
 
-        yield Button("Add new Source", id="btn_new_source")
+        yield Button("Add new Source (coming soon)", id="btn_new_source")
         return super().compose()
 
     @work()
@@ -172,12 +209,12 @@ class ConfigProxy(VerticalScroll):
 
     @work(thread=True, exclusive=True)
     @on(Input.Submitted)
-    def update_value(self, event):
-        event.input.loading = True
-        new_value = str(event.value).lower()
-        category, option = event.input.id.split("_")
+    def update_value(self, message: Input.Submitted):
+        message.input.loading = True
+        new_value = str(message.value).lower()
+        category, option = message.input.id.split("_")
         rye_config_set_command(category=category, option=option, value=new_value)
-        event.input.loading = False
+        message.input.loading = False
 
         msg_show = f"set to [green]{new_value}[/]" if new_value else "[red]removed[/]"
         self.notify(

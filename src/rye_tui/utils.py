@@ -26,7 +26,7 @@ def rye_config_set_command(category: str, option: str, value=str) -> str:
     if category == "behavior":
         command = f"rye config --set-bool {category}.{option}={value}"
         return rye_command_str_output(command=command)
-    if category == "proxy":
+    if category in ["proxy", "default"]:
         command = f"rye config --set {category}.{option}={value}"
         return rye_command_str_output(command=command)
 
