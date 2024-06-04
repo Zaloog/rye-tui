@@ -3,6 +3,8 @@
 - add fallback to default config section if config section not present in rye config
 - add config `source` functionality to load current sources
 - add config `default` functionality and tooltips
+- add button `disabled` status if no project selected, enable buttons on project selection
+- fix a bug that caused crash on project creation
 
 # v0.2.2
 - Fix Regex Expression in Modal Pin by prepending `r`

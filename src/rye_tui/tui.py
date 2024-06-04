@@ -49,6 +49,7 @@ class RyeTui(App):
                     )
                     return True
             self.notify("[red]NO[/] pyproject.toml found in [blue]CWD[/]")
+
         return False
 
     def reset_project(self):
@@ -57,6 +58,7 @@ class RyeTui(App):
         preview_window.content_info.clear()
         preview_window.content_info.write("please select a file")
         preview_window.border_subtitle = "no project selected"
+        self.app.query_one("#project_interaction").disable_buttons()
 
     @work(thread=True, exclusive=True)
     def get_project_infos(self, project_name):

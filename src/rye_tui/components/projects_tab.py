@@ -64,8 +64,8 @@ class ProjectList(VerticalScroll):
 
     @work(thread=True, exclusive=True)
     @on(ListView.Selected)
-    def get_project_infos(self, event: ListView.Selected):
-        self.app.get_project_infos(project_name=event.item.project_title)
+    def get_project_infos(self, message: ListView.Selected):
+        self.app.get_project_infos(project_name=message.item.project_title)
 
         preview_window = self.app.query_one("#project_preview")
         preview_window.update_content()
@@ -74,7 +74,8 @@ class ProjectList(VerticalScroll):
         for btn in btns:
             btn.add_class("invisible")
 
-        event.item.query(Button).remove_class("invisible")
+        message.item.query(Button).remove_class("invisible")
+        self.app.query_one("#project_interaction").enable_buttons()
 
     @on(Button.Pressed, ".delete-button")
     def delete_project(self, message):
@@ -104,19 +105,28 @@ class ProjectInteraction(Container):
 
         with Vertical():
             with Horizontal():
-                yield Button("New Project", id="btn_new")
-                yield Button("Add/Remove Packages", id="btn_pkg")
-                yield SyncButton()
+                yield Button("New Project", id="btn_new", disabled=False)
+                yield Button("Add/Remove Packages", id="btn_pkg", disabled=True)
+                yield SyncButton(disabled=True)
             with Horizontal():
-                yield Button("Pin Python Version", id="btn_pin")
-                yield BuildButton()
-                yield Button("Publish", id="btn_publish")
+                yield Button("Pin Python Version", id="btn_pin", disabled=True)
+                yield BuildButton(disabled=True)
+                yield Button("Publish", id="btn_publish", disabled=True)
 
         return super().compose()
+
+    def enable_buttons(self):
+        for btn in self.query(Button).exclude("#btn_new").results(Button):
+            btn.disabled = False
+
+    def disable_buttons(self):
+        for btn in self.query(Button).exclude("#btn_new").results(Button):
+            btn.disabled = True
 
     # Rye publish
     @on(Button.Pressed, "#btn_publish")
     async def rye_publish(self) -> None:
+        # Check if project is build + modal missing
         # Open new Modal
         self.app.cfg.add_project(
             new_project_name="test2", new_project_path=Path().cwd().as_posix()

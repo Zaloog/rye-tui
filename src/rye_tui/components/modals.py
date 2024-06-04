@@ -84,12 +84,10 @@ class ModalRyeInit(ModalScreen):
 
     @on(Button.Pressed, ".btn-continue")
     async def create_project(self):
-        self.loading = True
         project_path = (Path(self.project_path) / self.project_name).as_posix()
         command = f"rye init {project_path}"
         output_str = await self.async_create_project(command=command)
         self.notify(title="New Project created", message=output_str, timeout=1)
-        self.loading = False
 
         self.app.cfg.add_project(
             new_project_name=self.project_name, new_project_path=project_path
