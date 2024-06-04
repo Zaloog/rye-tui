@@ -1,7 +1,8 @@
 # v0.3.0
 - add check for rye section of `pyproject.toml` when using `trye`
 - add fallback to default config section if config section not present in rye config
-- add source functionality to load current sources
+- add config `source` functionality to load current sources
+- add config `default` functionality and tooltips
 
 # v0.2.2
 - Fix Regex Expression in Modal Pin by prepending `r`

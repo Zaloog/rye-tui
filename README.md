@@ -90,7 +90,6 @@ Also check the [Changelog](https://github.com/Zaloog/rye-tui/blob/main/CHANGELOG
 - general tab
     - [ ] Enable Rye Tool Management
 - config tab
-    - [ ] Add default Sections
     - [ ] source adding/removing
 - other/general stuff
     - [ ] Add more tooltips

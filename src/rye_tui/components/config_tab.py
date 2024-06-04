@@ -78,20 +78,14 @@ class ConfigDefault(VerticalScroll):
     @work(thread=True, exclusive=True)
     @on(Select.Changed)
     def update_select_value(self, message: Select.Changed):
-        self.log.error(message.control)
         message.select.loading = True
         new_value = message.value
         category, option = message.select.id.split("_")
         rye_config_set_command(category=category, option=option, value=new_value)
         message.select.loading = False
 
-        msg_show = (
-            f"set to [green]{new_value}[/]"
-            if new_value != ">="
-            else "set to [red]default[/]"
-        )
         self.notify(
-            message=f"{category}.{option} {msg_show}",
+            message=f"{category}.{option} set to [green]{new_value}[/]",
             title="Config Updated",
         )
 
@@ -184,6 +178,37 @@ class ConfigSources(VerticalScroll):
                     source_option, source_option_dict["default"]
                 )
 
+    @work(thread=True, exclusive=True)
+    @on(Input.Submitted)
+    def update_source_value(self, message: Input.Submitted):
+        message.input.loading = True
+        new_value = message.value
+        category, option = message.input.id.split("_", maxsplit=1)
+        # rye_config_set_command(category=category, option=option, value=new_value)
+        message.input.loading = False
+
+        msg_show = (
+            f"set to [green]{new_value}[/]" if new_value else "set to [red]default[/]"
+        )
+        self.notify(
+            message=f"{category}.{option} {msg_show}",
+            title="Config Updated",
+        )
+
+    @work(thread=True, exclusive=True)
+    @on(Switch.Changed)
+    def update_source_ssl_value(event, message: Switch.Changed):
+        message.switch.loading = True
+        new_value = str(message.value).lower()
+        category, option = message.switch.id.split("_", maxsplit=1)
+        # rye_config_set_command(category=category, option=option, value=new_value)
+        message.switch.loading = False
+        msg_color = "green" if new_value == "true" else "red"
+        event.notify(
+            message=f"{category}.{option} set to [{msg_color}]{new_value}[/]",
+            title="Config Updated",
+        )
+
 
 ########################################################################################
 # Proxy
@@ -209,7 +234,7 @@ class ConfigProxy(VerticalScroll):
 
     @work(thread=True, exclusive=True)
     @on(Input.Submitted)
-    def update_value(self, message: Input.Submitted):
+    def update_proxy_value(self, message: Input.Submitted):
         message.input.loading = True
         new_value = str(message.value).lower()
         category, option = message.input.id.split("_")
