@@ -78,6 +78,7 @@ class ConfigDefault(VerticalScroll):
     @work(thread=True, exclusive=True)
     @on(Select.Changed)
     def update_select_value(self, message: Select.Changed):
+        self.log.error("Here")
         message.select.loading = True
         new_value = message.value
         category, option = message.select.id.split("_")
@@ -116,14 +117,14 @@ class ConfigBehavior(VerticalScroll):
 
     @work(thread=True, exclusive=True)
     @on(Switch.Changed)
-    def update_value(event, message: Switch.Changed):
+    def update_value(self, message: Switch.Changed):
         message.switch.loading = True
         new_value = str(message.value).lower()
         category, option = message.switch.id.split("_")
         rye_config_set_command(category=category, option=option, value=new_value)
         message.switch.loading = False
         msg_color = "green" if new_value == "true" else "red"
-        event.notify(
+        self.notify(
             message=f"{category}.{option} set to [{msg_color}]{new_value}[/]",
             title="Config Updated",
         )

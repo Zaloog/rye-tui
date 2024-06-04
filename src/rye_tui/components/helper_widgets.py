@@ -104,12 +104,14 @@ class ConfigOptionChanger(Horizontal):
                 id=f"{self.category}_{self.option}",
             )
         if self.option_dict["type"] == list:
-            change_widget = Select(
-                value=self.option_dict["default"],
-                options=[(opt, opt) for opt in self.option_dict["options"]],
-                allow_blank=False,
-                id=f"{self.category}_{self.option}",
-            )
+            with self.prevent(Select.Changed):
+                change_widget = Select(
+                    # value=Select.BLANK,
+                    value=self.option_dict["default"],
+                    options=[(opt, opt) for opt in self.option_dict["options"]],
+                    allow_blank=False,
+                    id=f"{self.category}_{self.option}",
+                )
 
         yield option_name
         yield change_widget

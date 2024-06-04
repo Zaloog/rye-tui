@@ -64,7 +64,7 @@ rich==13.7.1
     # via textual
 rich-pixels==3.0.1
     # via rye-tui
-textual==0.63.6
+textual==0.64.0
     # via rye-tui
     # via textual-dev
 textual-dev==1.5.1
