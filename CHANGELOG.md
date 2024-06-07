@@ -1,3 +1,5 @@
+# v0.4.0
+
 # v0.3.0
 - add check for rye section of `pyproject.toml` when using `trye`
 - add fallback to default config section if config section not present in rye config
