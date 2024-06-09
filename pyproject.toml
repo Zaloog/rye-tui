@@ -6,7 +6,7 @@ authors = [
     { name = "Zaloog", email = "gramslars@gmail.com" }
 ]
 dependencies = [
-    "textual>=0.64.0",
+    "textual>=0.66.0",
     "rich-pixels>=3.0.1",
     "platformdirs>=4.2.2",
 ]

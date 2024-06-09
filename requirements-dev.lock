@@ -47,7 +47,7 @@ msgpack==1.0.8
 multidict==6.0.5
     # via aiohttp
     # via yarl
-nodeenv==1.9.0
+nodeenv==1.9.1
     # via pre-commit
 pillow==10.3.0
     # via rich-pixels
@@ -64,11 +64,11 @@ rich==13.7.1
     # via textual
 rich-pixels==3.0.1
     # via rye-tui
-textual==0.64.0
+textual==0.66.0
     # via rye-tui
     # via textual-dev
 textual-dev==1.5.1
-typing-extensions==4.12.1
+typing-extensions==4.12.2
     # via textual
     # via textual-dev
 uc-micro-py==1.0.3
