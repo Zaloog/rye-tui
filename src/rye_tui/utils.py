@@ -235,3 +235,7 @@ def check_for_rye_project(toml_dict: dict) -> bool:
     if not toml_dict.get("tool", False):
         return False
     return toml_dict.get("tool").get("rye", False)
+
+
+def check_underscore(s: str) -> bool:
+    return "_" not in s

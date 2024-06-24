@@ -4,10 +4,11 @@ from pathlib import Path
 from textual import on, work
 from textual.reactive import reactive
 from textual.widget import Widget
-from textual.validation import Regex
+from textual.validation import Regex, Function
 from textual.screen import ModalScreen
 from textual.widgets import (
     Input,
+    Switch,
     Button,
     Collapsible,
     Static,
@@ -18,8 +19,13 @@ from textual.widgets import (
 from textual.containers import Vertical, Horizontal
 from textual.worker import get_current_worker
 
-from rye_tui.utils import rye_command_str_output, fill_package_add_table
-from rye_tui.components.helper_widgets import ProjectListItem
+from rye_tui.utils import (
+    rye_command_str_output,
+    fill_package_add_table,
+    check_underscore,
+)
+from rye_tui.components.helper_widgets import ProjectListItem, ConfigOptionChanger
+from rye_tui.constants import SOURCES_DICT
 
 
 class ModalRyeInit(ModalScreen):
@@ -79,7 +85,7 @@ class ModalRyeInit(ModalScreen):
         self.query_one("#input_path").value = self.project_path
 
     @on(Button.Pressed, ".btn-cancel")
-    def close_modal(self):
+    def close_modal_init(self):
         self.app.pop_screen()
 
     @on(Button.Pressed, ".btn-continue")
@@ -140,12 +146,12 @@ class ModalRyePin(ModalScreen):
         self.app.query_one(ListView).action_select_cursor()
 
     @on(Button.Pressed, ".btn-cancel")
-    def close_modal(self):
+    def close_modal_pin(self):
         self.app.pop_screen()
 
     @on(Input.Changed, "#input_pin_python")
-    def disable_buttons(self, event: Input.Changed):
-        self.query_one(".btn-continue", Button).disabled = not event.input.is_valid
+    def disable_buttons(self, message: Input.Changed):
+        self.query_one(".btn-continue", Button).disabled = not message.input.is_valid
 
     @on(Input.Submitted, "#input_pin_python")
     def confirm_input(self):
@@ -288,12 +294,12 @@ class ModalRyeAdd(ModalScreen):
             )
 
     @on(Button.Pressed, ".btn-continue")
-    def pin_new_version(self):
+    def add_packages_and_sync(self):
         self.app.pop_screen()
         self.app.query_one("#btn_sync").press()
 
     @on(Button.Pressed, ".btn-cancel")
-    def close_modal(self):
+    def close_modal_add(self):
         self.app.pop_screen()
         self.app.query_one(ListView).action_select_cursor()
 
@@ -329,3 +335,55 @@ class ModalConfirm(ModalScreen):
             f"project [blue]{self.app.project['name']}[/] was removed from config",
             title="Project List Updated",
         )
+
+
+class ModalNewSource(ModalScreen):
+    CSS_PATH: Path = Path("../assets/modal_screens.css")
+
+    def compose(self) -> Iterable[Widget]:
+        with Vertical():
+            with Horizontal():
+                yield Label("Source Name")
+                yield Input(
+                    placeholder="enter new source name (required, no `_` allowed)",
+                    valid_empty=False,
+                    validators=[Function(check_underscore)],
+                    id="sources_name",
+                )
+
+            for conf_option, conf_option_dict in SOURCES_DICT.items():
+                yield ConfigOptionChanger(
+                    category="sources", option=conf_option, opt_dict=conf_option_dict
+                )
+
+            with Horizontal(classes="horizontal-conf-cancel"):
+                yield Button(
+                    "continue", variant="success", classes="btn-continue", disabled=True
+                )
+                yield Button("cancel", variant="error", classes="btn-cancel")
+        return super().compose()
+
+    @on(Input.Changed, "#sources_name")
+    def enable_continue_button(self, message: Input.Changed):
+        self.query_one(".btn-continue", Button).disabled = not message.input.is_valid
+
+    @on(Button.Pressed, ".btn-continue")
+    def return_source_dict(self):
+        new_source_dict = {}
+
+        for input_field in self.query(Input):
+            _, option = input_field.id.split("_", maxsplit=1)
+            option_value = input_field.value
+
+            new_source_dict[option] = option_value
+
+        switch_widget = self.query_one(Switch)
+        _, option = switch_widget.id.split("_", maxsplit=1)
+        option_value = switch_widget.value
+        new_source_dict[option] = option_value
+
+        self.dismiss(new_source_dict)
+
+    @on(Button.Pressed, ".btn-cancel")
+    def close_modal_source(self):
+        self.app.pop_screen()

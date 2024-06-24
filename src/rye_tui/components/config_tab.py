@@ -12,6 +12,7 @@ from rye_tui.utils import (
 )
 from rye_tui.constants import CONF_OPT_DICT, SOURCES_DICT
 from rye_tui.components.helper_widgets import ConfigOptionChanger
+from rye_tui.components.modals import ModalNewSource
 
 
 class ConfigTab(Container):
@@ -155,36 +156,37 @@ class ConfigSources(VerticalScroll):
                         opt_dict=source_value_dict,
                     )
 
-        yield Button("Add new Source (coming soon)", id="btn_new_source")
+        yield Button("Add new Source", id="btn_new_source")
         return super().compose()
 
     @work()
     async def load_current(self, sources):
         for source in sources:
-            if source["name"] not in self.source_names_list:
-                await self.mount(
-                    Collapsible(
-                        *[
-                            ConfigOptionChanger(
-                                category=f"{self.category}_{source['name']}",
-                                option=source_option,
-                                opt_dict=source_option_dict,
-                            )
-                            for source_option, source_option_dict in SOURCES_DICT.items()
-                        ],
-                        title=source["name"],
-                    ),
-                    before="#btn_new_source",
-                )
+            with self.prevent(Select.Changed):
+                if source["name"] not in self.source_names_list:
+                    await self.mount(
+                        Collapsible(
+                            *[
+                                ConfigOptionChanger(
+                                    category=f"{self.category}_{source['name']}",
+                                    option=source_option,
+                                    opt_dict=source_option_dict,
+                                )
+                                for source_option, source_option_dict in SOURCES_DICT.items()
+                            ],
+                            title=source["name"],
+                        ),
+                        before="#btn_new_source",
+                    )
 
-            for source_option, source_option_dict in SOURCES_DICT.items():
-                option_widget = self.query_one(
-                    f"#{self.category}_{source['name']}_{source_option}"
-                )
-                option_widget.value = source.get(
-                    source_option, source_option_dict["default"]
-                )
-            self.source_names_list.append(source["name"])
+                for source_option, source_option_dict in SOURCES_DICT.items():
+                    option_widget = self.query_one(
+                        f"#{self.category}_{source['name']}_{source_option}"
+                    )
+                    option_widget.value = source.get(
+                        source_option, source_option_dict["default"]
+                    )
+                self.source_names_list.append(source["name"])
 
     @work(thread=True, exclusive=True)
     @on(Input.Submitted)
@@ -234,19 +236,13 @@ class ConfigSources(VerticalScroll):
     @on(Button.Pressed, "#btn_new_source")
     def create_new_source(self, message: Button.Pressed):
         # modal for new source
-        new_source_dict = {
-            "name": "test3",
-            "url": "test_url",
-            "username": "test_user",
-            "password": "test_pw",
-            "verify-ssl": True,
-        }
+        self.app.push_screen(ModalNewSource(), self.add_new_source)
 
-        self.config_toml[self.category].append(new_source_dict)
-
-        update_rye_config(conf_dict=self.config_toml)
-        self.load_current(self.config_toml["sources"])
-        # self.refresh(layout=True, recompose=True)
+    def add_new_source(self, new_source_dict: dict) -> None:
+        if new_source_dict:
+            self.config_toml[self.category].append(new_source_dict)
+            update_rye_config(conf_dict=self.config_toml)
+            self.load_current(self.config_toml["sources"])
 
 
 ########################################################################################

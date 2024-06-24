@@ -32,6 +32,10 @@ ModalConfirm > Vertical {
     width: 30%;
     height: 20%;
 }
+ModalNewSource > Vertical {
+    width: 40%;
+    height: 50%;
+}
 
 #btn_home{
     width: 20%;
