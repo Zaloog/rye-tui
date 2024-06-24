@@ -14,7 +14,7 @@ rye-tui is a CLI tool to manage your [rye] projects. It offers a UI to interact 
 ![header_image](https://raw.githubusercontent.com/Zaloog/rye-tui/main/images/image_rye_demo_preview.png)
 
 ## Currently still under development
-A 0.2.0 version is already released on [PyPi]
+For a list of missing features check the [Open Points](#open-points) below
 
 ## Installation
 
