@@ -71,7 +71,6 @@ The final section lists all installed toolchain.
 
 ### Config Tab
 The Config Tab can be used to change rye's underlying config.
-`default` and `sources` sections functionality is still missing currently
 ![config_image](https://raw.githubusercontent.com/Zaloog/rye-tui/main/images/image_rye_config.png)
 
 ## Feedback and Issues
@@ -79,23 +78,13 @@ Feel free to reach out and share your feedback, or open an Issue, if something d
 Also check the [Changelog](https://github.com/Zaloog/rye-tui/blob/main/CHANGELOG.md) for new updates.
 
 ## Open Points:
-- projects tab
-    - project_list
-        - [ ] edit button functionality
-        - [ ] Button to go directly to Folder
-    - button functionalities
-        - [ ] Add Flags to Rye Init and Rye add
-        - [ ] publish when wheels in dist/*
-            - [ ] Check if current build in dist/* aligns with version
-- general tab
-    - [ ] Enable Rye Tool Management
-- config tab
-    - [ ] source adding/removing
-- other/general stuff
-    - [ ] Add more tooltips
-    - [ ] focus widget color?
-    - [ ] Docs/Readme
-    - [ ] Input Validators for Path
+- [ ] edit button functionality for pyproject toml
+- [ ] Button to go directly to Folder
+- [ ] Support Flags for Rye Init and Rye add
+- [ ] Support publishing
+- [ ] Enable Rye Tool Management, like rye add
+- [ ] Enable source removing
+- [ ] Folder Scanner for rye projects
 
 [XDG]: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
 [platformdirs]: https://platformdirs.readthedocs.io/en/latest/
