@@ -1,4 +1,4 @@
-import tomllib
+import tomlkit
 from shutil import rmtree
 
 import subprocess
@@ -31,10 +31,23 @@ def rye_config_set_command(category: str, option: str, value=str) -> str:
         return rye_command_str_output(command=command)
 
 
+def get_rye_config_path() -> str:
+    return rye_command_str_output(command="rye config --show-path")
+
+
 def get_rye_config_values():
-    config_file_path = rye_command_str_output(command="rye config --show-path")
-    with open(config_file_path, "rb") as config_file:
-        return tomllib.load(config_file)
+    config_file_path = get_rye_config_path()
+    return read_toml(path=config_file_path)
+
+
+def update_rye_config(conf_dict: dict):
+    config_file_path = get_rye_config_path()
+    save_config_toml(toml_dict=conf_dict, path=config_file_path)
+
+
+def save_config_toml(toml_dict: dict, path: str) -> None:
+    with open(path, "wb") as conf_file:
+        conf_file.write(tomlkit.dumps(toml_dict).encode())
 
 
 def delete_folder(folder_path: str | Path):
@@ -43,8 +56,9 @@ def delete_folder(folder_path: str | Path):
 
 def read_toml(path: str) -> dict:
     try:
-        with open(Path(path) / "pyproject.toml", "rb") as tomlfile:
-            return tomllib.load(tomlfile)
+        toml_path = path if ".toml" in path else Path(path) / "pyproject.toml"
+        with open(toml_path, "rb") as tomlfile:
+            return tomlkit.load(tomlfile)
     except FileNotFoundError:
         return {}
 

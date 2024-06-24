@@ -5,7 +5,11 @@ from textual.widgets import Input, Switch, Collapsible, Button, Select
 from textual.widget import Widget
 from textual.containers import Container, Vertical, Horizontal, VerticalScroll
 
-from rye_tui.utils import get_rye_config_values, rye_config_set_command
+from rye_tui.utils import (
+    get_rye_config_values,
+    rye_config_set_command,
+    update_rye_config,
+)
 from rye_tui.constants import CONF_OPT_DICT, SOURCES_DICT
 from rye_tui.components.helper_widgets import ConfigOptionChanger
 
@@ -135,6 +139,7 @@ class ConfigBehavior(VerticalScroll):
 class ConfigSources(VerticalScroll):
     category: str = "sources"
     default_source_list: dict = CONF_OPT_DICT["sources"]
+    config_toml: dict = get_rye_config_values()
 
     def compose(self) -> Iterable[Widget]:
         self.classes = "section"
@@ -185,7 +190,14 @@ class ConfigSources(VerticalScroll):
         message.input.loading = True
         new_value = message.value
         category, option = message.input.id.split("_", maxsplit=1)
-        # rye_config_set_command(category=category, option=option, value=new_value)
+        source_name, source_option = option.split("_")
+        # Update config Toml
+        for source in self.config_toml[category]:
+            if source["name"] == source_name:
+                source[source_option] = new_value
+
+        update_rye_config(conf_dict=self.config_toml)
+
         message.input.loading = False
 
         msg_show = (

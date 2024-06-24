@@ -30,7 +30,9 @@ rich==13.7.1
     # via textual
 rich-pixels==3.0.1
     # via rye-tui
-textual==0.66.0
+textual==0.70.0
+    # via rye-tui
+tomlkit==0.12.5
     # via rye-tui
 typing-extensions==4.12.2
     # via textual

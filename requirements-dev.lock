@@ -23,7 +23,7 @@ colorama==0.4.6
     # via click
 distlib==0.3.8
     # via virtualenv
-filelock==3.14.0
+filelock==3.15.4
     # via virtualenv
 frozenlist==1.4.1
     # via aiohttp
@@ -64,16 +64,18 @@ rich==13.7.1
     # via textual
 rich-pixels==3.0.1
     # via rye-tui
-textual==0.66.0
+textual==0.70.0
     # via rye-tui
     # via textual-dev
 textual-dev==1.5.1
+tomlkit==0.12.5
+    # via rye-tui
 typing-extensions==4.12.2
     # via textual
     # via textual-dev
 uc-micro-py==1.0.3
     # via linkify-it-py
-virtualenv==20.26.2
+virtualenv==20.26.3
     # via pre-commit
 yarl==1.9.4
     # via aiohttp

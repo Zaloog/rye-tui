@@ -1,5 +1,4 @@
 from typing import Iterable
-# from importlib.metadata import version
 
 from textual.widget import Widget
 from textual.widgets import (

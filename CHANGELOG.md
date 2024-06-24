@@ -1,4 +1,6 @@
 # v0.4.0
+- add config `source` functionality to update current sources
+- add `tomlkit` dependency to update ryes `config.toml` and preserve comments
 
 # v0.3.0
 - add check for rye section of `pyproject.toml` when using `trye`
