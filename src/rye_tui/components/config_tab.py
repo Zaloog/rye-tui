@@ -140,6 +140,7 @@ class ConfigSources(VerticalScroll):
     category: str = "sources"
     default_source_list: dict = CONF_OPT_DICT["sources"]
     config_toml: dict = get_rye_config_values()
+    source_names_list: list = ["default"]
 
     def compose(self) -> Iterable[Widget]:
         self.classes = "section"
@@ -160,7 +161,7 @@ class ConfigSources(VerticalScroll):
     @work()
     async def load_current(self, sources):
         for source in sources:
-            if source["name"] != "default":
+            if source["name"] not in self.source_names_list:
                 await self.mount(
                     Collapsible(
                         *[
@@ -183,6 +184,7 @@ class ConfigSources(VerticalScroll):
                 option_widget.value = source.get(
                     source_option, source_option_dict["default"]
                 )
+            self.source_names_list.append(source["name"])
 
     @work(thread=True, exclusive=True)
     @on(Input.Submitted)
@@ -210,17 +212,41 @@ class ConfigSources(VerticalScroll):
 
     @work(thread=True, exclusive=True)
     @on(Switch.Changed)
-    def update_source_ssl_value(event, message: Switch.Changed):
+    def update_source_ssl_value(self, message: Switch.Changed):
         message.switch.loading = True
         new_value = str(message.value).lower()
         category, option = message.switch.id.split("_", maxsplit=1)
-        # rye_config_set_command(category=category, option=option, value=new_value)
+        source_name, source_option = option.split("_")
+        # Update config toml
+        for source in self.config_toml[category]:
+            if source["name"] == source_name:
+                source[source_option] = True if new_value == "true" else False
+
+        update_rye_config(conf_dict=self.config_toml)
+
         message.switch.loading = False
         msg_color = "green" if new_value == "true" else "red"
-        event.notify(
+        self.notify(
             message=f"{category}.{option} set to [{msg_color}]{new_value}[/]",
             title="Config Updated",
         )
+
+    @on(Button.Pressed, "#btn_new_source")
+    def create_new_source(self, message: Button.Pressed):
+        # modal for new source
+        new_source_dict = {
+            "name": "test3",
+            "url": "test_url",
+            "username": "test_user",
+            "password": "test_pw",
+            "verify-ssl": True,
+        }
+
+        self.config_toml[self.category].append(new_source_dict)
+
+        update_rye_config(conf_dict=self.config_toml)
+        self.load_current(self.config_toml["sources"])
+        # self.refresh(layout=True, recompose=True)
 
 
 ########################################################################################
