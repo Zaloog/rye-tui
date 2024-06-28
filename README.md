@@ -83,7 +83,6 @@ Also check the [Changelog](https://github.com/Zaloog/rye-tui/blob/main/CHANGELOG
 - [ ] Support Flags for Rye Init and Rye add
 - [ ] Support publishing
 - [ ] Enable Rye Tool Management, like rye add
-- [ ] Enable source removing
 - [ ] Folder Scanner for rye projects
 
 [XDG]: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
