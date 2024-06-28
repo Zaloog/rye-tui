@@ -12,7 +12,7 @@ from rye_tui.utils import (
 )
 from rye_tui.constants import CONF_OPT_DICT, SOURCES_DICT
 from rye_tui.components.helper_widgets import ConfigOptionChanger
-from rye_tui.components.modals import ModalNewSource
+from rye_tui.components.modals import ModalNewSource, ModalDeleteSource
 
 
 class ConfigTab(Container):
@@ -146,7 +146,9 @@ class ConfigSources(VerticalScroll):
     def compose(self) -> Iterable[Widget]:
         self.classes = "section"
         self.border_title = self.category
-        yield Button("Add new Source", id="btn_new_source")
+        with Horizontal(id="hor_source_buttons"):
+            yield Button("Add new Source", id="btn_new_source")
+            yield Button("Remove Source", id="btn_del_source")
 
         for source in self.default_source_list:
             with Collapsible(title=source["name"]):
@@ -176,9 +178,11 @@ class ConfigSources(VerticalScroll):
                                 for source_option, source_option_dict in SOURCES_DICT.items()
                             ],
                             title=source["name"],
+                            id=f'source_{source["name"]}',
                         ),
-                        before="#btn_new_source",
+                        after="#hor_source_buttons",
                     )
+                    self.source_names_list.append(source["name"])
 
                 # set to current value in conf
                 for source_option, source_option_dict in SOURCES_DICT.items():
@@ -188,7 +192,6 @@ class ConfigSources(VerticalScroll):
                     option_widget.value = source.get(
                         source_option, source_option_dict["default"]
                     )
-                self.source_names_list.append(source["name"])
 
     @work(thread=True, exclusive=True)
     @on(Input.Submitted)
@@ -244,6 +247,33 @@ class ConfigSources(VerticalScroll):
         if new_source_dict:
             self.config_toml[self.category].append(new_source_dict)
             update_rye_config(conf_dict=self.config_toml)
+            self.load_current(self.config_toml["sources"])
+
+    @on(Button.Pressed, "#btn_del_source")
+    def remove_a_source(self, message: Button.Pressed):
+        # modal for del source
+        self.app.push_screen(
+            ModalDeleteSource(available_sources=self.source_names_list),
+            self.remove_source_from_conf,
+        )
+
+    def remove_source_from_conf(self, source_to_remove: str) -> None:
+        if source_to_remove:
+            # self.config_toml[self.category].pop(source_to_remove)
+            self.log.error(source_to_remove)
+            sources = self.config_toml[self.category]
+            self.config_toml[self.category] = [
+                source for source in sources if source["name"] != source_to_remove
+            ]
+
+            update_rye_config(conf_dict=self.config_toml)
+
+            self.notify(
+                f"project [blue]{source_to_remove}[/] was removed from config",
+                title="Config Sources Updated",
+            )
+            self.source_names_list.remove(source_to_remove)
+            self.query_one(f"#source_{source_to_remove}").remove()
             self.load_current(self.config_toml["sources"])
 
 

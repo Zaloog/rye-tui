@@ -47,6 +47,10 @@ ModalNewSource  Vertical  Input {
     width: 3fr;
     margin: 0 0 0 0;
 }
+ModalDeleteSource > Vertical {
+    width: 30%;
+    height: 20%;
+}
 
 #btn_home{
     width: 20%;

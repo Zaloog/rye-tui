@@ -68,6 +68,17 @@ ConfigTab Container {
     border-subtitle-color: $error;
 }
 
+/* For Buttons in sources */
+ConfigSources Horizontal Button {
+    height: auto;
+    width: 1fr;
+    margin: 0 1 0 1;
+}
+ConfigSources Horizontal {
+    height: auto;
+    width: 1fr;
+    margin: 0 0 0 0;
+}
 
 
 ConfigOptionChanger {
@@ -115,18 +126,17 @@ ConfigOptionChanger Select{
 }
 
 .config-sources-container Input {
-    
     height: auto;
     width: 1fr;
     margin: 0 0 0 0;
 }
 
 .config-sources-container Switch {
-    
     height: auto;
     width: 1fr;
     margin: 0 0 0 0;
 }
+
 
 /* Projects Tab*/
 ProjectTab Vertical{

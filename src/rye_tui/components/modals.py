@@ -9,6 +9,7 @@ from textual.screen import ModalScreen
 from textual.widgets import (
     Input,
     Switch,
+    Select,
     Button,
     Collapsible,
     Static,
@@ -387,3 +388,40 @@ class ModalNewSource(ModalScreen):
     @on(Button.Pressed, ".btn-cancel")
     def close_modal_source(self):
         self.app.pop_screen()
+
+
+class ModalDeleteSource(ModalScreen):
+    CSS_PATH: Path = Path("../assets/modal_screens.css")
+
+    def __init__(self, available_sources: list):
+        self.available_sources = available_sources[1:]
+        super().__init__()
+
+    def compose(self) -> Iterable[Widget]:
+        with Vertical():
+            yield Label("Which Source you want to remove")
+            source_selector = Select(
+                value=Select.BLANK,
+                prompt="Select a Source",
+                options=[(opt, opt) for opt in self.available_sources],
+                allow_blank=True,
+                id="source_del_selector",
+            )
+            yield source_selector
+            with Horizontal(classes="horizontal-conf-cancel"):
+                yield Button(
+                    "Remove selected Source", variant="success", classes="btn-continue"
+                )
+                yield Button("Cancel", variant="error", classes="btn-cancel")
+        return super().compose()
+
+    @on(Button.Pressed, ".btn-continue")
+    def remove_source(self):
+        source_selected = self.query_one(Select).value
+        if source_selected == Select.BLANK:
+            self.dismiss("")
+        self.dismiss(source_selected)
+
+    @on(Button.Pressed, ".btn-cancel")
+    def go_back_to_app(self):
+        self.dismiss(False)

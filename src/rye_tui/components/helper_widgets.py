@@ -98,7 +98,7 @@ class ConfigOptionChanger(Horizontal):
                 id=f"{self.category}_{self.option}",
             )
         if self.option_dict["type"] == bool:
-            with self.prevent(Select.Changed):
+            with self.prevent(Switch.Changed):
                 change_widget = Switch(
                     value=self.option_dict["default"],
                     id=f"{self.category}_{self.option}",
