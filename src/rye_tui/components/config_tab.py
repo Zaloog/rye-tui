@@ -146,6 +146,8 @@ class ConfigSources(VerticalScroll):
     def compose(self) -> Iterable[Widget]:
         self.classes = "section"
         self.border_title = self.category
+        yield Button("Add new Source", id="btn_new_source")
+
         for source in self.default_source_list:
             with Collapsible(title=source["name"]):
                 # loop over url/username/pw/verify-ssl
@@ -156,7 +158,6 @@ class ConfigSources(VerticalScroll):
                         opt_dict=source_value_dict,
                     )
 
-        yield Button("Add new Source", id="btn_new_source")
         return super().compose()
 
     @work()
@@ -179,6 +180,7 @@ class ConfigSources(VerticalScroll):
                         before="#btn_new_source",
                     )
 
+                # set to current value in conf
                 for source_option, source_option_dict in SOURCES_DICT.items():
                     option_widget = self.query_one(
                         f"#{self.category}_{source['name']}_{source_option}"

@@ -343,7 +343,7 @@ class ModalNewSource(ModalScreen):
     def compose(self) -> Iterable[Widget]:
         with Vertical():
             with Horizontal():
-                yield Label("Source Name")
+                yield Static("Source Name")
                 yield Input(
                     placeholder="enter new source name (required, no `_` allowed)",
                     valid_empty=False,

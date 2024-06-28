@@ -36,6 +36,17 @@ ModalNewSource > Vertical {
     width: 40%;
     height: 50%;
 }
+ModalNewSource  Vertical  Static {
+    height: auto;
+    width: 1fr;
+    content-align: left middle;
+    margin: 1 0 0 0;
+}
+ModalNewSource  Vertical  Input {
+    height: auto;
+    width: 3fr;
+    margin: 0 0 0 0;
+}
 
 #btn_home{
     width: 20%;
