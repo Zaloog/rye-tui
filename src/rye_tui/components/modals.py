@@ -15,6 +15,7 @@ from textual.widgets import (
     Static,
     Label,
     ListView,
+    TextArea,
     DataTable,
 )
 from textual.containers import Vertical, Horizontal
@@ -425,3 +426,33 @@ class ModalDeleteSource(ModalScreen):
     @on(Button.Pressed, ".btn-cancel")
     def go_back_to_app(self):
         self.dismiss(False)
+
+
+class ModalEditToml(ModalScreen):
+    CSS_PATH: Path = Path("../assets/modal_screens.css")
+
+    def compose(self) -> Iterable[Widget]:
+        self.toml_path = f"{self.app.project['path']}/pyproject.toml"
+        self.toml_content = self.read_txt_toml(toml_path=self.toml_path)
+
+        with Vertical():
+            yield Label(f"pyproject.toml of project: {self.toml_path}/pyproject.toml")
+            yield TextArea(self.toml_content, language="toml")
+            with Horizontal(classes="horizontal-conf-cancel"):
+                yield Button(
+                    "Remove selected Source", variant="success", classes="btn-continue"
+                )
+                yield Button("Cancel", variant="error", classes="btn-cancel")
+        return super().compose()
+
+    def read_txt_toml(self, toml_path: str):
+        with open(Path(toml_path), "r") as toml_file:
+            return toml_file.read()
+
+    @on(Button.Pressed, ".btn-continue")
+    def update_toml(self):
+        self.dismiss()
+
+    @on(Button.Pressed, ".btn-cancel")
+    def no_update_toml(self):
+        self.dismiss()

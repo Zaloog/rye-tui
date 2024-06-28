@@ -19,6 +19,7 @@ from rye_tui.components.modals import (
     ModalRyePin,
     ModalRyeAdd,
     ModalConfirm,
+    ModalEditToml,
 )
 from rye_tui.utils import (
     rye_command_str_output,
@@ -93,6 +94,23 @@ class ProjectList(VerticalScroll):
             self.app.reset_project()
 
         self.app.push_screen(ModalConfirm(), check_delete)
+
+    @on(Button.Pressed, ".edit-button")
+    def edit_project_toml(self, message):
+        # def check_delete(delete_files: bool) -> None:
+        #     if delete_files:
+        #         delete_folder(folder_path=self.app.project["path"])
+
+        #     project_list = self.app.query_one(ListView)
+
+        #     for i, project in enumerate(project_list.children):
+        #         if project.id == self.app.project["name"]:
+        #             project_list.pop(i)
+
+        #     self.app.cfg.remove_project(self.app.project["name"])
+        #     self.app.reset_project()
+
+        self.app.push_screen(ModalEditToml())
 
 
 ########################################################################################

@@ -50,7 +50,7 @@ class BuildButton(Button):
 class EditButton(Widget):
     def compose(self) -> Iterable[Widget]:
         yield Button(
-            label=":hammer_and_wrench:  Edit",
+            label=":hammer_and_wrench:  Edit .toml",
             classes="edit-button invisible",
             variant="warning",
         )

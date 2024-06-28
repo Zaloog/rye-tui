@@ -51,6 +51,10 @@ ModalDeleteSource > Vertical {
     width: 30%;
     height: 20%;
 }
+ModalEditToml > Vertical {
+    width: 60%;
+    height: 80%;
+}
 
 #btn_home{
     width: 20%;

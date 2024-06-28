@@ -259,8 +259,6 @@ class ConfigSources(VerticalScroll):
 
     def remove_source_from_conf(self, source_to_remove: str) -> None:
         if source_to_remove:
-            # self.config_toml[self.category].pop(source_to_remove)
-            self.log.error(source_to_remove)
             sources = self.config_toml[self.category]
             self.config_toml[self.category] = [
                 source for source in sources if source["name"] != source_to_remove
