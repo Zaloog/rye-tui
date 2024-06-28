@@ -1,9 +1,9 @@
 # v0.5.0
-- 
+- add config `source` functionality to remove sources (except default source)
 
 # v0.4.0
 - add config `source` functionality to update current sources
-- add config `source` functionality to new sources
+- add config `source` functionality to add new sources
 - add `tomlkit` dependency to update ryes `config.toml` and preserve comments
 
 # v0.3.0
