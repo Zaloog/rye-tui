@@ -439,9 +439,7 @@ class ModalEditToml(ModalScreen):
             yield Label(f"pyproject.toml of project: {self.toml_path}/pyproject.toml")
             yield TextArea(self.toml_content, language="toml")
             with Horizontal(classes="horizontal-conf-cancel"):
-                yield Button(
-                    "Remove selected Source", variant="success", classes="btn-continue"
-                )
+                yield Button("Remove Source", variant="success", classes="btn-continue")
                 yield Button("Cancel", variant="error", classes="btn-cancel")
         return super().compose()
 
