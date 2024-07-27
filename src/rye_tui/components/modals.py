@@ -20,11 +20,13 @@ from textual.widgets import (
 )
 from textual.containers import Vertical, Horizontal
 from textual.worker import get_current_worker
+import tomlkit
 
 from rye_tui.utils import (
     rye_command_str_output,
     fill_package_add_table,
     check_underscore,
+    save_config_toml,
 )
 from rye_tui.components.helper_widgets import ProjectListItem, ConfigOptionChanger
 from rye_tui.constants import SOURCES_DICT
@@ -437,9 +439,11 @@ class ModalEditToml(ModalScreen):
 
         with Vertical():
             yield Label(f"pyproject.toml of project: {self.toml_path}/pyproject.toml")
-            yield TextArea(self.toml_content, language="toml")
+            yield TextArea(
+                self.toml_content, language="toml", id="project_toml_content"
+            )
             with Horizontal(classes="horizontal-conf-cancel"):
-                yield Button("Remove Source", variant="success", classes="btn-continue")
+                yield Button("Save", variant="success", classes="btn-continue")
                 yield Button("Cancel", variant="error", classes="btn-cancel")
         return super().compose()
 
@@ -449,8 +453,21 @@ class ModalEditToml(ModalScreen):
 
     @on(Button.Pressed, ".btn-continue")
     def update_toml(self):
-        self.dismiss()
+        self.toml_content = self.query_one("#project_toml_content", TextArea).text
+        try:
+            toml_dict = tomlkit.loads(self.toml_content)
+            save_config_toml(toml_dict=toml_dict, path=self.toml_path)
+            self.notify(title="Pyproject.toml Updated", message="")
+        except Exception:
+            self.notify(
+                title="Pyproject.toml not Updated",
+                message="please check for proper formatting",
+                severity="error",
+            )
+
+        self.app.pop_screen()
+        self.app.query_one(ListView).action_select_cursor()
 
     @on(Button.Pressed, ".btn-cancel")
     def no_update_toml(self):
-        self.dismiss()
+        self.app.pop_screen()

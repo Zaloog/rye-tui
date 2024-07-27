@@ -1,5 +1,6 @@
 # v0.5.0
 - add config `source` functionality to remove sources (except default source)
+- add `pyproject.toml` edit-button functionality
 
 # v0.4.0
 - add config `source` functionality to update current sources
