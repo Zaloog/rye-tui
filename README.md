@@ -78,8 +78,6 @@ Feel free to reach out and share your feedback, or open an Issue, if something d
 Also check the [Changelog](https://github.com/Zaloog/rye-tui/blob/main/CHANGELOG.md) for new updates.
 
 ## Open Points:
-- [ ] edit button functionality for pyproject toml
-- [ ] Button to go directly to Folder
 - [ ] Support Flags for Rye Init and Rye add
 - [ ] Support publishing
 - [ ] Enable Rye Tool Management, like rye add
