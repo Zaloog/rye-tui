@@ -1,6 +1,6 @@
 [project]
-name = "rye-tuia"
-version = "0.5.0"
+name = "rye-tui"
+version = "0.5.1"
 description = "Rye meets Textual. Manage your python projects with a Tui"
 authors = [
     { name = "Zaloog", email = "gramslars@gmail.com" }
