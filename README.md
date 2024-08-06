@@ -57,7 +57,7 @@ Rye-Tui is divided into 3 Tabs:
 
 ### Projects Tab
 The Projects Tab holds all your rye projects and gives you an overview to each project based on the `pyproject.toml` and installed packages.
-`Edit`- Button function to open pyproject.toml is still missing currently. 
+The `Edit`- Button can be used to open and edit the pyproject.toml from within the TUI. 
 ![project_image](https://raw.githubusercontent.com/Zaloog/rye-tui/main/images/image_rye_project.png)
 
 `rye add` and  `rye add --dev` is already supported, flags are still missing currently.
@@ -70,7 +70,7 @@ The final section lists all installed toolchain.
 ![general_image](https://raw.githubusercontent.com/Zaloog/rye-tui/main/images/image_rye_general.png)
 
 ### Config Tab
-The Config Tab can be used to change rye's underlying config.
+The Config Tab can be used to change rye's underlying config and add or delete additional sources.
 ![config_image](https://raw.githubusercontent.com/Zaloog/rye-tui/main/images/image_rye_config.png)
 
 ## Feedback and Issues
