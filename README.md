@@ -5,6 +5,7 @@
 [![Licence](https://img.shields.io/pypi/l/rye-tui.svg)](https://github.com/astral-sh/rye-tui/blob/main/LICENSE)
 [![Downloads](https://static.pepy.tech/badge/rye-tui)](https://pepy.tech/project/rye-tui)
 
+> Archived. Please consider switching to uv, which is the successor of rye by the same maintainers.
 # rye-tui
 
 > Rye meets Textual. Manage your python projects with a Tui
